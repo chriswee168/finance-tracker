@@ -29,7 +29,6 @@ def create_tables():
         )
 
         cursor.execute(create_net_income_query)
-        conn.commit()
         cursor.execute(create_income_expense_table_query)
         conn.commit()
         conn.close()
