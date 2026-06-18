@@ -5,7 +5,7 @@ import os
 route = APIRouter()
 
 # Create SQL table to record net income overtime.
-@route.patch("/create-net-income-table")
+@route.patch("/create-tables")
 def create_tables():
     if not os.path.exists("finance_database.sqlite3"):
         conn = sqlite3.connect("finance_database.sqlite3")
@@ -29,7 +29,6 @@ def create_tables():
         )
 
         cursor.execute(create_net_income_query)
-        conn.commit()
         cursor.execute(create_income_expense_table_query)
         conn.commit()
         conn.close()
