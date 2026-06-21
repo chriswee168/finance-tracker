@@ -19,6 +19,13 @@ def create_tables():
             ")"
         )
 
+        create_category_table_query = (
+            "CREATE TABLE category_table(" \
+            "   category VARCHAR(100) PRIMARY KEY," \
+            "   category_type CHAR(7)" \
+            ")"
+        )
+
         create_income_expense_table_query = (
             "CREATE TABLE income_expense_table(" \
             "   entry_id INT PRIMARY KEY," \
@@ -29,6 +36,7 @@ def create_tables():
         )
 
         cursor.execute(create_net_income_query)
+        cursor.execute(create_category_table_query)
         cursor.execute(create_income_expense_table_query)
         conn.commit()
         conn.close()
