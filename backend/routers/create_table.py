@@ -30,8 +30,11 @@ def create_tables():
             "CREATE TABLE income_expense_table(" \
             "   entry_id INT PRIMARY KEY," \
             "   entry_date DATE,"
-            "   category CHAR(7)," \
+            "   category VARCHAR(100),"
+            "   category_type CHAR(7)" \
             "   amount VARCHAR(10)," \
+            
+            "   FOREIGN KEY (category) REFERENCES category_table(category) ON DELETE CASCADE" \
             ")"
         )
 
