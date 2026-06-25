@@ -10,21 +10,17 @@ def create_tables():
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
         
-    create_net_income_query = (
+    create_tables_query = (
         "CREATE TABLE IF NOT EXISTS net_income_table(" \
         "   entry_date DATE PRIMARY KEY," \
         "   amount_cents INT" \
-        ")"
-    )
+        ");"
 
-    create_category_table_query = (
         "CREATE TABLE IF NOT EXISTS category_table(" \
         "   category VARCHAR(100) PRIMARY KEY," \
         "   transaction_type CHAR(7)" \
-        ")"
-    )
+        ");"
 
-    create_income_expense_table_query = (
         "CREATE TABLE IF NOT EXISTS income_expense_table(" \
         "   entry_id INT PRIMARY KEY," \
         "   entry_date DATE,"
@@ -36,8 +32,6 @@ def create_tables():
         ")"
     )
 
-    cursor.execute(create_net_income_query)
-    cursor.execute(create_category_table_query)
-    cursor.execute(create_income_expense_table_query)
+    cursor.executescript(create_tables_query)
     conn.commit()
     conn.close()
