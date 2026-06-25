@@ -9,7 +9,10 @@ route = APIRouter()
 def create_tables():
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
-        
+    
+    # net_income_table: record the net income overtime.
+    # category_table: record all categories created by user.
+    # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
         "CREATE TABLE IF NOT EXISTS net_income_table(" \
         "   entry_date DATE PRIMARY KEY," \
