@@ -10,12 +10,9 @@ def add_category(category: str, transaction_type: str):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    add_category_query = (
-        "INSERT INTO category_table (category, transaction_type) "
-        f"VALUES ({category}, {transaction_type})"
-    )
+    add_category_query = "INSERT INTO category_table (category, transaction_type) VALUES (?, ?)"
 
-    cursor.execute(add_category_query)
+    cursor.execute(add_category_query, (category, transaction_type))
     conn.commit()
     conn.close()
 
