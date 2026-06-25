@@ -1,11 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 import sqlite3
 import time
 
 route = APIRouter()
 
 # Add to category SQL table.
-@route.post("/add-category")
+@route.post("/add-category", status_code=status.HTTP_204_NO_CONTENT)
 def add_category(category: str, transaction_type: str):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
@@ -17,7 +17,7 @@ def add_category(category: str, transaction_type: str):
     conn.close()
 
 # Add transaction entry to income and expense table.
-@route.post("/add-transaction")
+@route.post("/add-transaction", status_code=status.HTTP_204_NO_CONTENT)
 def add_transaction(category: str, transaction_type: str, amount_cents: int):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
