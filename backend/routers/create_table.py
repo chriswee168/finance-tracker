@@ -13,9 +13,8 @@ def create_tables():
         
         create_net_income_query = (
             "CREATE TABLE net_income_table(" \
-            "   entry_id INT PRIMARY KEY," \
-            "   entry_date DATE," \
-            "   amount VARCHAR(10)," \
+            "   entry_date DATE PRIMARY KEY," \
+            "   amount_cents INT," \
             ")"
         )
 
@@ -32,7 +31,7 @@ def create_tables():
             "   entry_date DATE,"
             "   category VARCHAR(100),"
             "   category_type CHAR(7)" \
-            "   amount VARCHAR(10)," \
+            "   amount_cents INT," \
             
             "   FOREIGN KEY (category) REFERENCES category_table(category) ON DELETE CASCADE" \
             ")"

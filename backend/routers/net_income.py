@@ -10,13 +10,13 @@ class NetIncomeResponse(BaseModel):
 
 # Add to net income SQL table.
 @route.post("/add-net-income")
-def add_net_income(entry_id: int, entry_date: str, ammount: str):
+def add_net_income(entry_date: str, ammount: str):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
     add_net_income_query = (
-        "INSERT INTO net_income_table (entry_id, entry_date, ammount) "
-        f"VALUES ({entry_id}, {entry_date}, {ammount})"
+        "INSERT INTO net_income_table (entry_date, ammount) "
+        f"VALUES ({entry_date}, {ammount})"
     )
 
     cursor.execute(add_net_income_query)
@@ -29,8 +29,8 @@ def calc_net_income():
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    obtain_income_sum_query = "SELECT SUM(amount) FROM net_income_table WHERE category_type = 'income'"
-    obtain_expenses_sum_query = "SELECT SUM(amount) FROM net_income_table WHERE category_type = 'expense'"
+    obtain_income_sum_query = "SELECT SUM(amount_cents) FROM net_income_table WHERE category_type = 'income'"
+    obtain_expenses_sum_query = "SELECT SUM(amount_cents) FROM net_income_table WHERE category_type = 'expense'"
 
     # Get income and expense sum.
     cursor.execute(obtain_income_sum_query)
