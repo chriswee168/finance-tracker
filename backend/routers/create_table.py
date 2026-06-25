@@ -13,8 +13,7 @@ def create_tables():
         
         create_net_income_query = (
             "CREATE TABLE net_income_table(" \
-            "   entry_id INT PRIMARY KEY," \
-            "   entry_date DATE," \
+            "   entry_date DATE PRIMARY KEY," \
             "   amount_cents INT," \
             ")"
         )
