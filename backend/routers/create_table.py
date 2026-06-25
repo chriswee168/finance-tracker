@@ -20,7 +20,7 @@ def create_tables():
     create_category_table_query = (
         "CREATE TABLE IF NOT EXISTS category_table(" \
         "   category VARCHAR(100) PRIMARY KEY," \
-        "   category_type CHAR(7)" \
+        "   transaction_type CHAR(7)" \
         ")"
     )
 
@@ -29,7 +29,7 @@ def create_tables():
         "   entry_id INT PRIMARY KEY," \
         "   entry_date DATE,"
         "   category VARCHAR(100),"
-        "   category_type CHAR(7)," \
+        "   transaction_type CHAR(7)," \
         "   amount_cents INT," \
         
         "   FOREIGN KEY (category) REFERENCES category_table(category) ON DELETE CASCADE" \
