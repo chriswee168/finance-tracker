@@ -29,8 +29,8 @@ def calc_net_income():
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    obtain_income_sum_query = "SELECT SUM(amount) FROM net_income_table WHERE category_type = 'income'"
-    obtain_expenses_sum_query = "SELECT SUM(amount) FROM net_income_table WHERE category_type = 'expense'"
+    obtain_income_sum_query = "SELECT SUM(amount_cents) FROM net_income_table WHERE category_type = 'income'"
+    obtain_expenses_sum_query = "SELECT SUM(amount_cents) FROM net_income_table WHERE category_type = 'expense'"
 
     # Get income and expense sum.
     cursor.execute(obtain_income_sum_query)
