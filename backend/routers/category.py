@@ -25,13 +25,13 @@ def add_transaction(category: str, transaction_type: str, amount_cents: int):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    get_n_entries_query = "SELECT COUNT(entry_id) FROM income_expense_table"
+    get_n_entries_query = "SELECT COUNT(entry_id) FROM transaction_table"
     cursor.execute(get_n_entries_query)
     entry_id = cursor.fetchall()[0][0]
     current_date = time.strftime("%Y-%m-%d")
 
     add_transaction_query = (
-        "INSERT INTO income_expense_table "
+        "INSERT INTO transaction_table "
         "(entry_id, entry_date, category, transaction_type, amount_cents) "
         "VALUES (?, ?, ?, ?, ?)"
     )

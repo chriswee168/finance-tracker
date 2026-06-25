@@ -21,7 +21,7 @@ def create_tables():
         "   transaction_type CHAR(7)" \
         ");"
 
-        "CREATE TABLE IF NOT EXISTS income_expense_table(" \
+        "CREATE TABLE IF NOT EXISTS transaction_table(" \
         "   entry_id INT PRIMARY KEY," \
         "   entry_date DATE,"
         "   category VARCHAR(100),"
