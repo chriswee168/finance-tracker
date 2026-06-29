@@ -1,0 +1,21 @@
+/* Styles for net income box. */
+.netIncomeBox
+{
+    border-style: solid;
+    border-radius: 10px;
+    border-color: rgb(212, 212, 212);
+
+    width: 400px;
+    height: 50px;
+    text-align: center;
+
+    position: relative;
+
+    p
+    {
+        font-size: 40px;
+        bottom: 40px;
+        position: relative;
+        font-family: var(--p-font-family);
+    }
+}
