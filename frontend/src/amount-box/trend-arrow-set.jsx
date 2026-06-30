@@ -1,7 +1,7 @@
 import styles from "./trend-arrow-set.module.css";
 
 /**
- * Create the trend arrow set component to display trend of net income overtime.
+ * Create the trend arrow set component to display cash trend overtime.
  * 
  * @returns Trend arrow set component.
  */
