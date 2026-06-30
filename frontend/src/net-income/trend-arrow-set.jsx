@@ -11,9 +11,9 @@ export default function TrendArrowSet({upColourState, downColourState})
   const downStyle = {borderTop: downColourState};
 
   return (
-    <div>
-      <div className={styles.arrowStyle} style={upStyle}/>
-      <div className={styles.arrowStyle} style={downStyle}/>
+    <div className={styles.trendArrowSet}>
+      <div className={`${styles.arrowStyle} ${styles.upArrow}`} style={upStyle}/>
+      <div className={`${styles.arrowStyle} ${styles.downArrow}`} style={downStyle}/>
     </div>
   )
 }
