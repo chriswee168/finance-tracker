@@ -5,7 +5,7 @@ import heroImg from './assets/hero.png'
 import styles from './App.module.css'
 import NetIncome from './amount-box/amount-box'
 import TrendArrowSet from './amount-box/trend-arrow-set'
-import { TREND_ARROW_COLOURS } from './constants'
+import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './constants'
 import AmountBox from './amount-box/amount-box'
 
 /**
@@ -22,8 +22,8 @@ function App() {
         upColourState={TREND_ARROW_COLOURS.green} 
         downColourState={TREND_ARROW_COLOURS.red}
       />
-      <AmountBox amountDollars='+$0.0'/>
-      <AmountBox amountDollars='+$0.0'/>
+      <AmountBox textLabel='Net Income' amountDollars='0.0' sign='+' colour={SIGN_COLOURS.green}/>
+      <AmountBox textLabel='Net Balance' amountDollars='0.0' sign='-' colour={SIGN_COLOURS.red}/>
     </div>
   )
 }
