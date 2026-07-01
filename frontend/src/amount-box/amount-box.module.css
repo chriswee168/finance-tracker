@@ -10,12 +10,20 @@
     text-align: center;
 
     position: relative;
+}
 
-    p
-    {
-        font-size: 40px;
-        bottom: 40px;
-        position: relative;
-        font-family: var(--p-font-family);
-    }
+/* Styles for text label and the cash amount displayed in dollars. */
+.textLabel
+{
+    position: relative;
+    bottom: 20%;
+    color: rgb(73, 73, 73);
+    font-family: var(--p-font-family);
+}
+.amountDollars
+{
+    font-size: 30px;
+    bottom: 40px;
+    position: relative;
+    font-family: var(--p-font-family);
 }
