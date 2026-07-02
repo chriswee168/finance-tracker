@@ -8,8 +8,8 @@
 .transactionOptionGroup
 {
     border-style: solid;
-    width: 310px;
-    height: 25px;
+    width: 320px;
+    height: 45px;
     position: relative;
     left: 6%;
 }
@@ -27,6 +27,7 @@
 {
     background-color: rgb(48, 192, 0);
     position: absolute;
+    left: 2%;
     &:hover
     {
         background-color: rgb(15, 229, 0);
