@@ -2,3 +2,8 @@
 {
     --p-font-family: monospace;
 }
+
+label, h3
+{
+    font-family: var(--p-font-family);
+}

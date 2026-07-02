@@ -1,0 +1,10 @@
+.transactionOption
+{
+    width: 100px;
+    border-style: none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-family: var(--p-font-family);
+    transition: 0.5s;
+}
