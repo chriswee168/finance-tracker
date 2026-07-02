@@ -1,10 +1,39 @@
+.transactionOptionGroup
+{
+    border-style: solid;
+    width: 310px;
+    height: 25px;
+    position: relative;
+    left: 6%;
+}
 .transactionOption
 {
-    width: 100px;
-    border-style: none;
-    border-radius: 10px;
+    width: 150px;
+    border-radius: 20px;
     text-align: center;
     font-size: 20px;
     font-family: var(--p-font-family);
     transition: 0.5s;
+}
+
+.incomeOption
+{
+    background-color: rgb(48, 192, 0);
+    position: absolute;
+    &:hover
+    {
+        background-color: rgb(15, 229, 0);
+    }
+}
+
+.expenseOption
+{
+    background-color: rgb(195, 0, 0);
+    position: absolute;
+    left: 51.5%;
+
+    &:hover
+    {
+        background-color: rgb(236, 0, 0);
+    }
 }

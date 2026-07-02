@@ -9,8 +9,8 @@ export default function TransactionBox()
       <h3>ENTER TRANSACTION</h3>
       <label htmlFor="transaction-type">1. Transaction Type: </label>
       <div className={styles.transactionOptionGroup}>
-        <div className={styles.transactionOption}>Income</div>
-        <div className={styles.transactionOption}>Expense</div>
+        <div className={`${styles.transactionOption} ${styles.incomeOption}`}>Income</div>
+        <div className={`${styles.transactionOption} ${styles.expenseOption}`}>Expense</div>
       </div>
     </div>
   )
