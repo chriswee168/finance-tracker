@@ -3,6 +3,10 @@
     --p-font-family: monospace;
 }
 
+label
+{
+    font-size: 110%;
+}
 label, h3
 {
     font-family: var(--p-font-family);

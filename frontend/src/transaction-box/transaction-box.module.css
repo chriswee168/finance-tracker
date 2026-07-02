@@ -5,6 +5,11 @@
     height: 400px;
 }
 
+.transactionTypeLabel
+{
+    padding-left: 2%;
+}
+
 .transactionOptionGroup
 {
     border-style: solid;
