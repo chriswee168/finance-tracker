@@ -7,6 +7,7 @@ import NetIncome from './amount-box/amount-box'
 import TrendArrowSet from './amount-box/trend-arrow-set'
 import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './constants'
 import AmountBox from './amount-box/amount-box'
+import TransactionBox from './transaction-box/transaction-box'
 
 /**
  * Create main app component.
@@ -24,6 +25,7 @@ function App() {
       />
       <AmountBox textLabel='Net Income' amountDollars='0.0' sign='+' colour={SIGN_COLOURS.green}/>
       <AmountBox textLabel='Net Balance' amountDollars='0.0' sign='-' colour={SIGN_COLOURS.red}/>
+      <TransactionBox />
     </div>
   )
 }
