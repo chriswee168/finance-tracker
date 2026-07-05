@@ -19,10 +19,6 @@ function App() {
 
   return (
     <div className={styles.appWrapper}>
-      <TrendArrowSet 
-        upColourState={TREND_ARROW_COLOURS.green} 
-        downColourState={TREND_ARROW_COLOURS.red}
-      />
       <AmountBox textLabel='Net Income' amountDollars='0.0' sign='+' colour={SIGN_COLOURS.green}/>
       <AmountBox textLabel='Net Balance' amountDollars='0.0' sign='-' colour={SIGN_COLOURS.red}/>
       <TransactionBox />
