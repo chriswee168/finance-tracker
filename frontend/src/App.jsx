@@ -3,11 +3,11 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import styles from './App.module.css'
-import NetIncome from './amount-box/amount-box'
-import TrendArrowSet from './amount-box/trend-arrow-set'
+import NetIncome from './amount-transaction/amount-box/amount-box'
+import TrendArrowSet from './amount-transaction/amount-box/trend-arrow-set'
 import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './constants'
-import AmountBox from './amount-box/amount-box'
-import TransactionBox from './transaction-box/transaction-box'
+import AmountBox from './amount-transaction/amount-box/amount-box'
+import TransactionBox from './amount-transaction/transaction-box/transaction-box'
 
 /**
  * Create main app component.
