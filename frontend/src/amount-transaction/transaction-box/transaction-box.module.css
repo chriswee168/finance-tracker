@@ -23,7 +23,8 @@
     width: 320px;
     height: 45px;
     position: relative;
-    left: 9%;
+    left: 50%;
+    transform: translate(-50%);
 }
 .transactionOption
 {
@@ -64,7 +65,8 @@
     border-style: solid;
     width: 320px;
     height: 45px;
-    left: 9%;
+    left: 50%;
+    transform: translate(-50%);
     position: relative;
     line-height: 16px;
 }
@@ -89,8 +91,9 @@
     height: 50%;
     background-color: rgb(206, 206, 206);
     padding-left: 10px;
-    position: relative;
-    left: 1%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
     font-size: 19px;
     font-family: var(--p-font-family);
     font-weight: bold;
@@ -108,7 +111,8 @@
     border-style: solid;
     width: 314px;
     height: 100px;
-    left: 9%;
+    left: 50%;
+    transform: translate(-50%);
     position: relative;
     line-height: 16px;
     padding-left: 1.5%;
@@ -122,8 +126,10 @@
     height: 69%;
     background-color: rgb(206, 206, 206);
     padding: 5px;
-    position: relative;
-    left: 1%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -42%);
     font-size: 15px;
     font-family: var(--p-font-family);
     font-weight: bold;
