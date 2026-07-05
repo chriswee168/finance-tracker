@@ -15,8 +15,7 @@ export default function TransactionBox()
       </div>
       
       <div className={styles.cashAmountInput}>
-        <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount (dollars): </label><br/>
-        <label htmlFor="cash-input" className={styles.cashAmountSymbol}>$</label>
+        <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
         <input id="cash-input" type="text" className={styles.cashAmountTextbox} placeholder="00.00"/>
       </div>
       
