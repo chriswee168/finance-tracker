@@ -8,7 +8,7 @@
 {
     border-style: solid;
     width: 400px;
-    height: 290px;
+    height: 330px;
 }
 
 /* Rules for the transaction option selection. */
@@ -141,5 +141,27 @@
     {
         background-color: grey;
         border-radius: 10px;
+    }
+}
+
+/* Transaction submit button. */
+.submitButton
+{
+    position: relative;
+    left: 50%;
+    top: 4%;
+    transform: translate(-50%);
+    width: 170px;
+    height: 30px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 15px;
+    font-family: var(--p-font-family);
+    border-style: none;
+    background-color: rgb(206, 206, 206);
+
+    &:hover
+    {
+        background-color: rgb(173, 173, 173);
     }
 }
