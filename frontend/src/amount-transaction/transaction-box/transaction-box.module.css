@@ -94,6 +94,12 @@
     font-size: 19px;
     font-family: var(--p-font-family);
     font-weight: bold;
+
+    &:focus
+    {
+        outline: none;
+        background-color: rgb(183, 183, 183);
+    }
 }
 
 /* Rules for transaction description. */
@@ -141,6 +147,12 @@
     {
         background-color: grey;
         border-radius: 10px;
+    }
+
+    &:focus
+    {
+        outline: none;
+        background-color: rgb(183, 183, 183);
     }
 }
 
