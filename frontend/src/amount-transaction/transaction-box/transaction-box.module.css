@@ -76,18 +76,11 @@
     padding-left: 2%;    
 }
 
-.cashAmountSymbol
-{
-    font-size: 20px;
-    font-weight: bold;
-    padding-left: 2%;
-}
-
 .cashAmountTextbox
 {
     border-style: none;
     border-radius: 20px;
-    width: 88%;
+    width: 93%;
     height: 50%;
     background-color: rgb(206, 206, 206);
     padding-left: 10px;
