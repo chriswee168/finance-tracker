@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
 import styles from "./transaction-box.module.css";
 
-
-export default function TransactionBox()
+/**
+ * Transaction box component to record transaction type, state and amount.
+ * 
+ * @param {Object} param0 
+ * @param {string} param0.cashAmount Cash amount state.
+ * @param {string} param0.transactionDesc Transaction description state.
+ * @param {Dispatch<SetStateAction<string>>} param0.setAmount Setter for cash amount.
+ * @param {Dispatch<SetStateAction<string>>} param0.setTransactionDesc Setter for transaction description.
+ * 
+ * @returns Transaction box component.
+ */
+export default function TransactionBox({cashAmount, transactionDesc, setAmount, setTransactionDesc})
 {
   return (
     <div className={styles.transactionBox}>
@@ -16,12 +26,14 @@ export default function TransactionBox()
       
       <div className={styles.cashAmountInput}>
         <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
-        <input id="cash-input" type="text" className={styles.cashAmountTextbox} placeholder="00.00"/>
+        <input id="cash-input" value={cashAmount} type="text" className={styles.cashAmountTextbox} 
+          placeholder="00.00" onChange={(event) => setAmount(event.target.value)}/>
       </div>
       
       <div className={styles.descriptionInput}>
         <label htmlFor="desc-input" className={styles.descLabel}>Transaction description: </label>
-        <textarea id="desc-input" type="text" className={styles.descTextbox} placeholder="Enter description..."/>
+        <textarea id="desc-input" value={transactionDesc} type="text" className={styles.descTextbox} 
+          placeholder="Enter description..." onChange={(event) => setTransactionDesc(event.target.value)}/>
       </div>
 
       <button className={styles.submitButton}>SUBMIT TRANSACTION</button>
