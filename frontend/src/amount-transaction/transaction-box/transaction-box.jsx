@@ -35,7 +35,7 @@ export default function TransactionBox({
       initialAmountNum = -initialAmountNum;
     }
 
-    const newAmount = (initialAmountNum + cashAmountNum);
+    const newAmount = (initialAmountNum + cashAmountNum).toFixed(2);
 
     // Choose colour and sign to display in front of dollar symbol.
     let sign, colour;
