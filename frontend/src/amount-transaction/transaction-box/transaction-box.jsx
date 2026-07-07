@@ -1,5 +1,6 @@
 import { useId, useRef, useState } from "react";
 import styles from "./transaction-box.module.css";
+import { SIGN_COLOURS } from "../../constants";
 
 /**
  * Transaction box component to record transaction type, state and amount.
@@ -21,6 +22,39 @@ export default function TransactionBox({
   netIncomeStates, netBalanceStates, setNetIncomeStates, setNetBalanceStates
 })
 {
+  // Function to update the net income and net balance in real time as transactions
+  // are entered.
+  const updateAmount = (initialAmount, initialSign, setStateFunc) =>
+  {
+    let initialAmountNum = Number(initialAmount);
+    const cashAmountNum = Number(cashAmount);
+
+    // Add negative sign if required for addition/subtraction.
+    if (initialSign == '-')
+    {
+      initialAmountNum = -initialAmountNum;
+    }
+
+    const newAmount = (initialAmountNum + cashAmountNum);
+
+    // Choose colour and sign to display in front of dollar symbol.
+    let sign, colour;
+    if (newAmount >= 0)
+    {
+      colour = SIGN_COLOURS.green;
+      sign = '+';
+    }
+    else
+    {
+      colour = SIGN_COLOURS.red;
+      sign = '-';
+    }
+
+    // Remove any negative sign from new amount in string format.
+    const newAmountStr = String(newAmount).replace('-','');
+    setStateFunc({amountDollars: newAmountStr, sign: sign, colour: colour});
+  }
+
   return (
     <div className={styles.transactionBox}>
       <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
@@ -43,7 +77,15 @@ export default function TransactionBox({
           placeholder="Enter description..." onChange={(event) => setTransactionDesc(event.target.value)}/>
       </div>
 
-      <button className={styles.submitButton}>SUBMIT TRANSACTION</button>
+      <button className={styles.submitButton} 
+        onClick={
+          () => {
+            updateAmount(netIncomeStates.amountDollars, netIncomeStates.sign, setNetIncomeStates);
+            updateAmount(netBalanceStates.amountDollars, netBalanceStates.sign, setNetBalanceStates);
+          }
+        }>
+        SUBMIT TRANSACTION
+      </button>
     </div>
   )
 }

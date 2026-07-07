@@ -25,6 +25,10 @@ export default function AmountTransaction()
         setAmount={setAmount} 
         transactionDesc={transactionDesc}
         setTransactionDesc={setTransactionDesc}
+        netIncomeStates={netIncomeStates}
+        netBalanceStates={netBalanceStates}
+        setNetIncomeStates={setNetIncomeStates}
+        setNetBalanceStates={setNetBalanceStates}
       />
     </>
   )
