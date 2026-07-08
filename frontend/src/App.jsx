@@ -16,8 +16,7 @@ import AmountTransaction from './amount-transaction/AmountTransaction'
  * @returns Main app component.
  */
 function App() {
-  const [count, setCount] = useState(0)
-
+  
   return (
     <div className={styles.appWrapper}>
       <AmountTransaction />
