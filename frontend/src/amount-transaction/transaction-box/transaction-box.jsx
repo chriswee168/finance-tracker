@@ -23,7 +23,8 @@ export default function TransactionBox({
 })
 {
   // Transaction type state. (0 = income, 1 = expense).
-  const [transactionType, setTransactionType] = useState(false);
+  const [transactionType, setTransactionType] = useState(0);
+
   // Function to update the net income and net balance in real time as transactions
   // are entered.
   const updateAmount = (initialAmount, initialSign, setStateFunc) =>
@@ -65,13 +66,17 @@ export default function TransactionBox({
         <label htmlFor="transaction-type" className={styles.transactionTypeLabel}>Transaction type: </label>
         <div className={
           `${styles.transactionOption} 
-          ${transactionType ? styles.incomeOption : styles.incomeOptionSelected}`
-          }>Income
+          ${transactionType == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
+          }
+          onClick={() => setTransactionType(0)}
+          >Income
         </div>
         <div className={
           `${styles.transactionOption} 
-          ${!transactionType ? styles.expenseOption : styles.expenseOptionSelected}`
-          }>Expense
+          ${transactionType == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
+          }
+          onClick={() => setTransactionType(1)}
+          >Expense
         </div>
       </div>
       
