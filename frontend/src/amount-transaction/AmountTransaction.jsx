@@ -17,6 +17,16 @@ export default function AmountTransaction()
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
 
+  // Function for submit button in transaction box to call when clicked.
+  const submitFunc = () =>
+  {
+
+    // Reset transaction box states.
+    setTransactionType(0);
+    setAmount('');
+    setTransactionDesc('');
+  }
+
   return (
     <>
       <AmountBox textLabel='Net Income' amountDollars={netIncomeStates.amountDollars} 
@@ -34,6 +44,7 @@ export default function AmountTransaction()
         netBalanceStates={netBalanceStates}
         setNetIncomeStates={setNetIncomeStates}
         setNetBalanceStates={setNetBalanceStates}
+        submitFunc={submitFunc}
       />
     </>
   )
