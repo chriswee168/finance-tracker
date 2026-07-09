@@ -10,6 +10,9 @@ export default function AmountTransaction()
   const [netIncomeStates, setNetIncomeStates] = useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
   const [netBalanceStates, setNetBalanceStates] = useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
 
+  // Transaction type state. (0 = income, 1 = expense).
+  const [transactionType, setTransactionType] = useState(0);
+
   // Cash amount and transaction description states.
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
@@ -21,6 +24,8 @@ export default function AmountTransaction()
       <AmountBox textLabel='Net Balance' amountDollars={netBalanceStates.amountDollars} 
         sign={netBalanceStates.sign} colour={netBalanceStates.colour}/>
       <TransactionBox 
+        transactionType={transactionType}
+        setTransactionType={setTransactionType}
         cashAmount={cashAmount} 
         setAmount={setAmount} 
         transactionDesc={transactionDesc}

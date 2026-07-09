@@ -14,12 +14,17 @@ import { SIGN_COLOURS } from "../../constants";
  * @param {string} param0.netBalanceStates State settings for net balance.
  * @param {Dispatch<SetStateAction<string>>} param0.setNetIncomeStates Setter for net income.
  * @param {Dispatch<SetStateAction<string>>} param0.setNetBalanceStates Setter for net balance.
+ * @param {number} param0.transactionType Transaction type state.
+ * @param {Dispatch<SetStateAction<number>>} param0.setTransactionType Setter for transaction type.
  * 
  * @returns Transaction box component.
  */
 export default function TransactionBox({
-  cashAmount, transactionDesc, setAmount, setTransactionDesc,
-  netIncomeStates, netBalanceStates, setNetIncomeStates, setNetBalanceStates
+  cashAmount, transactionDesc, 
+  setAmount, setTransactionDesc,
+  netIncomeStates, netBalanceStates, 
+  setNetIncomeStates, setNetBalanceStates,
+  transactionType, setTransactionType
 })
 {
   // Function to update the net income and net balance in real time as transactions
@@ -61,8 +66,20 @@ export default function TransactionBox({
 
       <div className={styles.transactionOptionGroup}>
         <label htmlFor="transaction-type" className={styles.transactionTypeLabel}>Transaction type: </label>
-        <div className={`${styles.transactionOption} ${styles.incomeOption}`}>Income</div>
-        <div className={`${styles.transactionOption} ${styles.expenseOption}`}>Expense</div>
+        <div className={
+          `${styles.transactionOption} 
+          ${transactionType == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
+          }
+          onClick={() => setTransactionType(0)}
+          >Income
+        </div>
+        <div className={
+          `${styles.transactionOption} 
+          ${transactionType == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
+          }
+          onClick={() => setTransactionType(1)}
+          >Expense
+        </div>
       </div>
       
       <div className={styles.cashAmountInput}>
