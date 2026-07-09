@@ -19,11 +19,6 @@ def create_tables():
         "   amount_cents INT" \
         ");"
 
-        "CREATE TABLE IF NOT EXISTS category_table(" \
-        "   category VARCHAR(100) PRIMARY KEY," \
-        "   transaction_type CHAR(7)" \
-        ");"
-
         "CREATE TABLE IF NOT EXISTS transaction_table(" \
         "   entry_id INT PRIMARY KEY," \
         "   entry_date DATE,"
