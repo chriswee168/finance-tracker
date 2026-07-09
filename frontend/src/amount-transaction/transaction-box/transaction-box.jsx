@@ -16,6 +16,7 @@ import { SIGN_COLOURS } from "../../constants";
  * @param {Dispatch<SetStateAction<string>>} param0.setNetBalanceStates Setter for net balance.
  * @param {number} param0.transactionType Transaction type state.
  * @param {Dispatch<SetStateAction<number>>} param0.setTransactionType Setter for transaction type.
+ * @param {function(): void} param0.submitFunc Function for submit button to call.
  * 
  * @returns Transaction box component.
  */
@@ -24,7 +25,7 @@ export default function TransactionBox({
   setAmount, setTransactionDesc,
   netIncomeStates, netBalanceStates, 
   setNetIncomeStates, setNetBalanceStates,
-  transactionType, setTransactionType
+  transactionType, setTransactionType, submitFunc
 })
 {
   // Function to update the net income and net balance in real time as transactions
@@ -99,6 +100,7 @@ export default function TransactionBox({
           () => {
             updateAmount(netIncomeStates.amountDollars, netIncomeStates.sign, setNetIncomeStates);
             updateAmount(netBalanceStates.amountDollars, netBalanceStates.sign, setNetBalanceStates);
+            submitFunc();
           }
         }>
         SUBMIT TRANSACTION
