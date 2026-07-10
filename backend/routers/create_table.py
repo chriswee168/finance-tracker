@@ -28,6 +28,7 @@ def create_tables():
         "   entry_id INT PRIMARY KEY," \
         "   entry_date DATE,"
         "   transaction_type CHAR(7)," \
+        "   transaction_desc TEXT," \
         "   amount_cents INT," \
         ")"
     )
