@@ -11,10 +11,15 @@ def create_tables():
     cursor = conn.cursor()
     
     # net_income_table: record the net income overtime.
-    # category_table: record all categories created by user.
+    # current_balance_table: record the current balance.
     # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
         "CREATE TABLE IF NOT EXISTS net_income_table(" \
+        "   entry_date DATE PRIMARY KEY," \
+        "   amount_cents INT" \
+        ");"
+
+        "CREATE TABLE IF NOT EXISTS current_balance_table(" \
         "   entry_date DATE PRIMARY KEY," \
         "   amount_cents INT" \
         ");"
