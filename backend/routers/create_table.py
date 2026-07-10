@@ -27,7 +27,7 @@ def create_tables():
         "CREATE TABLE IF NOT EXISTS transaction_table(" \
         "   entry_id INT PRIMARY KEY," \
         "   entry_date DATE,"
-        "   transaction_type CHAR(7)," \
+        "   transaction_type VARCHAR(7)," \
         "   transaction_desc TEXT," \
         "   amount_cents INT," \
         ")"
