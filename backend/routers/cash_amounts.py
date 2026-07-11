@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from pydantic import BaseModel
 import sqlite3
 import os
@@ -8,18 +8,18 @@ route = APIRouter()
 class NetIncomeResponse(BaseModel):
     net_income_cents: int
 
-# Add to net income SQL table.
-@route.post("/add-net-income")
-def add_net_income(entry_date: str, ammount: str):
+# Add net income and current balance to SQL tables.
+@route.post("/add-cash-amount", status_code=status.HTTP_204_NO_CONTENT)
+def add_cash_amounts(entry_date: str, net_income_cents: str, current_balance_cents: str):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    add_net_income_query = (
-        "INSERT INTO net_income_table (entry_date, ammount) "
-        f"VALUES ({entry_date}, {ammount})"
-    )
+    add_cash_amounts_query = (
+        "INSERT INTO amount_history_table "
+        "(entry_date, net_income_cents, current_balance_cents) VALUES (?, ?, ?)"
+        )
 
-    cursor.execute(add_net_income_query)
+    cursor.execute(add_cash_amounts_query, (entry_date, net_income_cents, current_balance_cents))
     conn.commit()
     conn.close()
 
