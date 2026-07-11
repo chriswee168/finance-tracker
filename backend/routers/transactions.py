@@ -25,6 +25,13 @@ def add_transaction(transaction_type: str, transaction_desc: str, amount_cents: 
         add_transaction_query, 
         (entry_id, current_date, transaction_type, transaction_desc, amount_cents)
     )
-
     conn.commit()
     conn.close()
+
+    print((
+        "Added transaction:\n" \
+        f"Date: {current_date}\n" \
+        f"Transaction type: {transaction_type}\n" \
+        f"Description: {transaction_desc}\n" \
+        f"Cash amount (cents): {amount_cents}"
+    ))
