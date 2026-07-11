@@ -1,12 +1,19 @@
 from fastapi import APIRouter, status
+from pydantic import BaseModel
 import sqlite3
 import time
 
 route = APIRouter()
 
+# Transactions require type, description and cash amount.
+class Transaction(BaseModel):
+    type: str
+    desc: str
+    amount_cents: int
+
 # Add transaction entry to transaction table.
 @route.post("/add-transaction", status_code=status.HTTP_204_NO_CONTENT)
-def add_transaction(transaction_type: str, transaction_desc: str, amount_cents: int):
+def add_transaction(transaction: Transaction):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
@@ -23,7 +30,7 @@ def add_transaction(transaction_type: str, transaction_desc: str, amount_cents: 
 
     cursor.execute(
         add_transaction_query, 
-        (entry_id, current_date, transaction_type, transaction_desc, amount_cents)
+        (entry_id, current_date, transaction.type, transaction.desc, transaction.amount_cents)
     )
     conn.commit()
     conn.close()
@@ -31,7 +38,7 @@ def add_transaction(transaction_type: str, transaction_desc: str, amount_cents: 
     print((
         "Added transaction:\n" \
         f"Date: {current_date}\n" \
-        f"Transaction type: {transaction_type}\n" \
-        f"Description: {transaction_desc}\n" \
-        f"Cash amount (cents): {amount_cents}"
+        f"Transaction type: {transaction.type}\n" \
+        f"Description: {transaction.desc}\n" \
+        f"Cash amount (cents): {transaction.amount_cents}"
     ))
