@@ -30,10 +30,10 @@ export default function TransactionBox({
 {
   // Function to update the net income and net balance in real time as transactions
   // are entered.
-  const updateAmount = (initialAmount, initialSign, setStateFunc) =>
+  const updateAmount = (initialAmount, transactionType, initialSign, setStateFunc) =>
   {
     let initialAmountNum = Number(initialAmount);
-    const cashAmountNum = Number(cashAmount);
+    let cashAmountNum = Number(cashAmount);
 
     // Add negative sign if required for addition/subtraction.
     if (initialSign == '-')
@@ -41,6 +41,11 @@ export default function TransactionBox({
       initialAmountNum = -initialAmountNum;
     }
 
+    // Add or subtract based on transaction type selected.
+    if (transactionType == 1)
+    {
+      cashAmountNum = -cashAmountNum;
+    }
     const newAmount = (initialAmountNum + cashAmountNum).toFixed(2);
 
     // Choose colour and sign to display in front of dollar symbol.
@@ -98,8 +103,14 @@ export default function TransactionBox({
       <button className={styles.submitButton} 
         onClick={
           () => {
-            updateAmount(netIncomeStates.amountDollars, netIncomeStates.sign, setNetIncomeStates);
-            updateAmount(netBalanceStates.amountDollars, netBalanceStates.sign, setNetBalanceStates);
+            updateAmount(
+              netIncomeStates.amountDollars, transactionType, 
+              netIncomeStates.sign, setNetIncomeStates
+            );
+            updateAmount(
+              netBalanceStates.amountDollars, transactionType, 
+              netBalanceStates.sign, setNetBalanceStates
+            );
             submitFunc();
           }
         }>
