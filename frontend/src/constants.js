@@ -9,4 +9,4 @@ export const TREND_ARROW_COLOURS = {
 export const SIGN_COLOURS = {
     green: "green",
     red: "red"
-}
+}export const CASH_SCALE_FACTOR = 100;
