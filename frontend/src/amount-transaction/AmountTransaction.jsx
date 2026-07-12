@@ -17,6 +17,58 @@ export default function AmountTransaction()
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
 
+  // Function to export the transaction information to backend.
+  const exportTransaction = async (transactionType, cashAmountCents) =>
+  {
+    try
+    {
+      const response = await fetch("http://127.0.0.1:8000/add-transaction", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          type: transactionType,
+          desc: transactionDesc,
+          amount_cents: cashAmountCents
+        })
+      });
+
+      if (!response.ok)
+      {
+        throw new Error(`${response.status}`);
+      }
+    }
+    catch (error)
+    {
+      console.log(error);
+    }
+  }
+
+  // Function for submit button in transaction box to call when clicked.
+  const submitFunc = () =>
+  {
+    // Cash amount dollars to cents.
+    const cashAmountCents = parseInt(cashAmount * 100);
+
+    let transactionStr;
+    switch (transactionType)
+    {
+      case 0:
+        transactionStr = "income";
+        break;
+      case 1:
+        transactionStr = "expense";
+        break;
+    }
+
+    // Send transaction entry to backend and add to SQL database.
+    exportTransaction(transactionStr, cashAmountCents);
+
+    // Reset transaction box states.
+    setTransactionType(0);
+    setAmount('');
+    setTransactionDesc('');
+  }
+
   return (
     <>
       <AmountBox textLabel='Net Income' amountDollars={netIncomeStates.amountDollars} 
@@ -34,6 +86,7 @@ export default function AmountTransaction()
         netBalanceStates={netBalanceStates}
         setNetIncomeStates={setNetIncomeStates}
         setNetBalanceStates={setNetBalanceStates}
+        submitFunc={submitFunc}
       />
     </>
   )
