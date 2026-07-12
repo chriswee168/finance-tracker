@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from "react";
 import styles from "./transaction-box.module.css";
-import { SIGN_COLOURS } from "../../constants";
+import { CASH_DP, SIGN_COLOURS } from "../../constants";
 
 /**
  * Transaction box component to record transaction type, state and amount.
@@ -46,7 +46,7 @@ export default function TransactionBox({
     {
       cashAmountNum = -cashAmountNum;
     }
-    const newAmount = (initialAmountNum + cashAmountNum).toFixed(2);
+    const newAmount = (initialAmountNum + cashAmountNum).toFixed(CASH_DP);
 
     // Choose colour and sign to display in front of dollar symbol.
     let sign, colour;

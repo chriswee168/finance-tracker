@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SIGN_COLOURS } from "../constants";
+import { CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
 import TransactionBox from "./transaction-box/transaction-box";
 
@@ -47,7 +47,7 @@ export default function AmountTransaction()
   const submitFunc = () =>
   {
     // Cash amount dollars to cents.
-    const cashAmountCents = parseInt(cashAmount * 100);
+    const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
 
     let transactionStr;
     switch (transactionType)
