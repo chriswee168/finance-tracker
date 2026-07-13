@@ -46,25 +46,32 @@ export default function AmountTransaction()
     }
   }
 
+  // Function to convert string of transaction option (0 = income, 1 = expense).
+  const intToStrOp = transactionOpInt =>
+  {
+    let transactionOpStr;
+    switch (transactionOpInt)
+    {
+      case 0:
+        transactionOpStr = "income";
+        break;
+      case 1:
+        transactionOpStr = "expense";
+        break;
+    }
+
+    return transactionOpStr;
+  }
+
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
     // Cash amount dollars to cents.
     const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
-
-    let transactionStr;
-    switch (transactionOption)
-    {
-      case 0:
-        transactionStr = "income";
-        break;
-      case 1:
-        transactionStr = "expense";
-        break;
-    }
+    const transactionOpStr = intToStrOp(transactionOption);
 
     // Send transaction entry to backend and add to SQL database.
-    exportTransaction(transactionStr, cashAmountCents);
+    exportTransaction(transactionOpStr, cashAmountCents);
 
     // Reset transaction box states.
     setTransactionOption(0);
