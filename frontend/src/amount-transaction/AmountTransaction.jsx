@@ -3,6 +3,7 @@ import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
+import CashAmountInput from "./cash-amount-input/cash-amount-input";
 
 export default function AmountTransaction()
 {
@@ -119,12 +120,7 @@ export default function AmountTransaction()
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
       
         <TransactionOptions transactionOption={transactionOption} setTransactionOption={setTransactionOption} />
-            
-        <div className={styles.cashAmountInput}>
-          <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
-          <input id="cash-input" value={cashAmount} type="text" className={styles.cashAmountTextbox} 
-            placeholder="00.00" onChange={(event) => setAmount(event.target.value)}/>
-        </div>
+        <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} />
             
         <div className={styles.descriptionInput}>
           <label htmlFor="desc-input" className={styles.descLabel}>Transaction description: </label>
