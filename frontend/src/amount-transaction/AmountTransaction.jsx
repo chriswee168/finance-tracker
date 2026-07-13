@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
+import TransactionOptions from "./transaction-options/transaction-options";
 
 export default function AmountTransaction()
 {
@@ -117,23 +118,7 @@ export default function AmountTransaction()
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
       
-          <div className={styles.transactionOptionGroup}>
-          <label htmlFor="transaction-type" className={styles.transactionTypeLabel}>Transaction type: </label>
-          <div className={
-            `${styles.transactionOption} 
-            ${transactionType == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
-            }
-            onClick={() => setTransactionType(0)}
-            >Income
-          </div>
-          <div className={
-            `${styles.transactionOption} 
-            ${transactionType == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
-            }
-            onClick={() => setTransactionType(1)}
-            >Expense
-          </div>
-        </div>
+        <TransactionOptions transactionType={transactionType} setTransactionType={setTransactionType} />
             
         <div className={styles.cashAmountInput}>
           <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
