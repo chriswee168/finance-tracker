@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
-import TransactionBox from "./transaction-box/transaction-box";
 
 export default function AmountTransaction()
 {
@@ -75,19 +74,7 @@ export default function AmountTransaction()
         sign={netIncomeStates.sign} colour={netIncomeStates.colour}/>
       <AmountBox textLabel='Net Balance' amountDollars={netBalanceStates.amountDollars} 
         sign={netBalanceStates.sign} colour={netBalanceStates.colour}/>
-      <TransactionBox 
-        transactionType={transactionType}
-        setTransactionType={setTransactionType}
-        cashAmount={cashAmount} 
-        setAmount={setAmount} 
-        transactionDesc={transactionDesc}
-        setTransactionDesc={setTransactionDesc}
-        netIncomeStates={netIncomeStates}
-        netBalanceStates={netBalanceStates}
-        setNetIncomeStates={setNetIncomeStates}
-        setNetBalanceStates={setNetBalanceStates}
-        submitFunc={submitFunc}
-      />
+      
     </>
   )
 }
