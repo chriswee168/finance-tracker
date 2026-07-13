@@ -68,6 +68,44 @@ export default function AmountTransaction()
     setTransactionDesc('');
   }
 
+  // Function to update the net income and net balance in real time as transactions
+  // are entered.
+  const updateAmount = (initialAmount, transactionType, initialSign, setStateFunc) =>
+  {
+    let initialAmountNum = Number(initialAmount);
+    let cashAmountNum = Number(cashAmount);
+  
+    // Add negative sign if required for addition/subtraction.
+    if (initialSign == '-')
+    {
+      initialAmountNum = -initialAmountNum;
+    }
+  
+    // Add or subtract based on transaction type selected.
+    if (transactionType == 1)
+    {
+      cashAmountNum = -cashAmountNum;
+    }
+    const newAmount = (initialAmountNum + cashAmountNum).toFixed(CASH_DP);
+  
+    // Choose colour and sign to display in front of dollar symbol.
+    let sign, colour;
+    if (newAmount >= 0)
+    {
+      colour = SIGN_COLOURS.green;
+      sign = '+';
+    }
+    else
+    {
+      colour = SIGN_COLOURS.red;
+      sign = '-';
+    }
+  
+    // Remove any negative sign from new amount in string format.
+    const newAmountStr = String(newAmount).replace('-','');
+    setStateFunc({amountDollars: newAmountStr, sign: sign, colour: colour});
+  }
+
   return (
     <>
       <AmountBox textLabel='Net Income' amountDollars={netIncomeStates.amountDollars} 
