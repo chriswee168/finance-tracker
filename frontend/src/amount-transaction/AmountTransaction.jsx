@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
+import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
+import styles from "./transaction-box.module.css";
 
 export default function AmountTransaction()
 {
@@ -113,6 +114,56 @@ export default function AmountTransaction()
       <AmountBox textLabel='Net Balance' amountDollars={netBalanceStates.amountDollars} 
         sign={netBalanceStates.sign} colour={netBalanceStates.colour}/>
       
+      <div className={styles.transactionBox}>
+        <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
+      
+          <div className={styles.transactionOptionGroup}>
+          <label htmlFor="transaction-type" className={styles.transactionTypeLabel}>Transaction type: </label>
+          <div className={
+            `${styles.transactionOption} 
+            ${transactionType == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
+            }
+            onClick={() => setTransactionType(0)}
+            >Income
+          </div>
+          <div className={
+            `${styles.transactionOption} 
+            ${transactionType == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
+            }
+            onClick={() => setTransactionType(1)}
+            >Expense
+          </div>
+        </div>
+            
+        <div className={styles.cashAmountInput}>
+          <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
+          <input id="cash-input" value={cashAmount} type="text" className={styles.cashAmountTextbox} 
+            placeholder="00.00" onChange={(event) => setAmount(event.target.value)}/>
+        </div>
+            
+        <div className={styles.descriptionInput}>
+          <label htmlFor="desc-input" className={styles.descLabel}>Transaction description: </label>
+          <textarea id="desc-input" value={transactionDesc} type="text" className={styles.descTextbox} 
+            placeholder="Enter description..." onChange={(event) => setTransactionDesc(event.target.value)}/>
+        </div>
+      
+        <button className={styles.submitButton} 
+          onClick={
+            () => {
+              updateAmount(
+                netIncomeStates.amountDollars, transactionType, 
+                netIncomeStates.sign, setNetIncomeStates
+              );
+                  updateAmount(
+                netBalanceStates.amountDollars, transactionType, 
+                netBalanceStates.sign, setNetBalanceStates
+              );
+              submitFunc();
+            }
+          }>
+          SUBMIT TRANSACTION
+        </button>
+      </div>
     </>
   )
 }
