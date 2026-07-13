@@ -78,6 +78,16 @@ export default function AmountTransaction()
     setAmount('');
     setTransactionDesc('');
   }
+  
+  // Add negative sign if sign character is '-'.
+  const addNegativeSign = (amountNum, signChar) =>
+  {
+    if (signChar == '-')
+    {
+      amountNum = -amountNum;
+    }
+    return amountNum;
+  }
 
   // Function to update the net income and net balance in real time as transactions
   // are entered.
@@ -85,12 +95,7 @@ export default function AmountTransaction()
   {
     let initialAmountNum = Number(initialAmount);
     let cashAmountNum = Number(cashAmount);
-  
-    // Add negative sign if required for addition/subtraction.
-    if (initialSign == '-')
-    {
-      initialAmountNum = -initialAmountNum;
-    }
+    initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
   
     // Add or subtract based on transaction type selected.
     if (transactionOption == 1)
