@@ -4,6 +4,7 @@ import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
+import DescriptionInput from "./description-input/description-input";
 
 export default function AmountTransaction()
 {
@@ -121,12 +122,7 @@ export default function AmountTransaction()
       
         <TransactionOptions transactionOption={transactionOption} setTransactionOption={setTransactionOption} />
         <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} />
-            
-        <div className={styles.descriptionInput}>
-          <label htmlFor="desc-input" className={styles.descLabel}>Transaction description: </label>
-          <textarea id="desc-input" value={transactionDesc} type="text" className={styles.descTextbox} 
-            placeholder="Enter description..." onChange={(event) => setTransactionDesc(event.target.value)}/>
-        </div>
+        <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
       
         <button className={styles.submitButton} 
           onClick={
