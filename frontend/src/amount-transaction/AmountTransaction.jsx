@@ -5,6 +5,7 @@ import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
+import twoNumOp from "../misc-helper-funcs/twoNumOp";
 
 export default function AmountTransaction()
 {
@@ -46,55 +47,55 @@ export default function AmountTransaction()
     }
   }
 
+  // Function to convert string of transaction option (0 = income, 1 = expense).
+  const intToStrOp = transactionOpInt =>
+  {
+    let transactionOpStr;
+    switch (transactionOpInt)
+    {
+      case 0:
+        transactionOpStr = "income";
+        break;
+      case 1:
+        transactionOpStr = "expense";
+        break;
+    }
+
+    return transactionOpStr;
+  }
+
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
     // Cash amount dollars to cents.
     const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
-
-    let transactionStr;
-    switch (transactionOption)
-    {
-      case 0:
-        transactionStr = "income";
-        break;
-      case 1:
-        transactionStr = "expense";
-        break;
-    }
+    const transactionOpStr = intToStrOp(transactionOption);
 
     // Send transaction entry to backend and add to SQL database.
-    exportTransaction(transactionStr, cashAmountCents);
+    exportTransaction(transactionOpStr, cashAmountCents);
 
     // Reset transaction box states.
     setTransactionOption(0);
     setAmount('');
     setTransactionDesc('');
   }
-
-  // Function to update the net income and net balance in real time as transactions
-  // are entered.
-  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
+  
+  // Add negative sign if sign character is '-'.
+  const addNegativeSign = (amountNum, signChar) =>
   {
-    let initialAmountNum = Number(initialAmount);
-    let cashAmountNum = Number(cashAmount);
-  
-    // Add negative sign if required for addition/subtraction.
-    if (initialSign == '-')
+    if (signChar == '-')
     {
-      initialAmountNum = -initialAmountNum;
+      amountNum = -amountNum;
     }
-  
-    // Add or subtract based on transaction type selected.
-    if (transactionOption == 1)
-    {
-      cashAmountNum = -cashAmountNum;
-    }
-    const newAmount = (initialAmountNum + cashAmountNum).toFixed(CASH_DP);
-  
-    // Choose colour and sign to display in front of dollar symbol.
+    return amountNum;
+  }
+
+  // Returns the appropriate sign and its colour based on whether
+  // amount is below or above zero.
+  const getAmountSign = (amount) =>
+  {
     let sign, colour;
-    if (newAmount >= 0)
+    if (amount >= 0)
     {
       colour = SIGN_COLOURS.green;
       sign = '+';
@@ -104,6 +105,19 @@ export default function AmountTransaction()
       colour = SIGN_COLOURS.red;
       sign = '-';
     }
+
+    return [sign, colour];
+  }
+
+  // Function to update the net income and net balance in real time as transactions
+  // are entered.
+  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
+  {
+    let initialAmountNum = Number(initialAmount);
+    let cashAmountNum = Number(cashAmount);
+    initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
+    const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
+    let [sign, colour] = getAmountSign(newAmount);
   
     // Remove any negative sign from new amount in string format.
     const newAmountStr = String(newAmount).replace('-','');
@@ -131,7 +145,7 @@ export default function AmountTransaction()
                 netIncomeStates.amountDollars, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
-                  updateAmount(
+              updateAmount(
                 netBalanceStates.amountDollars, transactionOption, 
                 netBalanceStates.sign, setNetBalanceStates
               );
