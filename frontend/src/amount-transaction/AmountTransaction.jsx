@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
+import TransactionOptions from "./transaction-options/transaction-options";
 
 export default function AmountTransaction()
 {
@@ -11,14 +12,14 @@ export default function AmountTransaction()
   const [netBalanceStates, setNetBalanceStates] = useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
 
   // Transaction type state. (0 = income, 1 = expense).
-  const [transactionType, setTransactionType] = useState(0);
+  const [transactionOption, setTransactionOption] = useState(0);
 
   // Cash amount and transaction description states.
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
 
   // Function to export the transaction information to backend.
-  const exportTransaction = async (transactionType, cashAmountCents) =>
+  const exportTransaction = async (transactionOption, cashAmountCents) =>
   {
     try
     {
@@ -26,7 +27,7 @@ export default function AmountTransaction()
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          type: transactionType,
+          type: transactionOption,
           desc: transactionDesc,
           amount_cents: cashAmountCents
         })
@@ -50,7 +51,7 @@ export default function AmountTransaction()
     const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
 
     let transactionStr;
-    switch (transactionType)
+    switch (transactionOption)
     {
       case 0:
         transactionStr = "income";
@@ -64,14 +65,14 @@ export default function AmountTransaction()
     exportTransaction(transactionStr, cashAmountCents);
 
     // Reset transaction box states.
-    setTransactionType(0);
+    setTransactionOption(0);
     setAmount('');
     setTransactionDesc('');
   }
 
   // Function to update the net income and net balance in real time as transactions
   // are entered.
-  const updateAmount = (initialAmount, transactionType, initialSign, setStateFunc) =>
+  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
   {
     let initialAmountNum = Number(initialAmount);
     let cashAmountNum = Number(cashAmount);
@@ -83,7 +84,7 @@ export default function AmountTransaction()
     }
   
     // Add or subtract based on transaction type selected.
-    if (transactionType == 1)
+    if (transactionOption == 1)
     {
       cashAmountNum = -cashAmountNum;
     }
@@ -117,23 +118,7 @@ export default function AmountTransaction()
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
       
-          <div className={styles.transactionOptionGroup}>
-          <label htmlFor="transaction-type" className={styles.transactionTypeLabel}>Transaction type: </label>
-          <div className={
-            `${styles.transactionOption} 
-            ${transactionType == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
-            }
-            onClick={() => setTransactionType(0)}
-            >Income
-          </div>
-          <div className={
-            `${styles.transactionOption} 
-            ${transactionType == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
-            }
-            onClick={() => setTransactionType(1)}
-            >Expense
-          </div>
-        </div>
+        <TransactionOptions transactionOption={transactionOption} setTransactionOption={setTransactionOption} />
             
         <div className={styles.cashAmountInput}>
           <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
@@ -151,11 +136,11 @@ export default function AmountTransaction()
           onClick={
             () => {
               updateAmount(
-                netIncomeStates.amountDollars, transactionType, 
+                netIncomeStates.amountDollars, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
                   updateAmount(
-                netBalanceStates.amountDollars, transactionType, 
+                netBalanceStates.amountDollars, transactionOption, 
                 netBalanceStates.sign, setNetBalanceStates
               );
               submitFunc();
