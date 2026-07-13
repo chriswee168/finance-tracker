@@ -90,18 +90,12 @@ export default function AmountTransaction()
     return amountNum;
   }
 
-  // Function to update the net income and net balance in real time as transactions
-  // are entered.
-  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
+  // Returns the appropriate sign and its colour based on whether
+  // amount is below or above zero.
+  const getAmountSign = (amount) =>
   {
-    let initialAmountNum = Number(initialAmount);
-    let cashAmountNum = Number(cashAmount);
-    initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
-    const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
-  
-    // Choose colour and sign to display in front of dollar symbol.
     let sign, colour;
-    if (newAmount >= 0)
+    if (amount >= 0)
     {
       colour = SIGN_COLOURS.green;
       sign = '+';
@@ -111,6 +105,19 @@ export default function AmountTransaction()
       colour = SIGN_COLOURS.red;
       sign = '-';
     }
+
+    return [sign, colour];
+  }
+
+  // Function to update the net income and net balance in real time as transactions
+  // are entered.
+  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
+  {
+    let initialAmountNum = Number(initialAmount);
+    let cashAmountNum = Number(cashAmount);
+    initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
+    const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
+    let [sign, colour] = getAmountSign(newAmount);
   
     // Remove any negative sign from new amount in string format.
     const newAmountStr = String(newAmount).replace('-','');
@@ -138,7 +145,7 @@ export default function AmountTransaction()
                 netIncomeStates.amountDollars, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
-                  updateAmount(
+              updateAmount(
                 netBalanceStates.amountDollars, transactionOption, 
                 netBalanceStates.sign, setNetBalanceStates
               );
