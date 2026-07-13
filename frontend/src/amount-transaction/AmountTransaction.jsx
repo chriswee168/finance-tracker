@@ -5,6 +5,7 @@ import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
+import twoNumOp from "../misc-helper-funcs/twoNumOp";
 
 export default function AmountTransaction()
 {
@@ -96,13 +97,7 @@ export default function AmountTransaction()
     let initialAmountNum = Number(initialAmount);
     let cashAmountNum = Number(cashAmount);
     initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
-  
-    // Add or subtract based on transaction type selected.
-    if (transactionOption == 1)
-    {
-      cashAmountNum = -cashAmountNum;
-    }
-    const newAmount = (initialAmountNum + cashAmountNum).toFixed(CASH_DP);
+    const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
   
     // Choose colour and sign to display in front of dollar symbol.
     let sign, colour;
