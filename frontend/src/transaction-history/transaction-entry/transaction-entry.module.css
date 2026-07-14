@@ -1,0 +1,13 @@
+/* Main transaction history window. */
+.transactionEntry
+{   
+    border-radius: 10px;
+    background-color: rgb(183, 183, 183);
+    height: 50px;
+    width: 95%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    flex-shrink: 0;
+}
