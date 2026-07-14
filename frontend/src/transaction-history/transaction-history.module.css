@@ -1,0 +1,39 @@
+/* Main transaction history window. */
+.transactionHistory
+{
+    border-style: solid;
+    height: 442px;
+    width: 489px;
+    position: absolute;
+    top: 0%;
+    left: 45.1%;
+    text-align: center;
+}
+
+/* Display for all transactions made. */
+.transactionList
+{
+    border-style: solid;
+    border-radius: 10px;
+    height: 365px;
+    width: 470px;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    background-color: rgb(206, 206, 206);
+}
+
+/* Default message to display when no transactions exist. */
+.defaultMsg
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--p-font-family);
+    font-size: 25px;
+    font-weight: bold;
+    color: rgb(183, 183, 183)
+}
