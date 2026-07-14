@@ -11,7 +11,7 @@
 }
 
 /* Display for all transactions made. */
-.historyList
+.transactionList
 {
     border-style: solid;
     height: 365px;
