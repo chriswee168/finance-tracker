@@ -15,13 +15,15 @@
 {
     border-style: solid;
     border-radius: 10px;
-    height: 365px;
+    height: 337px;
     width: 470px;
     position: absolute;
     top: 15%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
+    padding-top: 13px;
+    padding-bottom: 13px;
     background-color: rgb(206, 206, 206);
     display: flex;
     flex-direction: column;
