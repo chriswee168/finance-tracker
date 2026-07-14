@@ -16,7 +16,7 @@ export default function TransactionHistory()
   // details of previous transactions.
   const transactionEntries = [];
 
-  for (let i = 0; i < 5; i++)
+  for (let i = 0; i < 10; i++)
   {
     transactionEntries.push(
       <TransactionEntry 
