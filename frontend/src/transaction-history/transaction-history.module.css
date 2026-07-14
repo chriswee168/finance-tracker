@@ -22,3 +22,15 @@
     transform: translateX(-50%);
     text-align: center;
 }
+
+/* Default message to display when no transactions exist. */
+.defaultMsg
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--p-font-family);
+    font-size: 25px;
+    font-weight: bold;
+}
