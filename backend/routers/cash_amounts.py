@@ -14,7 +14,7 @@ class CashAmounts(BaseModel):
     current_balance_cents: int
 
 # Add net income and current balance to SQL tables.
-@route.post("/add-cash-amount", status_code=status.HTTP_204_NO_CONTENT)
+@route.post("/cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
 def add_cash_amounts(cash_amounts: CashAmounts):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
