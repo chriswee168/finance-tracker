@@ -23,7 +23,7 @@ export default function TransactionHistory()
         key={i} 
         datetime={"2025-06-06 12.45pm"}
         type={"income"}
-        amountDollars={"+$22.22"}
+        amountCents={"2222"}
         desc={"testing description 123456789"}
       />
     );
