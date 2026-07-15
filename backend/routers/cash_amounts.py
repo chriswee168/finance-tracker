@@ -1,5 +1,5 @@
 import time
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
 import sqlite3
 
@@ -32,6 +32,8 @@ def add_cash_amounts(cash_amounts: CashAmounts):
     )
     conn.commit()
     conn.close()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # Calculate the net income from the income and expenses SQL table.
 @route.get("/calc-net-income", response_model=NetIncomeResponse)

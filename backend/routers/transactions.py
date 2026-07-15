@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
 import sqlite3
 import time
@@ -42,3 +42,5 @@ def add_transaction(transaction: Transaction):
         f"Description: {transaction.desc}\n" \
         f"Cash amount (cents): {transaction.amount_cents}"
     ))
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
