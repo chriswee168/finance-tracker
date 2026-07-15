@@ -6,6 +6,7 @@ import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../misc-helper-funcs/twoNumOp";
+import { URL_PATHS } from "../apiConfig";
 
 export default function AmountTransaction()
 {
@@ -28,7 +29,7 @@ export default function AmountTransaction()
   {
     try
     {
-      const response = await fetch("http://127.0.0.1:8000/add-transaction", {
+      const response = await fetch(URL_PATHS.TRANSACTIONS, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
