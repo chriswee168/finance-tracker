@@ -1,13 +1,25 @@
 :root
 {
     --p-font-family: monospace;
+    --widget-back-colour: rgb(233, 233, 233);
+    --sub-box-colour: rgb(206, 206, 206);
+    --webkit-scrollbar-thumb-colour: rgb(69, 69, 69);
+    --webkit-scrollbar-track-colour: grey;
+    
+    --focus-colour: rgb(183, 183, 183);
 }
 
 label
 {
     font-size: 110%;
 }
-label, h1, h3
+
+h1, h3, button
+{
+    font-family: Arial;
+}
+
+label
 {
     font-family: var(--p-font-family);
 }
