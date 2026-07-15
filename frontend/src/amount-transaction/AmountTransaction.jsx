@@ -18,9 +18,9 @@ export default function AmountTransaction()
 
   // Net income and current balance states.
   const [netIncomeStates, setNetIncomeStates] = 
-    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
   const [currentBalanceStates, setCurrentBalanceStates] = 
-    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
 
   // Transaction type state. (0 = income, 1 = expense).
   const [transactionOption, setTransactionOption] = useState(0);
