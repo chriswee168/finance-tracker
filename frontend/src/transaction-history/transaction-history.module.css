@@ -1,8 +1,9 @@
 /* Main transaction history window. */
 .transactionHistory
 {
-    border-style: solid;
-    height: 442px;
+    border-radius: 10px;
+    background-color: var(--widget-back-colour);
+    height: 456px;
     width: 489px;
     position: absolute;
     top: 0%;
@@ -13,9 +14,8 @@
 /* Display for all transactions made. */
 .transactionList
 {
-    border-style: solid;
     border-radius: 10px;
-    height: 337px;
+    height: 350px;
     width: 470px;
     position: absolute;
     top: 15%;
