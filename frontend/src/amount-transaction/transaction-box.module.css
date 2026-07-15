@@ -6,7 +6,9 @@
 
 .transactionBox
 {
-    border-style: solid;
+    border-radius: 10px;
+    background-color: var(--widget-back-colour);
+    position: absolute;
     width: 400px;
     height: 330px;
 }

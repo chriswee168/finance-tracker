@@ -1,6 +1,7 @@
 :root
 {
     --p-font-family: monospace;
+    --widget-back-colour: rgb(233, 233, 233);
 }
 
 label
