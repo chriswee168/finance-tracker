@@ -1,7 +1,6 @@
 /* Rules for transaction description. */
 .descriptionInput
 {
-    border-style: solid;
     width: 314px;
     height: 100px;
     left: 50%;

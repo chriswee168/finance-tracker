@@ -2,7 +2,6 @@
 /* Rules for cash amount elements. */
 .cashAmountInput
 {
-    border-style: solid;
     width: 320px;
     height: 45px;
     left: 50%;
