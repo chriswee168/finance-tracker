@@ -1,0 +1,55 @@
+/* Rules for transaction description. */
+.descriptionInput
+{
+    width: 314px;
+    height: 100px;
+    left: 50%;
+    transform: translate(-50%);
+    position: relative;
+    line-height: 16px;
+    padding-left: 1.5%;
+}
+
+.descTextbox
+{
+    border-style: none;
+    border-radius: 10px;
+    width: 93%;
+    height: 69%;
+    background-color: var(--sub-box-colour);
+    padding: 5px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -42%);
+    font-size: 15px;
+    font-family: var(--p-font-family);
+    font-weight: bold;
+    resize: none;
+
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar
+    {
+        background-color: transparent;
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+        background-color: var(--webkit-scrollbar-thumb-colour);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track
+    {
+        background-color: var(--webkit-scrollbar-track-colour);
+        border-radius: 10px;
+    }
+
+    &:focus
+    {
+        outline: none;
+        background-color: var(--focus-colour);
+    }
+}
