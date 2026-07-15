@@ -6,15 +6,21 @@ import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../misc-helper-funcs/twoNumOp";
+import { URL_PATHS } from "../apiConfig";
 
+/**
+ * Wrapper for amount boxes and transaction box that allows state sharing.
+ * 
+ * @returns Wrapper component for amount boxes and transaction box.
+ */
 export default function AmountTransaction()
 {
 
   // Net income and current balance states.
   const [netIncomeStates, setNetIncomeStates] = 
-    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
   const [currentBalanceStates, setCurrentBalanceStates] = 
-    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
 
   // Transaction type state. (0 = income, 1 = expense).
   const [transactionOption, setTransactionOption] = useState(0);
@@ -28,7 +34,7 @@ export default function AmountTransaction()
   {
     try
     {
-      const response = await fetch("http://127.0.0.1:8000/add-transaction", {
+      const response = await fetch(URL_PATHS.TRANSACTIONS, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -97,15 +103,20 @@ export default function AmountTransaction()
   const getAmountSign = (amount) =>
   {
     let sign, colour;
-    if (amount >= 0)
+    if (amount > 0)
     {
       colour = SIGN_COLOURS.green;
       sign = '+';
     }
-    else
+    else if (amount < 0)
     {
       colour = SIGN_COLOURS.red;
       sign = '-';
+    }
+    else
+    {
+      colour = SIGN_COLOURS.black;
+      sign = '';
     }
 
     return [sign, colour];
