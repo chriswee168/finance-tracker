@@ -6,13 +6,21 @@ import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../misc-helper-funcs/twoNumOp";
+import { URL_PATHS } from "../apiConfig";
 
+/**
+ * Wrapper for amount boxes and transaction box that allows state sharing.
+ * 
+ * @returns Wrapper component for amount boxes and transaction box.
+ */
 export default function AmountTransaction()
 {
 
-  // Net income and net balance states.
-  const [netIncomeStates, setNetIncomeStates] = useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
-  const [netBalanceStates, setNetBalanceStates] = useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+  // Net income and current balance states.
+  const [netIncomeStates, setNetIncomeStates] = 
+    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+  const [currentBalanceStates, setCurrentBalanceStates] = 
+    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
 
   // Transaction type state. (0 = income, 1 = expense).
   const [transactionOption, setTransactionOption] = useState(0);
@@ -26,7 +34,7 @@ export default function AmountTransaction()
   {
     try
     {
-      const response = await fetch("http://127.0.0.1:8000/add-transaction", {
+      const response = await fetch(URL_PATHS.TRANSACTIONS, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -109,7 +117,7 @@ export default function AmountTransaction()
     return [sign, colour];
   }
 
-  // Function to update the net income and net balance in real time as transactions
+  // Function to update the net income and current balance in real time as transactions
   // are entered.
   const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
   {
@@ -128,8 +136,8 @@ export default function AmountTransaction()
     <>
       <AmountBox textLabel='Net Income' amountDollars={netIncomeStates.amountDollars} 
         sign={netIncomeStates.sign} colour={netIncomeStates.colour}/>
-      <AmountBox textLabel='Net Balance' amountDollars={netBalanceStates.amountDollars} 
-        sign={netBalanceStates.sign} colour={netBalanceStates.colour}/>
+      <AmountBox textLabel='Current Balance' amountDollars={currentBalanceStates.amountDollars} 
+        sign={currentBalanceStates.sign} colour={currentBalanceStates.colour}/>
       
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
@@ -146,13 +154,13 @@ export default function AmountTransaction()
                 netIncomeStates.sign, setNetIncomeStates
               );
               updateAmount(
-                netBalanceStates.amountDollars, transactionOption, 
-                netBalanceStates.sign, setNetBalanceStates
+                currentBalanceStates.amountDollars, transactionOption, 
+                currentBalanceStates.sign, setCurrentBalanceStates
               );
               submitFunc();
             }
           }>
-          SUBMIT TRANSACTION
+          SUBMIT
         </button>
       </div>
     </>
