@@ -14,14 +14,14 @@ def create_tables():
     # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
         "CREATE TABLE IF NOT EXISTS amount_history_table(" \
-        "   entry_date DATE PRIMARY KEY," \
+        "   entry_datetime TEXT PRIMARY KEY," \
         "   net_income_cents INT," \
         "   current_balance_cents INT" \
         ");"
 
         "CREATE TABLE IF NOT EXISTS transaction_table(" \
         "   entry_id INT PRIMARY KEY," \
-        "   entry_date DATE,"
+        "   entry_datetime TEXT,"
         "   transaction_type VARCHAR(7)," \
         "   transaction_desc TEXT," \
         "   amount_cents INT" \
