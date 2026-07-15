@@ -20,24 +20,24 @@ def add_transaction(transaction: Transaction):
     get_n_entries_query = "SELECT COUNT(entry_id) FROM transaction_table"
     cursor.execute(get_n_entries_query)
     entry_id = cursor.fetchall()[0][0]
-    current_date = time.strftime("%Y-%m-%d")
+    current_datetime = time.strftime("%Y-%m-%d %I:%M:%S%p")
 
     add_transaction_query = (
         "INSERT INTO transaction_table "
-        "(entry_id, entry_date, transaction_type, transaction_desc, amount_cents) "
+        "(entry_id, entry_datetime, transaction_type, transaction_desc, amount_cents) "
         "VALUES (?, ?, ?, ?, ?)"
     )
 
     cursor.execute(
         add_transaction_query, 
-        (entry_id, current_date, transaction.type, transaction.desc, transaction.amount_cents)
+        (entry_id, current_datetime, transaction.type, transaction.desc, transaction.amount_cents)
     )
     conn.commit()
     conn.close()
 
     print((
         "Added transaction:\n" \
-        f"Date: {current_date}\n" \
+        f"Datetime: {current_datetime}\n" \
         f"Transaction type: {transaction.type}\n" \
         f"Description: {transaction.desc}\n" \
         f"Cash amount (cents): {transaction.amount_cents}"
