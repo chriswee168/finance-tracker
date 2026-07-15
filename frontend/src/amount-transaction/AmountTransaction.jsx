@@ -8,6 +8,11 @@ import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../misc-helper-funcs/twoNumOp";
 import { URL_PATHS } from "../apiConfig";
 
+/**
+ * Wrapper for amount boxes and transaction box that allows state sharing.
+ * 
+ * @returns Wrapper component for amount boxes and transaction box.
+ */
 export default function AmountTransaction()
 {
 
