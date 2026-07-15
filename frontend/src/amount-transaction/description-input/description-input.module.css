@@ -16,7 +16,7 @@
     border-radius: 10px;
     width: 93%;
     height: 69%;
-    background-color: rgb(206, 206, 206);
+    background-color: var(--sub-box-colour);
     padding: 5px;
     position: absolute;
     left: 50%;

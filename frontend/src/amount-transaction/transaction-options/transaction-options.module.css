@@ -25,7 +25,7 @@
 
 .incomeOption
 {
-    background-color: rgb(206, 206, 206);
+    background-color: var(--sub-box-colour);
     position: absolute;
     left: 2%;
     &:hover
@@ -43,7 +43,7 @@
 
 .expenseOption
 {
-    background-color: rgb(206, 206, 206);
+    background-color: var(--sub-box-colour);
     position: absolute;
     left: 51.5%;
 

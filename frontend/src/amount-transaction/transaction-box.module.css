@@ -27,7 +27,7 @@
     font-size: 15px;
     font-family: var(--p-font-family);
     border-style: none;
-    background-color: rgb(206, 206, 206);
+    background-color: var(--sub-box-colour);
 
     &:hover
     {

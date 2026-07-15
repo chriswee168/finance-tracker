@@ -2,6 +2,7 @@
 {
     --p-font-family: monospace;
     --widget-back-colour: rgb(233, 233, 233);
+    --sub-box-colour: rgb(206, 206, 206);
 }
 
 label
