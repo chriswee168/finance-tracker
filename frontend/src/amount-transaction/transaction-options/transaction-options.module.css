@@ -1,0 +1,61 @@
+/* Rules for the transaction option selection. */
+.transactionOptionLabel
+{
+    padding-left: 2%;
+}
+
+.transactionOptionGroup
+{
+    width: 320px;
+    height: 45px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+.transactionOption
+{
+    width: 150px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 20px;
+    font-family: var(--p-font-family);
+    transition: 0.5s;
+}
+
+
+.incomeOption
+{
+    background-color: var(--sub-box-colour);
+    position: absolute;
+    left: 2%;
+    &:hover
+    {
+        background-color: rgb(48, 192, 0);
+    }
+}
+
+.incomeOptionSelected
+{
+    background-color: rgb(48, 192, 0);
+    position: absolute;
+    left: 2%;
+}
+
+.expenseOption
+{
+    background-color: var(--sub-box-colour);
+    position: absolute;
+    left: 51.5%;
+
+    &:hover
+    {
+        background-color: rgb(195, 0, 0);
+    }
+}
+
+.expenseOptionSelected
+{
+    background-color: rgb(195, 0, 0);
+    position: absolute;
+    left: 51.5%;
+}

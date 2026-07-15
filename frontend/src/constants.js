@@ -10,3 +10,7 @@ export const SIGN_COLOURS = {
     green: "green",
     red: "red"
 }
+
+// Constants for decimal places and scaling factor.
+export const CASH_DP = 2;
+export const CASH_SCALE_FACTOR = 100;

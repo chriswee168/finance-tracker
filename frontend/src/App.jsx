@@ -7,8 +7,8 @@ import NetIncome from './amount-transaction/amount-box/amount-box'
 import TrendArrowSet from './amount-transaction/amount-box/trend-arrow-set'
 import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './constants'
 import AmountBox from './amount-transaction/amount-box/amount-box'
-import TransactionBox from './amount-transaction/transaction-box/transaction-box'
 import AmountTransaction from './amount-transaction/AmountTransaction'
+import TransactionHistory from './transaction-history/transaction-history'
 
 /**
  * Create main app component.
@@ -20,6 +20,7 @@ function App() {
   return (
     <div className={styles.appWrapper}>
       <AmountTransaction />
+      <TransactionHistory />
     </div>
   )
 }
