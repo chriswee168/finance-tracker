@@ -13,7 +13,13 @@ label
 {
     font-size: 110%;
 }
-label, h1, h3
+
+h1, h3, button
+{
+    font-family: Arial;
+}
+
+label
 {
     font-family: var(--p-font-family);
 }
