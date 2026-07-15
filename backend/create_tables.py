@@ -1,11 +1,6 @@
-from fastapi import APIRouter, status
 import sqlite3
-import os
 
-route = APIRouter()
-
-# Create SQL table to record net income overtime.
-@route.post("/create-tables", status_code=status.HTTP_204_NO_CONTENT)
+# Create all required SQL tables if they do not exist.
 def create_tables():
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
