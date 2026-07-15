@@ -1,14 +1,9 @@
 /* Styles for cash amount box. */
 .amountBox
 {
-    border-style: solid;
-    border-radius: 10px;
-    border-color: rgb(212, 212, 212);
-
     width: 400px;
     height: 50px;
     text-align: center;
-
     position: relative;
 }
 
