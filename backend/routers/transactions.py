@@ -12,7 +12,7 @@ class Transaction(BaseModel):
     amount_cents: int
 
 # Add transaction entry to transaction table.
-@route.post("/add-transaction", status_code=status.HTTP_204_NO_CONTENT)
+@route.post("/transaction-entries", status_code=status.HTTP_204_NO_CONTENT)
 def add_transaction(transaction: Transaction):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
