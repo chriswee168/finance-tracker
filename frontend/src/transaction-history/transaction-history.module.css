@@ -39,20 +39,14 @@
 
     &::-webkit-scrollbar-thumb
     {
-        background-color: rgb(69, 69, 69);
+        background-color: var(--webkit-scrollbar-thumb-colour);
         border-radius: 10px;
     }
 
     &::-webkit-scrollbar-track
     {
-        background-color: grey;
+        background-color: var(--webkit-scrollbar-track-colour);
         border-radius: 10px;
-    }
-
-    &:focus
-    {
-        outline: none;
-        background-color: rgb(183, 183, 183);
     }
 }
 
@@ -66,5 +60,5 @@
     font-family: var(--p-font-family);
     font-size: 25px;
     font-weight: bold;
-    color: rgb(183, 183, 183)
+    color: var(--focus-colour)
 }

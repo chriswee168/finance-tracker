@@ -33,6 +33,6 @@
     &:focus
     {
         outline: none;
-        background-color: rgb(183, 183, 183);
+        background-color: var(--focus-colour);
     }
 }
