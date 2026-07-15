@@ -154,7 +154,7 @@ export default function AmountTransaction()
               submitFunc();
             }
           }>
-          SUBMIT TRANSACTION
+          SUBMIT
         </button>
       </div>
     </>
