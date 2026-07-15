@@ -8,14 +8,9 @@ route = APIRouter()
 class NetIncomeResponse(BaseModel):
     net_income_cents: int
 
-# Involves cash amounts of net income and current balance in cents.
-class CashAmounts(BaseModel):
-    net_income_cents: int
-    current_balance_cents: int
-
 # Add net income and current balance to SQL tables.
 @route.post("/add-cash-amount", status_code=status.HTTP_204_NO_CONTENT)
-def add_cash_amounts(cash_amounts: CashAmounts):
+def add_cash_amounts(net_income_cents: str, current_balance_cents: str):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
@@ -26,10 +21,7 @@ def add_cash_amounts(cash_amounts: CashAmounts):
         "(entry_datetime, net_income_cents, current_balance_cents) VALUES (?, ?, ?)"
         )
 
-    cursor.execute(
-        add_cash_amounts_query, 
-        (current_datetime, cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
-    )
+    cursor.execute(add_cash_amounts_query, (current_datetime, net_income_cents, current_balance_cents))
     conn.commit()
     conn.close()
 
