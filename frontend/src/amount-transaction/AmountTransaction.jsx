@@ -103,15 +103,20 @@ export default function AmountTransaction()
   const getAmountSign = (amount) =>
   {
     let sign, colour;
-    if (amount >= 0)
+    if (amount > 0)
     {
       colour = SIGN_COLOURS.green;
       sign = '+';
     }
-    else
+    else if (amount < 0)
     {
       colour = SIGN_COLOURS.red;
       sign = '-';
+    }
+    else
+    {
+      colour = SIGN_COLOURS.black;
+      sign = '';
     }
 
     return [sign, colour];
