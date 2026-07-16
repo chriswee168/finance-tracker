@@ -44,6 +44,12 @@ def save_current_cash_amounts(cash_amounts: CashAmounts):
             "current_balance_cents": cash_amounts.current_balance_cents
         }, f)
     
+    print((
+        "Save current cash amounts:\n"
+        f"Net income cents: {cash_amounts.net_income_cents}\n"
+        f"Current balance cents: {cash_amounts.current_balance_cents}"
+    ))
+    
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # Get the current net income and current balance from JSON config.
