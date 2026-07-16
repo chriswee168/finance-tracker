@@ -36,7 +36,7 @@ def add_cash_amounts(cash_amounts: CashAmounts):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # Save the current net income and current balance to JSON config.
-@route.post("/current-cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
+@route.put("/current-cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
 def save_current_cash_amounts(cash_amounts: CashAmounts):
     with open("config.json", "w") as f:
         json.dump({
