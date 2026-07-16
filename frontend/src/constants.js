@@ -8,7 +8,8 @@ export const TREND_ARROW_COLOURS = {
 // Colours for negative/positive sign.
 export const SIGN_COLOURS = {
     green: "green",
-    red: "red"
+    red: "red",
+    black: "black",
 }
 
 // Constants for decimal places and scaling factor.
