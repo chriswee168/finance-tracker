@@ -5,8 +5,9 @@ import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
-import twoNumOp from "../misc-helper-funcs/twoNumOp";
+import twoNumOp from "../utils/twoNumOp";
 import { URL_PATHS } from "../apiConfig";
+import { apiSendJSON } from "../utils/apiService";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -28,32 +29,6 @@ export default function AmountTransaction()
   // Cash amount and transaction description states.
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
-
-  // Function to export the transaction information to backend.
-  const exportTransaction = async (transactionOption, cashAmountCents) =>
-  {
-    try
-    {
-      const response = await fetch(URL_PATHS.TRANSACTIONS, {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          type: transactionOption,
-          desc: transactionDesc,
-          amount_cents: cashAmountCents
-        })
-      });
-
-      if (!response.ok)
-      {
-        throw new Error(`${response.status}`);
-      }
-    }
-    catch (error)
-    {
-      console.log(error);
-    }
-  }
 
   // Function to convert string of transaction option (0 = income, 1 = expense).
   const intToStrOp = transactionOpInt =>
@@ -80,7 +55,14 @@ export default function AmountTransaction()
     const transactionOpStr = intToStrOp(transactionOption);
 
     // Send transaction entry to backend and add to SQL database.
-    exportTransaction(transactionOpStr, cashAmountCents);
+    apiSendJSON(
+      URL_PATHS.TRANSACTIONS, "POST", 
+      {
+        type: transactionOpStr,
+        desc: transactionDesc,
+        amount_cents: cashAmountCents
+      }
+    );
 
     // Reset transaction box states.
     setTransactionOption(0);
@@ -128,26 +110,14 @@ export default function AmountTransaction()
     const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
     const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
 
-    try
-    {
-      const response = await fetch(URL_PATHS.CURRENT_AMOUNTS, {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          net_income_cents: netIncomeCents,
-          current_balance_cents: currentBalanceCents
-        })
-      });
-
-      if (!response.ok)
+    apiSendJSON(
+      URL_PATHS.CURRENT_AMOUNTS, 
+      "PUT", 
       {
-        throw new Error(`${response.status}`);
+        net_income_cents: netIncomeCents,
+        current_balance_cents: currentBalanceCents
       }
-    }
-    catch (error)
-    {
-      console.log(error);
-    }
+    )
   }
 
   // Function to update the net income and current balance in real time as transactions
