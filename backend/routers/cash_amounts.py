@@ -1,7 +1,7 @@
 import time
 from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
-import sqlite3
+import sqlite3, json
 
 route = APIRouter()
 
@@ -34,6 +34,31 @@ def add_cash_amounts(cash_amounts: CashAmounts):
     conn.close()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# Save the current net income and current balance to JSON config.
+@route.post("/current-cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
+def save_current_cash_amounts(cash_amounts: CashAmounts):
+    with open("config.json", "w") as f:
+        json.dump({
+            "net_income_cents": cash_amounts.net_income_cents,
+            "current_balance_cents": cash_amounts.current_balance_cents
+        }, f, indent=4)
+    
+    print((
+        "Save current cash amounts:\n"
+        f"Net income cents: {cash_amounts.net_income_cents}\n"
+        f"Current balance cents: {cash_amounts.current_balance_cents}"
+    ))
+    
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# Get the current net income and current balance from JSON config.
+@route.get("/current-cash-amounts", status_code=status.HTTP_200_OK)
+def get_current_cash_amounts():
+    with open("config.json", "r") as f:
+        amount_data = json.load(f)
+    
+    return amount_data
 
 # Calculate the net income from the income and expenses SQL table.
 @route.get("/calc-net-income", response_model=NetIncomeResponse)
