@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
@@ -7,7 +7,7 @@ import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
 import { URL_PATHS } from "../apiConfig";
-import { apiSendJSON } from "../utils/apiService";
+import { apiGetJSON, apiSendJSON } from "../utils/apiService";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -120,6 +120,15 @@ export default function AmountTransaction()
     )
   }
 
+  // Set the amount state directly whether positive or negative.
+  const setAmountState = (amount, setStateFunc) =>
+  {
+    let [sign, colour] = getAmountSign(amount);
+    // Remove any negative sign from amount in string format.
+    const amountStr = String(amount).replace('-','');
+    setStateFunc({amountDollars: amountStr, sign: sign, colour: colour});
+  }
+
   // Function to update the net income and current balance in real time as transactions
   // are entered.
   const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
@@ -128,14 +137,20 @@ export default function AmountTransaction()
     let cashAmountNum = Number(cashAmount);
     initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
     const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
-    let [sign, colour] = getAmountSign(newAmount);
-  
-    // Remove any negative sign from new amount in string format.
-    const newAmountStr = String(newAmount).replace('-','');
-    setStateFunc({amountDollars: newAmountStr, sign: sign, colour: colour});
-
+    setAmountState(newAmount, setStateFunc);
     return newAmount;
   }
+
+  // Synchronize net income and current balance amounts from persistent JSON data.
+  useEffect(() => {
+    apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
+      .then(
+        (data) => {
+          setAmountState(data.net_income_cents / CASH_SCALE_FACTOR, setNetIncomeStates);
+          setAmountState(data.current_balance_cents / CASH_SCALE_FACTOR, setCurrentBalanceStates);
+        }
+      );
+  }, [])
 
   return (
     <>
