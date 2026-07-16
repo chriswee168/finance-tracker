@@ -146,8 +146,10 @@ export default function AmountTransaction()
     apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
       .then(
         (data) => {
-          setAmountState(data.net_income_cents / CASH_SCALE_FACTOR, setNetIncomeStates);
-          setAmountState(data.current_balance_cents / CASH_SCALE_FACTOR, setCurrentBalanceStates);
+          const netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          const currentBalanceDollars = (data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          setAmountState(netIncomeDollars, setNetIncomeStates);
+          setAmountState(currentBalanceDollars, setCurrentBalanceStates);
         }
       );
   }, [])
