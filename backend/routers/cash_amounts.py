@@ -42,7 +42,7 @@ def save_current_cash_amounts(cash_amounts: CashAmounts):
         json.dump({
             "net_income_cents": cash_amounts.net_income_cents,
             "current_balance_cents": cash_amounts.current_balance_cents
-        }, f)
+        }, f, indent=4)
     
     print((
         "Save current cash amounts:\n"
