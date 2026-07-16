@@ -122,6 +122,34 @@ export default function AmountTransaction()
     return [sign, colour];
   }
 
+  // Function to save current net income and current balance to JSON.
+  const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
+  {
+    const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
+    const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
+
+    try
+    {
+      const response = await fetch(URL_PATHS.CURRENT_AMOUNTS, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          net_income_cents: netIncomeCents,
+          current_balance_cents: currentBalanceCents
+        })
+      });
+
+      if (!response.ok)
+      {
+        throw new Error(`${response.status}`);
+      }
+    }
+    catch (error)
+    {
+      console.log(error);
+    }
+  }
+
   // Function to update the net income and current balance in real time as transactions
   // are entered.
   const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
@@ -135,6 +163,8 @@ export default function AmountTransaction()
     // Remove any negative sign from new amount in string format.
     const newAmountStr = String(newAmount).replace('-','');
     setStateFunc({amountDollars: newAmountStr, sign: sign, colour: colour});
+
+    return newAmount;
   }
 
   return (
@@ -154,14 +184,15 @@ export default function AmountTransaction()
         <button className={styles.submitButton} 
           onClick={
             () => {
-              updateAmount(
+              const newNetIncome = updateAmount(
                 netIncomeStates.amountDollars, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
-              updateAmount(
+              const newCurrentBalance = updateAmount(
                 currentBalanceStates.amountDollars, transactionOption, 
                 currentBalanceStates.sign, setCurrentBalanceStates
               );
+              saveCurrentAmounts(newNetIncome, newCurrentBalance);
               submitFunc();
             }
           }>
