@@ -8,13 +8,15 @@ import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
 import { URL_PATHS } from "../utils/api/apiConfig";
 import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
+import getCurrentDatetime from "../utils/getCurrentDatetime";
+import { addToHistoryList } from "../transaction-history/transaction-history";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
  * 
  * @returns Wrapper component for amount boxes and transaction box.
  */
-export default function AmountTransaction()
+export default function AmountTransaction({entries, setEntries})
 {
 
   // Net income and current balance states.
@@ -54,15 +56,19 @@ export default function AmountTransaction()
     const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
     const transactionOpStr = intToStrOp(transactionOption);
 
+    const datetime = getCurrentDatetime();
+    const transactionObj = {
+      datetime: getCurrentDatetime(),
+      type: transactionOpStr,
+      desc: transactionDesc,
+      amount_cents: cashAmountCents
+    }
+    
     // Send transaction entry to backend and add to SQL database.
-    apiSendJSON(
-      URL_PATHS.TRANSACTIONS, "POST", 
-      {
-        type: transactionOpStr,
-        desc: transactionDesc,
-        amount_cents: cashAmountCents
-      }
-    );
+    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj);
+
+    // Also send transaction entry to transaction history list.
+    addToHistoryList(entries, setEntries, transactionObj);
 
     // Reset transaction box states.
     setTransactionOption(0);

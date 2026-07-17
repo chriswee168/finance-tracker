@@ -30,13 +30,13 @@
     left: 2%;
     &:hover
     {
-        background-color: rgb(48, 192, 0);
+        background-color: var(--green);
     }
 }
 
 .incomeOptionSelected
 {
-    background-color: rgb(48, 192, 0);
+    background-color: var(--green);
     position: absolute;
     left: 2%;
 }
@@ -49,13 +49,13 @@
 
     &:hover
     {
-        background-color: rgb(195, 0, 0);
+        background-color: var(--red);
     }
 }
 
 .expenseOptionSelected
 {
-    background-color: rgb(195, 0, 0);
+    background-color: var(--red);
     position: absolute;
     left: 51.5%;
 }

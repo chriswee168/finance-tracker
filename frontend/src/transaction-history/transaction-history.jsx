@@ -73,7 +73,7 @@ export const addToHistoryList = (entries, setEntries, data) =>
     />;
   
   // Insert new entry in the beginning of the entry list as latest.
-  setEntries(entries.splice(0, 0, newEntry));
+  setEntries([newEntry, ...entries]);
 }
 
 /**

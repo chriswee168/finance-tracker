@@ -12,7 +12,6 @@
 {
     position: relative;
     bottom: 20%;
-    color: rgb(73, 73, 73);
     font-family: var(--p-font-family);
 }
 .amountDollars

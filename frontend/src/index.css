@@ -7,6 +7,9 @@
     --webkit-scrollbar-track-colour: grey;
     
     --focus-colour: rgb(183, 183, 183);
+    
+    --green: rgb(48, 192, 0);
+    --red: rgb(195, 0, 0);
 }
 
 label
