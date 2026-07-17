@@ -11,6 +11,10 @@ class Transaction(BaseModel):
     desc: str
     amount_cents: int
 
+# Includes additional datetime attribute.
+class TransactionEntry(Transaction):
+    datetime: str
+
 # Add transaction entry to transaction table.
 @route.post("/transaction-entries", status_code=status.HTTP_204_NO_CONTENT)
 def add_transaction(transaction: Transaction):
@@ -44,3 +48,19 @@ def add_transaction(transaction: Transaction):
     ))
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# Obtain the latest N transaction entries.
+@route.get("/transaction-entries", status_code=status.HTTP_200_OK, response_model=list[TransactionEntry])
+def get_transaction(n_entries: int):
+    conn = sqlite3.connect("finance_database.sqlite3")
+    cursor = conn.cursor()
+
+    get_entries_query = "SELECT * FROM transaction_table ORDER BY entry_id DESC LIMIT ?"
+    cursor.execute(get_entries_query, (n_entries,))
+    all_entries = cursor.fetchall()
+    conn.close()
+
+    return [
+        {"datetime": entry[1], "type": entry[2], "desc": entry[3], "amount_cents": entry[4]} 
+        for entry in all_entries
+    ]
