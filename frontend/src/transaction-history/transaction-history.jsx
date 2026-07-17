@@ -31,7 +31,6 @@ export default function TransactionHistory()
           const tempEntries = [];
           for (let i = 0; i < data.length; i++)
           {
-            console.log(data[i].datetime, data[i].type, data[i].amount_cents, data[i].desc);
             if (data[i].desc == '')
             {
               data[i].desc = 'No description.';
