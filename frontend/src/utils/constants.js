@@ -15,3 +15,6 @@ export const SIGN_COLOURS = {
 // Constants for decimal places and scaling factor.
 export const CASH_DP = 2;
 export const CASH_SCALE_FACTOR = 100;
+
+// Max number of entries transaction history window can display.
+export const MAX_TRANSACTION_ENTRIES = 100;
