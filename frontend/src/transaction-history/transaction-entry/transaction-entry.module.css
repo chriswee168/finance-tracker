@@ -2,7 +2,7 @@
 .transactionEntry
 {   
     border-radius: 10px;
-    background-color: var(--focus-colour);
+    background-color: var(--widget-back-colour);
     height: 60px;
     width: 95%;
     position: relative;
@@ -31,7 +31,7 @@
 
 .descWrapper
 {
-   background-color: var(--widget-back-colour);
+   background-color: var(--sub-box-colour);
    border-radius: 10px;
    position: relative;
    bottom: 20%;
