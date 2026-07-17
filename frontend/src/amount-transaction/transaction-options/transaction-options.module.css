@@ -12,6 +12,7 @@
     left: 50%;
     transform: translate(-50%);
 }
+
 .transactionOption
 {
     width: 150px;
@@ -20,8 +21,8 @@
     font-size: 20px;
     font-family: var(--p-font-family);
     transition: 0.5s;
+    user-select: none;
 }
-
 
 .incomeOption
 {
