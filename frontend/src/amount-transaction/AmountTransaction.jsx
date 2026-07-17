@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
+import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
-import { URL_PATHS } from "../apiConfig";
-import { apiGetJSON, apiSendJSON } from "../utils/apiService";
+import { URL_PATHS } from "../utils/api/apiConfig";
+import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.

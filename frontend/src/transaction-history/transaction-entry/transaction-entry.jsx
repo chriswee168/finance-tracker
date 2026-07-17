@@ -1,4 +1,4 @@
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../../constants";
+import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../../utils/constants";
 import styles from "./transaction-entry.module.css";
 
 /**
