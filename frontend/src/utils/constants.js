@@ -7,8 +7,8 @@ export const TREND_ARROW_COLOURS = {
 
 // Colours for negative/positive sign.
 export const SIGN_COLOURS = {
-    green: "green",
-    red: "red",
+    green: "rgb(48, 192, 0)",
+    red: "rgb(195, 0, 0)",
     black: "black",
 }
 
