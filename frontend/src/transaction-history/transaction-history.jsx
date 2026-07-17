@@ -55,3 +55,24 @@ export default function TransactionHistory({entries, setEntries})
     </div>
   )
 }
+
+/**
+ * Function to add a new transaction to entry list directly after submitting.
+ * 
+ * @param {JSX.Element[]} entries List of TransactionEntry components.
+ * @param {Dispatch<SetStateAction<JSX.Element[]>>} setEntries Setter for entries list.
+ */
+export const addToHistoryList = (entries, setEntries, data) => 
+{
+  const newEntry = 
+    <TransactionEntry 
+      key={entries.length} 
+      datetime={data.datetime}
+      type={data.type}
+      amountCents={data.amount_cents}
+      desc={data.desc}
+    />;
+  
+  // Insert new entry in the beginning of the entry list as latest.
+  setEntries(entries.splice(0, 0, newEntry));
+}
