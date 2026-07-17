@@ -1,5 +1,9 @@
+import { useEffect, useState } from "react";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 import styles from "./transaction-history.module.css";
+import { apiGetJSON } from "../utils/apiService";
+import { URL_PATHS } from "../apiConfig";
+import { MAX_TRANSACTION_ENTRIES } from "../constants";
 
 /**
  * Create transaction history component to display previous transactions
@@ -14,26 +18,45 @@ export default function TransactionHistory()
 
   // Array to store transaction entry components that include
   // details of previous transactions.
-  const transactionEntries = [];
+  const [entries, setEntries] = useState([]);
 
-  for (let i = 0; i < 10; i++)
-  {
-    transactionEntries.push(
-      <TransactionEntry 
-        key={i} 
-        datetime={"2025-06-06 12.45pm"}
-        type={"income"}
-        amountCents={"2222"}
-        desc={"testing description 123456789"}
-      />
-    );
-  }
+  const url = new URL(URL_PATHS.TRANSACTIONS);
+  url.searchParams.append("n_entries", MAX_TRANSACTION_ENTRIES);
+
+  // Get transaction entries from backend SQL database.
+  useEffect(() => {
+    apiGetJSON(url)
+      .then(
+        (data) => {
+          const tempEntries = [];
+          for (let i = 0; i < data.length; i++)
+          {
+            console.log(data[i].datetime, data[i].type, data[i].amount_cents, data[i].desc);
+            if (data[i].desc == '')
+            {
+              data[i].desc = 'No description.';
+            }
+            
+            tempEntries.push(
+              <TransactionEntry 
+                key={i} 
+                datetime={data[i].datetime}
+                type={data[i].type}
+                amountCents={data[i].amount_cents}
+                desc={data[i].desc}
+              />
+            );
+          }
+          setEntries(tempEntries);
+        }
+      )
+  }, []);
 
   return (
     <div className={styles.transactionHistory}>
       <h1>TRANSACTION HISTORY</h1>
       <div className={styles.transactionList}>
-        {transactionEntries.length == 0 ? defaultMsg : transactionEntries}
+        {entries.length == 0 ? defaultMsg : entries}
       </div>
     </div>
   )
