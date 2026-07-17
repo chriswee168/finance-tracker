@@ -1,20 +1,29 @@
-import { useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../constants";
+import { useEffect, useState } from "react";
+import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
-import twoNumOp from "../misc-helper-funcs/twoNumOp";
+import twoNumOp from "../utils/twoNumOp";
+import { URL_PATHS } from "../utils/api/apiConfig";
+import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
+import getCurrentDatetime from "../utils/getCurrentDatetime";
+import { addToHistoryList } from "../transaction-history/transaction-history";
 
-export default function AmountTransaction()
+/**
+ * Wrapper for amount boxes and transaction box that allows state sharing.
+ * 
+ * @returns Wrapper component for amount boxes and transaction box.
+ */
+export default function AmountTransaction({entries, setEntries})
 {
 
   // Net income and current balance states.
   const [netIncomeStates, setNetIncomeStates] = 
-    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
   const [currentBalanceStates, setCurrentBalanceStates] = 
-    useState({amountDollars: '0.0', sign: '', colour: SIGN_COLOURS.green});
+    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
 
   // Transaction type state. (0 = income, 1 = expense).
   const [transactionOption, setTransactionOption] = useState(0);
@@ -22,32 +31,6 @@ export default function AmountTransaction()
   // Cash amount and transaction description states.
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
-
-  // Function to export the transaction information to backend.
-  const exportTransaction = async (transactionOption, cashAmountCents) =>
-  {
-    try
-    {
-      const response = await fetch("http://127.0.0.1:8000/add-transaction", {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          type: transactionOption,
-          desc: transactionDesc,
-          amount_cents: cashAmountCents
-        })
-      });
-
-      if (!response.ok)
-      {
-        throw new Error(`${response.status}`);
-      }
-    }
-    catch (error)
-    {
-      console.log(error);
-    }
-  }
 
   // Function to convert string of transaction option (0 = income, 1 = expense).
   const intToStrOp = transactionOpInt =>
@@ -73,8 +56,19 @@ export default function AmountTransaction()
     const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
     const transactionOpStr = intToStrOp(transactionOption);
 
+    const datetime = getCurrentDatetime();
+    const transactionObj = {
+      datetime: getCurrentDatetime(),
+      type: transactionOpStr,
+      desc: transactionDesc,
+      amount_cents: cashAmountCents
+    }
+    
     // Send transaction entry to backend and add to SQL database.
-    exportTransaction(transactionOpStr, cashAmountCents);
+    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj);
+
+    // Also send transaction entry to transaction history list.
+    addToHistoryList(entries, setEntries, transactionObj);
 
     // Reset transaction box states.
     setTransactionOption(0);
@@ -97,18 +91,48 @@ export default function AmountTransaction()
   const getAmountSign = (amount) =>
   {
     let sign, colour;
-    if (amount >= 0)
+    if (amount > 0)
     {
       colour = SIGN_COLOURS.green;
       sign = '+';
     }
-    else
+    else if (amount < 0)
     {
       colour = SIGN_COLOURS.red;
       sign = '-';
     }
+    else
+    {
+      colour = SIGN_COLOURS.black;
+      sign = '';
+    }
 
     return [sign, colour];
+  }
+
+  // Function to save current net income and current balance to JSON.
+  const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
+  {
+    const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
+    const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
+
+    apiSendJSON(
+      URL_PATHS.CURRENT_AMOUNTS, 
+      "PUT", 
+      {
+        net_income_cents: netIncomeCents,
+        current_balance_cents: currentBalanceCents
+      }
+    )
+  }
+
+  // Set the amount state directly whether positive or negative.
+  const setAmountState = (amount, setStateFunc) =>
+  {
+    let [sign, colour] = getAmountSign(amount);
+    // Remove any negative sign from amount in string format.
+    const amountStr = String(amount).replace('-','');
+    setStateFunc({amountDollars: amountStr, sign: sign, colour: colour});
   }
 
   // Function to update the net income and current balance in real time as transactions
@@ -119,12 +143,22 @@ export default function AmountTransaction()
     let cashAmountNum = Number(cashAmount);
     initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
     const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
-    let [sign, colour] = getAmountSign(newAmount);
-  
-    // Remove any negative sign from new amount in string format.
-    const newAmountStr = String(newAmount).replace('-','');
-    setStateFunc({amountDollars: newAmountStr, sign: sign, colour: colour});
+    setAmountState(newAmount, setStateFunc);
+    return newAmount;
   }
+
+  // Synchronize net income and current balance amounts from persistent JSON data.
+  useEffect(() => {
+    apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
+      .then(
+        (data) => {
+          const netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          const currentBalanceDollars = (data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          setAmountState(netIncomeDollars, setNetIncomeStates);
+          setAmountState(currentBalanceDollars, setCurrentBalanceStates);
+        }
+      );
+  }, [])
 
   return (
     <>
@@ -143,18 +177,19 @@ export default function AmountTransaction()
         <button className={styles.submitButton} 
           onClick={
             () => {
-              updateAmount(
+              const newNetIncome = updateAmount(
                 netIncomeStates.amountDollars, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
-              updateAmount(
+              const newCurrentBalance = updateAmount(
                 currentBalanceStates.amountDollars, transactionOption, 
                 currentBalanceStates.sign, setCurrentBalanceStates
               );
+              saveCurrentAmounts(newNetIncome, newCurrentBalance);
               submitFunc();
             }
           }>
-          SUBMIT TRANSACTION
+          SUBMIT
         </button>
       </div>
     </>
