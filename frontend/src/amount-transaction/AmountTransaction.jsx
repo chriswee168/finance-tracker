@@ -8,6 +8,7 @@ import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
 import { URL_PATHS } from "../utils/api/apiConfig";
 import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
+import getCurrentDatetime from "../utils/getCurrentDatetime";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -54,10 +55,13 @@ export default function AmountTransaction()
     const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
     const transactionOpStr = intToStrOp(transactionOption);
 
+    const datetime = getCurrentDatetime();
+
     // Send transaction entry to backend and add to SQL database.
     apiSendJSON(
       URL_PATHS.TRANSACTIONS, "POST", 
       {
+        datetime: datetime,
         type: transactionOpStr,
         desc: transactionDesc,
         amount_cents: cashAmountCents
