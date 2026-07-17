@@ -31,11 +31,6 @@ export default function TransactionHistory({entries, setEntries})
           const tempEntries = [];
           for (let i = 0; i < data.length; i++)
           {
-            if (data[i].desc == '')
-            {
-              data[i].desc = 'No description.';
-            }
-            
             tempEntries.push(
               <TransactionEntry 
                 key={i} 
