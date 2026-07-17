@@ -23,7 +23,10 @@ function App() {
 
   return (
     <div className={styles.appWrapper}>
-      <AmountTransaction />
+      <AmountTransaction
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
+      />
       <TransactionHistory 
         entries={transactionEntries} 
         setEntries={setTransactionEntries}
