@@ -31,6 +31,11 @@ export default function TransactionEntry({datetime, type, amountCents, desc})
       break;
   }
 
+  if (desc == '')
+  {
+    desc = 'No description.';
+  }
+
   return (
     <div className={styles.transactionEntry}>
       <div className={styles.amountDollars}>

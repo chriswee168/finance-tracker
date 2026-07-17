@@ -17,10 +17,17 @@ import TransactionHistory from './transaction-history/transaction-history'
  */
 function App() {
   
+  // Array to store transaction entry components that include
+  // details of previous transactions.
+  const [transactionEntries, setTransactionEntries] = useState([]);
+
   return (
     <div className={styles.appWrapper}>
       <AmountTransaction />
-      <TransactionHistory />
+      <TransactionHistory 
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
+      />
     </div>
   )
 }

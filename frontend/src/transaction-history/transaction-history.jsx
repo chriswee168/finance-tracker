@@ -9,19 +9,18 @@ import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
  * Create transaction history component to display previous transactions
  * made by user.
  * 
+ * @param {Object} param0 
+ * @param {JSX.Element[]} param0.entries List of TransactionEntry components.
+ * @param {Dispatch<SetStateAction<JSX.Element[]>>} param0.setEntries Setter for entries list.
+ * 
  * @returns Transaction history component.
  */
-export default function TransactionHistory()
+export default function TransactionHistory({entries, setEntries})
 {
   // Default message to display when no transactions have ever been made.
   const defaultMsg = <div className={styles.defaultMsg}>NO TRANSACTIONS</div>;
 
-  // Array to store transaction entry components that include
-  // details of previous transactions.
-  const [entries, setEntries] = useState([]);
-
-  const url = new URL(URL_PATHS.TRANSACTIONS);
-  url.searchParams.append("n_entries", MAX_TRANSACTION_ENTRIES);
+  const url = createEntryGetURL(MAX_TRANSACTION_ENTRIES);
 
   // Get transaction entries from backend SQL database.
   useEffect(() => {
@@ -31,11 +30,6 @@ export default function TransactionHistory()
           const tempEntries = [];
           for (let i = 0; i < data.length; i++)
           {
-            if (data[i].desc == '')
-            {
-              data[i].desc = 'No description.';
-            }
-            
             tempEntries.push(
               <TransactionEntry 
                 key={i} 
@@ -59,4 +53,40 @@ export default function TransactionHistory()
       </div>
     </div>
   )
+}
+
+/**
+ * Function to add a new transaction to entry list directly after submitting.
+ * 
+ * @param {JSX.Element[]} entries List of TransactionEntry components.
+ * @param {Dispatch<SetStateAction<JSX.Element[]>>} setEntries Setter for entries list.
+ */
+export const addToHistoryList = (entries, setEntries, data) => 
+{
+  const newEntry = 
+    <TransactionEntry 
+      key={entries.length} 
+      datetime={data.datetime}
+      type={data.type}
+      amountCents={data.amount_cents}
+      desc={data.desc}
+    />;
+  
+  // Insert new entry in the beginning of the entry list as latest.
+  setEntries(entries.splice(0, 0, newEntry));
+}
+
+/**
+ * Helper function to create the required URL path to obtain N transaction
+ * entries from backend SQL database.
+ * 
+ * @param {number} nEntries Number of entries to get from backend SQL database.
+ * 
+ * @returns New URL for GET request.
+ */
+export const createEntryGetURL = (nEntries) =>
+{
+  const url = new URL(URL_PATHS.TRANSACTIONS);
+  url.searchParams.append("n_entries", nEntries);
+  return url;
 }
