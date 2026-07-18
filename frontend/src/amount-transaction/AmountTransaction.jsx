@@ -168,7 +168,11 @@ export default function AmountTransaction({entries, setEntries})
       <AmountBox textLabel='Current Balance' amountDollars={currentBalanceStates.amountDollars} 
         sign={currentBalanceStates.sign} colour={currentBalanceStates.colour}/>
 
-      <CurrentBalanceInit cashAmount={currentBalanceStates} setAmount={setCurrentBalanceStates}/>
+      <CurrentBalanceInit 
+        netIncomeStates={netIncomeStates} 
+        currentBalanceStates={currentBalanceStates}
+        setCurrentBalanceStates={setCurrentBalanceStates}
+      />
             
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
