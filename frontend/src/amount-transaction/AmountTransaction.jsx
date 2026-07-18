@@ -177,7 +177,7 @@ export default function AmountTransaction({entries, setEntries})
         <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} />
         <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
       
-        <button className={styles.submitButton} 
+        <button
           onClick={
             () => {
               const newNetIncome = updateAmount(
