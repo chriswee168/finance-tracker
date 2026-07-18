@@ -10,6 +10,7 @@ import { URL_PATHS } from "../utils/api/apiConfig";
 import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
+import CurrentBalanceInit from "./current-balance-init/current-balance-init";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -166,10 +167,12 @@ export default function AmountTransaction({entries, setEntries})
         sign={netIncomeStates.sign} colour={netIncomeStates.colour}/>
       <AmountBox textLabel='Current Balance' amountDollars={currentBalanceStates.amountDollars} 
         sign={currentBalanceStates.sign} colour={currentBalanceStates.colour}/>
-      
+
+      <CurrentBalanceInit cashAmount={currentBalanceStates} setAmount={setCurrentBalanceStates}/>
+            
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
-      
+
         <TransactionOptions transactionOption={transactionOption} setTransactionOption={setTransactionOption} />
         <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} />
         <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
