@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./current-balance-init.module.css";
+import { SIGN_COLOURS } from "../../utils/constants";
 
 /**
  * Component to prompt the user to set the current balance.
@@ -18,6 +19,20 @@ export default function CurrentBalanceInit({
 })
 {
   const [amount, setAmount] = useState('');
+
+  // Main function to execute when submit function pressed.
+  const submitFunc = () =>
+  {
+    // Set the current balance with amount given by user.
+    setCurrentBalanceStates({
+      amountDollars: amount, sign: '+', colour: SIGN_COLOURS.green
+    });
+
+    
+    
+    // Clear user input.
+    setAmount('');
+  }
   
   return (
     <div className={styles.currentBalanceWrapper}>
@@ -27,14 +42,7 @@ export default function CurrentBalanceInit({
       <input id="cash-input" value={amount} type="text" 
         placeholder="00.00" onChange={(event) => setAmount(event.target.value)}/>
       </div>
-      <button className={styles.submitButton} 
-        onClick={
-          () => {
-            
-          }
-        }>
-        SUBMIT
-      </button>
+      <button onClick={() => submitFunc()}>SUBMIT</button>
     </div>
   )
 }
