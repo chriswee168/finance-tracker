@@ -26,8 +26,8 @@
     font-family: var(--p-font-family);
     font-weight: bold;
     resize: none;
-
     overflow-y: scroll;
+    transition: 0.5s;
 
     &::-webkit-scrollbar
     {
