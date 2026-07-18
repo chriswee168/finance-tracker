@@ -14,25 +14,3 @@
 {
     padding-left: 2%;    
 }
-
-.cashAmountTextbox
-{
-    border-style: none;
-    border-radius: 20px;
-    width: 93%;
-    height: 50%;
-    background-color: var(--sub-box-colour);
-    padding-left: 10px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    font-size: 19px;
-    font-family: var(--p-font-family);
-    font-weight: bold;
-
-    &:focus
-    {
-        outline: none;
-        background-color: var(--focus-colour);
-    }
-}

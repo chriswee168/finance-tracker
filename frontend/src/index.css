@@ -48,3 +48,27 @@ button
         background-color: rgb(173, 173, 173);
     }
 }
+
+/* For all text input elements. */
+input[type="text"]
+{
+    border-style: none;
+    border-radius: 20px;
+    width: 93%;
+    height: 50%;
+    background-color: var(--sub-box-colour);
+    padding-left: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 19px;
+    font-family: var(--p-font-family);
+    font-weight: bold;
+    transition: 0.5s;
+
+    &:focus
+    {
+        outline: none;
+        background-color: var(--focus-colour);
+    }
+}
