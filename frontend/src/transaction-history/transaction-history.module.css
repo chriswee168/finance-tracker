@@ -15,10 +15,10 @@
 .transactionList
 {
     border-radius: 10px;
-    height: 350px;
+    height: 470px;
     width: 470px;
     position: absolute;
-    top: 15%;
+    top: 13%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
