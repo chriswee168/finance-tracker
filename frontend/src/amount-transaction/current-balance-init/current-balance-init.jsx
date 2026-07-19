@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./current-balance-init.module.css";
 import { SIGN_COLOURS } from "../../utils/constants";
+import { addNegativeSign, saveCurrentAmounts } from "../AmountTransaction";
 
 /**
  * Component to prompt the user to set the current balance.
@@ -23,12 +24,20 @@ export default function CurrentBalanceInit({
   // Main function to execute when submit function pressed.
   const submitFunc = () =>
   {
-    // Set the current balance with amount given by user.
+    // Set the initial current balance.
     setCurrentBalanceStates({
       amountDollars: amount, sign: '+', colour: SIGN_COLOURS.green
     });
 
-    
+    // Get net income as a numerical amount with negative sign if required
+    // to send with current balance.
+    const netIncomeNum = addNegativeSign(
+      netIncomeStates.amountDollars, netIncomeStates.sign
+    );
+
+    // Send initial current balance to FastAPI backend along with
+    // existing net income.
+    saveCurrentAmounts(String(netIncomeNum), amount);
     
     // Clear user input.
     setAmount('');
