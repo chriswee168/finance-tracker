@@ -51,8 +51,8 @@ button
     }
 }
 
-/* For all text input elements. */
-input[type="text"]
+/* For all numbered input elements. */
+input[type="number"]
 {
     border-style: none;
     border-radius: 20px;
@@ -67,10 +67,18 @@ input[type="text"]
     font-family: var(--p-font-family);
     font-weight: bold;
     transition: 0.5s;
+    appearance: textfield;
 
     &:focus
     {
         outline: none;
         background-color: var(--focus-colour);
     }
+}
+
+/* Remove spin buttons for input elements. */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
