@@ -1,11 +1,13 @@
 /* Main wrapper to contain position all components of App. */
 .appWrapper
 {
-    width: 900px;
-    height: 600px;
+    width: 850px;
+    height: 585px;
     border-style: solid;
     top: 50%;
     left: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 10px;
 }

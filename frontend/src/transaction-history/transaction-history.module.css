@@ -5,9 +5,9 @@
     background-color: var(--widget-back-colour);
     height: 579px;
     width: 489px;
-    position: absolute;
-    top: 0%;
-    left: 40%;
+    position: relative;
+    bottom: 24.5%;
+    left: 42.4%;
     text-align: center;
 }
 
