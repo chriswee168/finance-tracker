@@ -3,22 +3,28 @@
 {
     border-radius: 10px;
     background-color: var(--widget-back-colour);
-    height: 456px;
+    height: 579px;
     width: 489px;
-    position: absolute;
-    top: 0%;
-    left: 45.1%;
+    position: relative;
+    bottom: 24.5%;
+    left: 42.4%;
     text-align: center;
+}
+
+/* Title for transaction history window. */
+.historyTitle
+{
+    line-height: 70px;
 }
 
 /* Display for all transactions made. */
 .transactionList
 {
     border-radius: 10px;
-    height: 350px;
+    height: 470px;
     width: 470px;
     position: absolute;
-    top: 15%;
+    top: 13%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
