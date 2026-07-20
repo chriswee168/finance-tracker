@@ -11,6 +11,12 @@
     text-align: center;
 }
 
+/* Title for transaction history window. */
+.historyTitle
+{
+    line-height: 70px;
+}
+
 /* Display for all transactions made. */
 .transactionList
 {
