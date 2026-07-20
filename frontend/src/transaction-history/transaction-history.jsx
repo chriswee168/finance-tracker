@@ -47,7 +47,7 @@ export default function TransactionHistory({entries, setEntries})
 
   return (
     <div className={styles.transactionHistory}>
-      <h1>TRANSACTION HISTORY</h1>
+      <h1 className={styles.historyTitle}>TRANSACTION HISTORY</h1>
       <div className={styles.transactionList}>
         {entries.length == 0 ? defaultMsg : entries}
       </div>
