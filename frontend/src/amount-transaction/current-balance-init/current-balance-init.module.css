@@ -1,3 +1,4 @@
+/* Wrap the title, label and input for cash amount. */
 .currentBalanceWrapper
 {
     position: absolute;
@@ -7,12 +8,20 @@
     height: 130px;
 }
 
+/* Title for component prompting the initial current balance. */
 .currentBalanceTitle
 {
     text-align: center;
     margin: 10px;
 }
-/* Rules for cash amount elements. */
+
+/* Prompts user the initial current balance to set. */
+.cashAmountLabel
+{
+    padding-left: 2%;    
+}
+
+/* Input box for cash amount. */
 .cashAmountInput
 {
     width: 320px;
@@ -21,9 +30,4 @@
     transform: translate(-50%);
     position: relative;
     line-height: 16px;
-}
-
-.cashAmountLabel
-{
-    padding-left: 2%;    
 }

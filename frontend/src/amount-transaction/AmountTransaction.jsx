@@ -15,6 +15,10 @@ import CurrentBalanceInit from "./current-balance-init/current-balance-init";
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
  * 
+ * @param {Object} param0 
+ * @param {JSX.Element[]} param0.entries List of TransactionEntry components.
+ * @param {Dispatch<SetStateAction<JSX.Element[]>>} param0.setEntries Setter for entries list.
+ *
  * @returns Wrapper component for amount boxes and transaction box.
  */
 export default function AmountTransaction({entries, setEntries})
