@@ -48,7 +48,7 @@ export default function CurrentBalanceInit({
       <h4 className={styles.currentBalanceTitle}>INITIAL CURRENT BALANCE</h4>
       <div className={styles.cashAmountInput}>
       <label htmlFor="cash-input" className={styles.cashAmountLabel}>Initial current balance amount ($): </label><br/>
-      <input id="cash-input" value={amount} type="text" 
+      <input id="cash-input" value={amount} type="number" 
         placeholder="00.00" onChange={(event) => setAmount(event.target.value)}/>
       </div>
       <button onClick={() => submitFunc()}>SUBMIT</button>

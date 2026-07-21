@@ -19,7 +19,8 @@ export default function getCurrentDatetime()
 
     // Convert 24 hours to 12 hours.
     const ampm = hours >= 12 ? "pm" : "am";
-    const twelveHours = String(hours % 12).padStart(2, '0');
+    const hoursMod = hours % 12;
+    const twelveHours = String(hoursMod == 0 ? 12 : hoursMod).padStart(2, '0');
 
     return `${year}-${month}-${day} ${twelveHours}:${mins}:${secs}${ampm}`;
 }

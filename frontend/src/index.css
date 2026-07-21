@@ -1,3 +1,4 @@
+/* Global variables. */
 :root
 {
     --app-back-colour: rgb(245, 245, 245);
@@ -14,21 +15,20 @@
     --red: rgb(195, 0, 0);
 }
 
+/* Properties for all labels. */
 label
 {
     font-size: 110%;
+    font-family: var(--p-font-family);
 }
 
+/* Use Arial for headings and buttons. */
 h1, h3, h4, button
 {
     font-family: Arial;
 }
 
-label
-{
-    font-family: var(--p-font-family);
-}
-
+/* Properties for all button elements. */
 button
 {
     position: relative;
@@ -51,8 +51,8 @@ button
     }
 }
 
-/* For all text input elements. */
-input[type="text"]
+/* For all numbered input elements. */
+input[type="number"]
 {
     border-style: none;
     border-radius: 20px;
@@ -67,10 +67,18 @@ input[type="text"]
     font-family: var(--p-font-family);
     font-weight: bold;
     transition: 0.5s;
+    appearance: textfield;
 
     &:focus
     {
         outline: none;
         background-color: var(--focus-colour);
     }
+}
+
+/* Remove spin buttons for input elements. */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
