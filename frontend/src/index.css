@@ -55,7 +55,6 @@ button
 input[type="number"]
 {
     border-style: none;
-    border-radius: 20px;
     width: 93%;
     height: 50%;
     background-color: var(--sub-box-colour);
