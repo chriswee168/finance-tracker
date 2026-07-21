@@ -1,3 +1,4 @@
+/* Global variables. */
 :root
 {
     --app-back-colour: rgb(245, 245, 245);
@@ -14,21 +15,20 @@
     --red: rgb(195, 0, 0);
 }
 
+/* Properties for all labels. */
 label
 {
     font-size: 110%;
+    font-family: var(--p-font-family);
 }
 
+/* Use Arial for headings and buttons. */
 h1, h3, h4, button
 {
     font-family: Arial;
 }
 
-label
-{
-    font-family: var(--p-font-family);
-}
-
+/* Properties for all button elements. */
 button
 {
     position: relative;

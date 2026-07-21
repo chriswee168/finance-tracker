@@ -13,13 +13,14 @@
     text-align: left;
 }
 
-/* Customise transaction entry contents. */
+/* Cash amount in transaction entry. */
 .amountDollars
 {
     font-size: 20px;
     padding-top: 5px;
 }
 
+/* Date and time transaction was made. */
 .datetime
 {
     font-size: 15px;
@@ -29,6 +30,7 @@
     bottom: 30%;
 }
 
+/* Text box to display transaction description. */
 .descWrapper
 {
    background-color: var(--sub-box-colour);
@@ -43,6 +45,7 @@
    display: flex;
 }
 
+/* Transaction description text. */
 .desc
 {
     font-size: 15px;
@@ -50,6 +53,7 @@
     bottom: 20%;
 }
 
+/* Properties shared by cash amount, datetime and description. */
 .amountDollars, .datetime, .desc
 {
     font-family: var(--p-font-family);

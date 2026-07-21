@@ -1,4 +1,3 @@
-
 /**
  * Function to perform a mathematical operation between two numbers.
  * 

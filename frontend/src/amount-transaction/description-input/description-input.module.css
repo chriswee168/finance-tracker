@@ -1,4 +1,4 @@
-/* Rules for transaction description. */
+/* Wrapper for description input. */
 .descriptionInput
 {
     width: 314px;
@@ -10,6 +10,7 @@
     padding-left: 1.5%;
 }
 
+/* Textarea to accept user text. */
 .descTextbox
 {
     border-style: none;
