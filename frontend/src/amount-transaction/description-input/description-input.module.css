@@ -44,7 +44,6 @@
     &::-webkit-scrollbar-track
     {
         background-color: var(--webkit-scrollbar-track-colour);
-        border-radius: 10px;
     }
 
     &:focus
