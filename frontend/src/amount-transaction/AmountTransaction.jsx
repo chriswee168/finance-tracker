@@ -10,10 +10,15 @@ import { URL_PATHS } from "../utils/api/apiConfig";
 import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
+import CurrentBalanceInit from "./current-balance-init/current-balance-init";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
  * 
+ * @param {Object} param0 
+ * @param {JSX.Element[]} param0.entries List of TransactionEntry components.
+ * @param {Dispatch<SetStateAction<JSX.Element[]>>} param0.setEntries Setter for entries list.
+ *
  * @returns Wrapper component for amount boxes and transaction box.
  */
 export default function AmountTransaction({entries, setEntries})
@@ -75,16 +80,6 @@ export default function AmountTransaction({entries, setEntries})
     setAmount('');
     setTransactionDesc('');
   }
-  
-  // Add negative sign if sign character is '-'.
-  const addNegativeSign = (amountNum, signChar) =>
-  {
-    if (signChar == '-')
-    {
-      amountNum = -amountNum;
-    }
-    return amountNum;
-  }
 
   // Returns the appropriate sign and its colour based on whether
   // amount is below or above zero.
@@ -108,22 +103,6 @@ export default function AmountTransaction({entries, setEntries})
     }
 
     return [sign, colour];
-  }
-
-  // Function to save current net income and current balance to JSON.
-  const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
-  {
-    const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
-    const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
-
-    apiSendJSON(
-      URL_PATHS.CURRENT_AMOUNTS, 
-      "PUT", 
-      {
-        net_income_cents: netIncomeCents,
-        current_balance_cents: currentBalanceCents
-      }
-    )
   }
 
   // Set the amount state directly whether positive or negative.
@@ -166,15 +145,21 @@ export default function AmountTransaction({entries, setEntries})
         sign={netIncomeStates.sign} colour={netIncomeStates.colour}/>
       <AmountBox textLabel='Current Balance' amountDollars={currentBalanceStates.amountDollars} 
         sign={currentBalanceStates.sign} colour={currentBalanceStates.colour}/>
-      
+
+      <CurrentBalanceInit 
+        netIncomeStates={netIncomeStates} 
+        currentBalanceStates={currentBalanceStates}
+        setCurrentBalanceStates={setCurrentBalanceStates}
+      />
+            
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
-      
+
         <TransactionOptions transactionOption={transactionOption} setTransactionOption={setTransactionOption} />
         <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} />
         <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
       
-        <button className={styles.submitButton} 
+        <button
           onClick={
             () => {
               const newNetIncome = updateAmount(
@@ -193,5 +178,43 @@ export default function AmountTransaction({entries, setEntries})
         </button>
       </div>
     </>
+  )
+}
+
+/**
+ * Add negative sign if sign character is '-'.
+ * 
+ * @param {number} amountNum Cash amount as number type.
+ * @param {string} signChar Sign character.
+ * 
+ * @returns New cash amount number.
+ */
+export const addNegativeSign = (amountNum, signChar) =>
+{
+  if (signChar == '-')
+  {
+    amountNum = -amountNum;
+  }
+  return amountNum;
+}
+
+/**
+ * Function to save current net income and current balance to JSON.
+ * 
+ * @param {string} netIncomeDollars Net income dollars in string format.
+ * @param {string} currentBalanceDollars Current balance dollars in string format.
+ */
+export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
+{
+  const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
+  const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
+
+  apiSendJSON(
+    URL_PATHS.CURRENT_AMOUNTS, 
+    "PUT", 
+    {
+      net_income_cents: netIncomeCents,
+      current_balance_cents: currentBalanceCents
+    }
   )
 }
