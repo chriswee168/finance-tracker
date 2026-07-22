@@ -14,7 +14,6 @@
 .descTextbox
 {
     border-style: none;
-    border-radius: 10px;
     width: 93%;
     height: 69%;
     background-color: var(--sub-box-colour);

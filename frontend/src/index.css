@@ -55,11 +55,10 @@ button
 input[type="number"]
 {
     border-style: none;
-    border-radius: 20px;
-    width: 93%;
+    width: 94%;
     height: 50%;
     background-color: var(--sub-box-colour);
-    padding-left: 10px;
+    padding-left: 5px;
     position: absolute;
     left: 50%;
     transform: translate(-50%);
