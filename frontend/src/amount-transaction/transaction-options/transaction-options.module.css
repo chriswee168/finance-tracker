@@ -40,6 +40,7 @@
 .incomeOptionSelected
 {
     background-color: var(--green);
+    color: var(--app-back-colour);
     position: absolute;
     left: 2%;
 }
@@ -59,6 +60,13 @@
 .expenseOptionSelected
 {
     background-color: var(--red);
+    color: var(--app-back-colour);
     position: absolute;
     left: 51.5%;
+}
+
+/* Option text colour on hover. */
+.incomeOption:hover, .expenseOption:hover
+{
+    color: var(--app-back-colour);
 }

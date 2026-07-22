@@ -32,15 +32,25 @@
 /* Text box to display transaction description. */
 .descWrapper
 {
-   background-color: var(--sub-box-colour);
-   position: relative;
-   bottom: 20%;
-   width: 96%;
-   left: 50%;
-   transform: translate(-50%);
-   overflow-x: scroll;
-   scrollbar-width: none;
-   display: flex;
+    background-color: var(--sub-box-colour);
+    position: relative;
+    bottom: 20%;
+    width: 96%;
+    left: 50%;
+    transform: translate(-50%);
+    overflow-x: scroll;
+    display: flex;
+    
+    &::-webkit-scrollbar
+    {
+        height: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+       background-color: var(--webkit-scrollbar-thumb-colour);
+       border-radius: 10px;
+    }
 }
 
 /* Transaction description text. */
