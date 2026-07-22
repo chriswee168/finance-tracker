@@ -46,13 +46,16 @@
 /* Transaction description text. */
 .desc
 {
+    font-family: var(--p-font-family);
     font-size: 15px;
     position: relative;
     bottom: 20%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* Properties shared by cash amount, datetime and description. */
-.amountDollars, .datetime, .desc
+.amountDollars, .datetime
 {
     font-family: var(--p-font-family);
     padding-left: 12px;
