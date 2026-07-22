@@ -1,9 +1,4 @@
-/* Rules for the transaction option selection. */
-.transactionOptionLabel
-{
-    padding-left: 2%;
-}
-
+/* Wrapper for income and expense transaction options. */
 .transactionOptionGroup
 {
     width: 320px;
@@ -13,10 +8,16 @@
     transform: translate(-50%);
 }
 
+/* Transaction option label. */
+.transactionOptionLabel
+{
+    padding-left: 2%;
+}
+
+/* Base styling for both the income and expense options. */
 .transactionOption
 {
     width: 150px;
-    border-radius: 20px;
     text-align: center;
     font-size: 20px;
     font-family: var(--p-font-family);
@@ -25,6 +26,7 @@
     user-select: none;
 }
 
+/* Income option when selected or unselected by user. */
 .incomeOption
 {
     background-color: var(--sub-box-colour);
@@ -35,7 +37,6 @@
         background-color: var(--green);
     }
 }
-
 .incomeOptionSelected
 {
     background-color: var(--green);
@@ -43,6 +44,7 @@
     left: 2%;
 }
 
+/* Expense option when selected or unselected by user. */
 .expenseOption
 {
     background-color: var(--sub-box-colour);
@@ -54,7 +56,6 @@
         background-color: var(--red);
     }
 }
-
 .expenseOptionSelected
 {
     background-color: var(--red);

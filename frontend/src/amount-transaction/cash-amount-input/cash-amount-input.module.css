@@ -1,5 +1,5 @@
 
-/* Rules for cash amount elements. */
+/* Input box for cash amount. */
 .cashAmountInput
 {
     width: 320px;
@@ -10,6 +10,7 @@
     line-height: 16px;
 }
 
+/* Label to indicate cash amount is to be given in dollars. */
 .cashAmountLabel
 {
     padding-left: 2%;    
