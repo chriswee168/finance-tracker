@@ -27,7 +27,7 @@
     font-weight: bold;
     resize: none;
     overflow-y: scroll;
-    transition: 0.5s;
+    transition: 0.25s;
 
     &::-webkit-scrollbar
     {

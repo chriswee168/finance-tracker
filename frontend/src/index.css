@@ -43,7 +43,7 @@ button
     border-style: none;
     background-color: var(--sub-box-colour);
 
-    transition: 0.5s;
+    transition: 0.25s;
 
     &:hover
     {
@@ -65,7 +65,7 @@ input[type="number"]
     font-size: 19px;
     font-family: var(--p-font-family);
     font-weight: bold;
-    transition: 0.5s;
+    transition: 0.25s;
     appearance: textfield;
 
     &:focus
