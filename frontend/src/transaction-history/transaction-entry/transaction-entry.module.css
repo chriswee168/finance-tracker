@@ -1,0 +1,73 @@
+/* Main transaction history window. */
+.transactionEntry
+{   
+    background-color: var(--widget-back-colour);
+    height: 60px;
+    width: 95%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-align: left;
+}
+
+/* Cash amount in transaction entry. */
+.amountDollars
+{
+    font-size: 20px;
+    padding-top: 5px;
+}
+
+/* Date and time transaction was made. */
+.datetime
+{
+    font-size: 15px;
+    padding-right: 12px;
+    text-align: right;
+    position: relative;
+    bottom: 30%;
+}
+
+/* Text box to display transaction description. */
+.descWrapper
+{
+    background-color: var(--sub-box-colour);
+    position: relative;
+    bottom: 20%;
+    width: 96%;
+    left: 50%;
+    transform: translate(-50%);
+    overflow-x: scroll;
+    display: flex;
+    
+    &::-webkit-scrollbar
+    {
+        height: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+       background-color: var(--webkit-scrollbar-thumb-colour);
+       border-radius: 10px;
+    }
+}
+
+/* Transaction description text. */
+.desc
+{
+    font-family: var(--p-font-family);
+    font-size: 15px;
+    position: relative;
+    bottom: 20%;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Properties shared by cash amount, datetime and description. */
+.amountDollars, .datetime
+{
+    font-family: var(--p-font-family);
+    padding-left: 12px;
+    padding-right: 12px;
+}

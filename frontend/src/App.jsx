@@ -5,10 +5,10 @@ import heroImg from './assets/hero.png'
 import styles from './App.module.css'
 import NetIncome from './amount-transaction/amount-box/amount-box'
 import TrendArrowSet from './amount-transaction/amount-box/trend-arrow-set'
-import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './constants'
+import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './utils/constants'
 import AmountBox from './amount-transaction/amount-box/amount-box'
-import TransactionBox from './amount-transaction/transaction-box/transaction-box'
 import AmountTransaction from './amount-transaction/AmountTransaction'
+import TransactionHistory from './transaction-history/transaction-history'
 
 /**
  * Create main app component.
@@ -16,11 +16,21 @@ import AmountTransaction from './amount-transaction/AmountTransaction'
  * @returns Main app component.
  */
 function App() {
-  const [count, setCount] = useState(0)
+  
+  // Array to store transaction entry components that include
+  // details of previous transactions.
+  const [transactionEntries, setTransactionEntries] = useState([]);
 
   return (
     <div className={styles.appWrapper}>
-      <AmountTransaction />
+      <AmountTransaction
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
+      />
+      <TransactionHistory 
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
+      />
     </div>
   )
 }
