@@ -3,11 +3,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import styles from './App.module.css'
-import NetIncome from './amount-box/amount-box'
-import TrendArrowSet from './amount-box/trend-arrow-set'
-import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './constants'
-import AmountBox from './amount-box/amount-box'
-import TransactionBox from './transaction-box/transaction-box'
+import NetIncome from './amount-transaction/amount-box/amount-box'
+import TrendArrowSet from './amount-transaction/amount-box/trend-arrow-set'
+import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './utils/constants'
+import AmountBox from './amount-transaction/amount-box/amount-box'
+import AmountTransaction from './amount-transaction/AmountTransaction'
+import TransactionHistory from './transaction-history/transaction-history'
 
 /**
  * Create main app component.
@@ -15,17 +16,21 @@ import TransactionBox from './transaction-box/transaction-box'
  * @returns Main app component.
  */
 function App() {
-  const [count, setCount] = useState(0)
+  
+  // Array to store transaction entry components that include
+  // details of previous transactions.
+  const [transactionEntries, setTransactionEntries] = useState([]);
 
   return (
     <div className={styles.appWrapper}>
-      <TrendArrowSet 
-        upColourState={TREND_ARROW_COLOURS.green} 
-        downColourState={TREND_ARROW_COLOURS.red}
+      <AmountTransaction
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
       />
-      <AmountBox textLabel='Net Income' amountDollars='0.0' sign='+' colour={SIGN_COLOURS.green}/>
-      <AmountBox textLabel='Net Balance' amountDollars='0.0' sign='-' colour={SIGN_COLOURS.red}/>
-      <TransactionBox />
+      <TransactionHistory 
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
+      />
     </div>
   )
 }
