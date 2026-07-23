@@ -72,8 +72,13 @@ export const addToHistoryList = (entries, setEntries, data) =>
       desc={data.desc}
     />;
   
+  // Ensure number of transaction entries does not exceed maximum number 
+  // of transaction entries.
+  const upperIdx = 
+    entries.length >= MAX_TRANSACTION_ENTRIES ? entries.length - 1 : entries.length;
+
   // Insert new entry in the beginning of the entry list as latest.
-  setEntries([newEntry, ...entries]);
+  setEntries([newEntry, ...entries.slice(0, upperIdx)]);
 }
 
 /**
