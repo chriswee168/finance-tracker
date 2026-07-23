@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import styles from './App.module.css'
 import NetIncome from './amount-transaction/amount-box/amount-box'
 import TrendArrowSet from './amount-transaction/amount-box/trend-arrow-set'
@@ -23,7 +20,10 @@ function App() {
 
   return (
     <div className={styles.appWrapper}>
-      <AmountTransaction />
+      <AmountTransaction
+        entries={transactionEntries} 
+        setEntries={setTransactionEntries}
+      />
       <TransactionHistory 
         entries={transactionEntries} 
         setEntries={setTransactionEntries}

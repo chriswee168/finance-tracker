@@ -7,7 +7,7 @@ import styles from "./transaction-entry.module.css";
  * 
  * @param {Object} param0 
  * @param {string} param0.datetime Date and time of transaction.
- * @param {string} param0.type Transaction type (income/expense)
+ * @param {string} param0.type Transaction type (income/expense).
  * @param {string} param0.amountCents Cash amount in cents.
  * @param {string} param0.desc Transaction description.
  * 

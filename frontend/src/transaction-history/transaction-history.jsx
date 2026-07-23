@@ -20,8 +20,7 @@ export default function TransactionHistory({entries, setEntries})
   // Default message to display when no transactions have ever been made.
   const defaultMsg = <div className={styles.defaultMsg}>NO TRANSACTIONS</div>;
 
-  const url = new URL(URL_PATHS.TRANSACTIONS);
-  url.searchParams.append("n_entries", MAX_TRANSACTION_ENTRIES);
+  const url = createEntryGetURL(MAX_TRANSACTION_ENTRIES);
 
   // Get transaction entries from backend SQL database.
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function TransactionHistory({entries, setEntries})
 
   return (
     <div className={styles.transactionHistory}>
-      <h1>TRANSACTION HISTORY</h1>
+      <h1 className={styles.historyTitle}>TRANSACTION HISTORY</h1>
       <div className={styles.transactionList}>
         {entries.length == 0 ? defaultMsg : entries}
       </div>
@@ -74,5 +73,20 @@ export const addToHistoryList = (entries, setEntries, data) =>
     />;
   
   // Insert new entry in the beginning of the entry list as latest.
-  setEntries(entries.splice(0, 0, newEntry));
+  setEntries([newEntry, ...entries]);
+}
+
+/**
+ * Helper function to create the required URL path to obtain N transaction
+ * entries from backend SQL database.
+ * 
+ * @param {number} nEntries Number of entries to get from backend SQL database.
+ * 
+ * @returns New URL for GET request.
+ */
+export const createEntryGetURL = (nEntries) =>
+{
+  const url = new URL(URL_PATHS.TRANSACTIONS);
+  url.searchParams.append("n_entries", nEntries);
+  return url;
 }
