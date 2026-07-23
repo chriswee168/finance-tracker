@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from routers import cash_amounts, transactions
+from routers import cash_amounts, transactions, timestamp
 from fastapi.middleware.cors import CORSMiddleware
 from create_tables import create_tables
 
@@ -10,6 +10,9 @@ async def lifespan(app: FastAPI):
     print("Starting FastAPI server...")
     create_tables()
     print("Called create_tables() function...")
+
+    # Initialise the timestamp if timestamp.json doesn't exist.
+    timestamp.init_timestamp()
     
     yield
 
