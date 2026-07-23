@@ -33,3 +33,4 @@ app.add_middleware(
 # Link all routers.
 app.include_router(cash_amounts.route)
 app.include_router(transactions.route)
+app.include_router(timestamp.route)
