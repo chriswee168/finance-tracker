@@ -1,15 +1,17 @@
+/* Title for transaction box as a whole. */
 .transactionBoxTitle
 {
     text-align: center;
     font-size: 20px;
 }
 
+/* Transaction box element for displaying options, cash amount and description. */
 .transactionBox
 {
     border-radius: 10px;
     background-color: var(--widget-back-colour);
     position: absolute;
-    width: 400px;
-    height: 330px;
-    top: 44%;
+    width: 350px;
+    height: 315px;
+    top: 46%;
 }
