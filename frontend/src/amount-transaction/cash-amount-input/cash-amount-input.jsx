@@ -13,8 +13,8 @@ export default function CashAmountInput({cashAmount, setAmount})
 {
   return (
     <div className={styles.cashAmountInput}>
-      <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount ($): </label><br/>
-      <input id="cash-input" value={cashAmount} type="text" className={styles.cashAmountTextbox} 
+      <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount in dollars: </label><br/>
+      <input id="cash-input" value={cashAmount} type="number"
         placeholder="00.00" onChange={(event) => setAmount(event.target.value)}/>
     </div>
   )

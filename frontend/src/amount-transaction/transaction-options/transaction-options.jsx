@@ -19,14 +19,14 @@ export default function TransactionOptions({transactionOption, setTransactionOpt
         ${transactionOption == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
         }
         onClick={() => setTransactionOption(0)}
-        >Income
+        >INCOME
       </div>
       <div className={
         `${styles.transactionOption} 
         ${transactionOption == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
         }
         onClick={() => setTransactionOption(1)}
-        >Expense
+        >EXPENSE
       </div>
     </div>
   )
