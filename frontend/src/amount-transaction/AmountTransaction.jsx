@@ -188,8 +188,18 @@ export default function AmountTransaction({entries, setEntries})
         <button
           onClick={
             () => {
+              // Update the epoch timestamp on FastAPI backend and reset net income to zero.
+              const [currentEpoch, exceeded] = currentEpochSecsExceeded(timestamp);
+              let netIncomeAmount = netIncomeStates.amountDollars;
+              if (exceeded)
+              {
+                incrementTimestamp(timestamp, setTimestamp);
+                netIncomeAmount = 0.0;
+              }
+              
+              // Obtain the new net income and current balance and save to FastAPI backend.
               const newNetIncome = updateAmount(
-                netIncomeStates.amountDollars, transactionOption, 
+                netIncomeAmount, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
               const newCurrentBalance = updateAmount(
