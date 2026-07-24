@@ -37,6 +37,10 @@ export default function AmountTransaction({entries, setEntries})
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
 
+  // Timestamp state for refreshing the net income periodically and saving
+  // data.
+  const [timestamp, setTimestamp] = useState(0);
+
   // Function to convert string of transaction option (0 = income, 1 = expense).
   const intToStrOp = transactionOpInt =>
   {
@@ -126,6 +130,14 @@ export default function AmountTransaction({entries, setEntries})
     return newAmount;
   }
 
+  // Synchronize timestamp.
+  useEffect(() => {
+    apiGetJSON(URL_PATHS.TIMESTAMP)
+      .then(
+        (data) => setTimestamp(data.timestamp)
+      );
+  }, []);
+
   // Synchronize net income and current balance amounts from persistent JSON data.
   useEffect(() => {
     apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
@@ -137,7 +149,7 @@ export default function AmountTransaction({entries, setEntries})
           setAmountState(currentBalanceDollars, setCurrentBalanceStates);
         }
       );
-  }, [])
+  }, []);
 
   return (
     <>
