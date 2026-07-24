@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../utils/constants";
+import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
@@ -243,4 +243,17 @@ export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars
       current_balance_cents: currentBalanceCents
     }
   )
+}
+
+/**
+ * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
+ * 
+ * @param {number} timestamp Current epoch timestamp in seconds.
+ * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
+ */
+const incrementTimestamp = (timestamp, setTimestamp) =>
+{
+  const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
+  setTimestamp(newTimestamp);
+  apiSendJSON(URL_PATHS.TIMESTAMP, "PUT", {secs: newTimestamp});
 }
