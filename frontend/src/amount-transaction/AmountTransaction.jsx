@@ -11,6 +11,7 @@ import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
 import CurrentBalanceInit from "./current-balance-init/current-balance-init";
+import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -147,8 +148,17 @@ export default function AmountTransaction({entries, setEntries})
     apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
       .then(
         (data) => {
-          const netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          let netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
           const currentBalanceDollars = (data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          
+          // Refresh net income if amount of time passed since previous timestamp exceeds the
+          // interval in seconds.
+          const [currentEpoch, exceeded] = currentEpochSecsExceeded(timestampTemp);
+          if (exceeded)
+          {
+            netIncomeDollars = '0.00';
+          }
+
           setAmountState(netIncomeDollars, setNetIncomeStates);
           setAmountState(currentBalanceDollars, setCurrentBalanceStates);
         }
