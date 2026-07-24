@@ -131,10 +131,14 @@ export default function AmountTransaction({entries, setEntries})
   }
 
   // Synchronize timestamp.
+  let timestampTemp = 0;
   useEffect(() => {
     apiGetJSON(URL_PATHS.TIMESTAMP)
       .then(
-        (data) => setTimestamp(data.timestamp)
+        (data) => {
+          timestampTemp = data.timestamp;
+          setTimestamp(timestampTemp)
+        }
       );
   }, []);
 
