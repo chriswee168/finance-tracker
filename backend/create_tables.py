@@ -9,7 +9,8 @@ def create_tables():
     # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
         "CREATE TABLE IF NOT EXISTS amount_history_table(" \
-        "   entry_datetime TEXT PRIMARY KEY," \
+        "   entry_id INT PRIMARY KEY,"
+        "   entry_datetime TEXT," \
         "   net_income_cents INT," \
         "   current_balance_cents INT" \
         ");"
