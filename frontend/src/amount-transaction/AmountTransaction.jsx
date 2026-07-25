@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../utils/constants";
+import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
@@ -11,6 +11,7 @@ import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
 import CurrentBalanceInit from "./current-balance-init/current-balance-init";
+import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -131,10 +132,14 @@ export default function AmountTransaction({entries, setEntries})
   }
 
   // Synchronize timestamp.
+  let timestampTemp = 0;
   useEffect(() => {
     apiGetJSON(URL_PATHS.TIMESTAMP)
       .then(
-        (data) => setTimestamp(data.timestamp)
+        (data) => {
+          timestampTemp = data.timestamp;
+          setTimestamp(timestampTemp)
+        }
       );
   }, []);
 
@@ -143,8 +148,16 @@ export default function AmountTransaction({entries, setEntries})
     apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
       .then(
         (data) => {
-          const netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          let netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
           const currentBalanceDollars = (data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          
+          // Refresh net income if amount of time passed since previous timestamp exceeds the
+          // interval in seconds.
+          if (currentEpochSecsExceeded(timestampTemp))
+          {
+            netIncomeDollars = '0.00';
+          }
+
           setAmountState(netIncomeDollars, setNetIncomeStates);
           setAmountState(currentBalanceDollars, setCurrentBalanceStates);
         }
@@ -174,8 +187,17 @@ export default function AmountTransaction({entries, setEntries})
         <button
           onClick={
             () => {
+              // Update the epoch timestamp on FastAPI backend and reset net income to zero.
+              let netIncomeAmount = netIncomeStates.amountDollars;
+              if (currentEpochSecsExceeded(timestamp))
+              {
+                incrementTimestamp(timestamp, setTimestamp);
+                netIncomeAmount = 0.0;
+              }
+              
+              // Obtain the new net income and current balance and save to FastAPI backend.
               const newNetIncome = updateAmount(
-                netIncomeStates.amountDollars, transactionOption, 
+                netIncomeAmount, transactionOption, 
                 netIncomeStates.sign, setNetIncomeStates
               );
               const newCurrentBalance = updateAmount(
@@ -229,4 +251,17 @@ export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars
       current_balance_cents: currentBalanceCents
     }
   )
+}
+
+/**
+ * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
+ * 
+ * @param {number} timestamp Current epoch timestamp in seconds.
+ * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
+ */
+const incrementTimestamp = (timestamp, setTimestamp) =>
+{
+  const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
+  setTimestamp(newTimestamp);
+  apiSendJSON(URL_PATHS.TIMESTAMP, "PUT", {secs: newTimestamp});
 }
