@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./current-balance-init.module.css";
 import { SIGN_COLOURS } from "../../utils/constants";
-import { addNegativeSign, saveCurrentAmounts } from "../AmountTransaction";
+import { addNegativeSign, saveCurrentAmounts } from "../amount-transaction";
 
 /**
  * Component to prompt the user to set the current balance.
