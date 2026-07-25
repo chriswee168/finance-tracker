@@ -32,6 +32,12 @@ def add_cash_amounts(cash_amounts: CashAmounts):
     conn.commit()
     conn.close()
 
+    print((
+        "Record current cash amounts to amount history:\n"
+        f"Net income cents: {cash_amounts.net_income_cents}\n"
+        f"Current balance cents: {cash_amounts.current_balance_cents}"
+    ))
+
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # Save the current net income and current balance to JSON config.
