@@ -167,9 +167,9 @@ export default function AmountTransaction({entries, setEntries})
       <AmountBox textLabel='Current Balance' amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
-        netIncome={netIncomeBox}
-        currentBalance={currentBalanceBox}
-        setCurrentBalance={setCurrentBalanceBox}
+        netIncomeStates={netIncomeStates} 
+        currentBalanceStates={currentBalanceStates}
+        setCurrentBalanceStates={setCurrentBalanceStates}
       />
             
       <div className={styles.transactionBox}>
@@ -231,8 +231,8 @@ export const addNegativeSign = (amountNum, signChar) =>
 /**
  * Function to save current net income and current balance to JSON.
  * 
- * @param {number} netIncomeDollars Net income in dollars.
- * @param {number} currentBalanceDollars Current balance in dollars.
+ * @param {string} netIncomeDollars Net income dollars in string format.
+ * @param {string} currentBalanceDollars Current balance dollars in string format.
  */
 export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
 {
