@@ -153,8 +153,7 @@ export default function AmountTransaction({entries, setEntries})
           
           // Refresh net income if amount of time passed since previous timestamp exceeds the
           // interval in seconds.
-          const [currentEpoch, exceeded] = currentEpochSecsExceeded(timestampTemp);
-          if (exceeded)
+          if (currentEpochSecsExceeded(timestampTemp))
           {
             netIncomeDollars = '0.00';
           }
@@ -189,9 +188,8 @@ export default function AmountTransaction({entries, setEntries})
           onClick={
             () => {
               // Update the epoch timestamp on FastAPI backend and reset net income to zero.
-              const [currentEpoch, exceeded] = currentEpochSecsExceeded(timestamp);
               let netIncomeAmount = netIncomeStates.amountDollars;
-              if (exceeded)
+              if (currentEpochSecsExceeded(timestamp))
               {
                 incrementTimestamp(timestamp, setTimestamp);
                 netIncomeAmount = 0.0;

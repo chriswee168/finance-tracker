@@ -6,12 +6,12 @@ import { TIMESTAMP_INTERVAL_SECS } from "./constants";
  * 
  * @param {number} pastEpoch Starting epoch time in seconds to calculate the cutoff time in seconds.
  * 
- * @returns Current epoch time in seconds.
+ * @returns Interval exceeded boolean.
  */
 export default function currentEpochSecsExceeded(pastEpochSecs)
 {
     const currentEpoch = Math.floor(Date.now() / 1000);
     const cutoffEpoch = pastEpochSecs + TIMESTAMP_INTERVAL_SECS;
     const intervalExceeded = currentEpoch > cutoffEpoch;
-    return [currentEpoch, intervalExceeded];
+    return intervalExceeded;
 }
