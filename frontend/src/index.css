@@ -1,5 +1,8 @@
+/* Global variables. */
 :root
 {
+    --app-back-colour: rgb(245, 245, 245);
+
     --p-font-family: monospace;
     --widget-back-colour: rgb(233, 233, 233);
     --sub-box-colour: rgb(206, 206, 206);
@@ -7,19 +10,74 @@
     --webkit-scrollbar-track-colour: grey;
     
     --focus-colour: rgb(183, 183, 183);
+    
+    --green: rgb(48, 192, 0);
+    --red: rgb(195, 0, 0);
 }
 
+/* Properties for all labels. */
 label
 {
     font-size: 110%;
+    font-family: var(--p-font-family);
 }
 
-h1, h3, button
+/* Use Arial for headings and buttons. */
+h1, h3, h4, button
 {
     font-family: Arial;
 }
 
-label
+/* Properties for all button elements. */
+button
 {
+    position: relative;
+    left: 50%;
+    top: 4%;
+    transform: translate(-50%);
+    width: 170px;
+    height: 30px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 25px;
+    border-style: none;
+    background-color: var(--sub-box-colour);
+
+    transition: 0.25s;
+
+    &:hover
+    {
+        background-color: rgb(173, 173, 173);
+    }
+}
+
+/* For all numbered input elements. */
+input[type="number"]
+{
+    border-style: none;
+    width: 94%;
+    height: 50%;
+    background-color: var(--sub-box-colour);
+    padding-left: 5px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 19px;
     font-family: var(--p-font-family);
+    font-weight: bold;
+    transition: 0.25s;
+    appearance: textfield;
+
+    &:focus
+    {
+        outline: none;
+        background-color: var(--focus-colour);
+    }
+}
+
+/* Remove spin buttons for input elements. */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

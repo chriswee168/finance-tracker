@@ -1,0 +1,1 @@
+TIMESTAMP_CONFIG_PATH: str = "config/timestamp.json"

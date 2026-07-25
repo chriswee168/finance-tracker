@@ -1,8 +1,7 @@
 /* Main transaction history window. */
 .transactionEntry
 {   
-    border-radius: 10px;
-    background-color: var(--focus-colour);
+    background-color: var(--widget-back-colour);
     height: 60px;
     width: 95%;
     position: relative;
@@ -13,13 +12,14 @@
     text-align: left;
 }
 
-/* Customise transaction entry contents. */
+/* Cash amount in transaction entry. */
 .amountDollars
 {
     font-size: 20px;
     padding-top: 5px;
 }
 
+/* Date and time transaction was made. */
 .datetime
 {
     font-size: 15px;
@@ -29,28 +29,43 @@
     bottom: 30%;
 }
 
+/* Text box to display transaction description. */
 .descWrapper
 {
-   background-color: var(--widget-back-colour);
-   border-radius: 10px;
-   position: relative;
-   bottom: 20%;
-   width: 96%;
-   left: 50%;
-   transform: translate(-50%);
-   overflow-x: scroll;
-   scrollbar-width: none;
-   display: flex;
+    background-color: var(--sub-box-colour);
+    position: relative;
+    bottom: 20%;
+    width: 96%;
+    left: 50%;
+    transform: translate(-50%);
+    overflow-x: scroll;
+    display: flex;
+    
+    &::-webkit-scrollbar
+    {
+        height: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+       background-color: var(--webkit-scrollbar-thumb-colour);
+       border-radius: 10px;
+    }
 }
 
+/* Transaction description text. */
 .desc
 {
+    font-family: var(--p-font-family);
     font-size: 15px;
     position: relative;
     bottom: 20%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
-.amountDollars, .datetime, .desc
+/* Properties shared by cash amount, datetime and description. */
+.amountDollars, .datetime
 {
     font-family: var(--p-font-family);
     padding-left: 12px;
