@@ -167,9 +167,9 @@ export default function AmountTransaction({entries, setEntries})
       <AmountBox textLabel='Current Balance' amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
-        netIncomeStates={netIncomeStates} 
-        currentBalanceStates={currentBalanceStates}
-        setCurrentBalanceStates={setCurrentBalanceStates}
+        netIncome={netIncomeBox}
+        currentBalance={currentBalanceBox}
+        setCurrentBalance={setCurrentBalanceBox}
       />
             
       <div className={styles.transactionBox}>

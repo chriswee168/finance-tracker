@@ -7,16 +7,16 @@ import { addNegativeSign, saveCurrentAmounts } from "../amount-transaction";
  * Component to prompt the user to set the current balance.
  * 
  * @param {Object} param0 
- * @param {Object} param0.netIncomeStates State of net income.
- * @param {Object} param0.currentBalanceStates State of current balance.
- * @param {Dispatch<SetStateAction<Object>>} param0.setCurrentBalanceStates Setter for current balance.
+ * @param {number} param0.netIncome Net income in dollars.
+ * @param {number} param0.currentBalance Current balance in dollars.
+ * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance.
  * 
  * @returns Current balance initialisation component.
 */
 export default function CurrentBalanceInit({
-  netIncomeStates,
-  currentBalanceStates,
-  setCurrentBalanceStates
+  netIncome,
+  currentBalance,
+  setCurrentBalance
 })
 {
   const [amount, setAmount] = useState('');
