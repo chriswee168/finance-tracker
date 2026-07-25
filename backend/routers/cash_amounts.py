@@ -16,21 +16,17 @@ def add_cash_amounts(cash_amounts: CashAmounts):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    get_n_entries_query = "SELECT COUNT(entry_id) FROM amount_history_table"
-    cursor.execute(get_n_entries_query)
-    entry_id = cursor.fetchall()[0][0]
-
     current_datetime = time.strftime("%Y-%m-%d %I:%M:%S%p")
     
     add_cash_amounts_query = (
         "INSERT INTO amount_history_table "
-        "(entry_id, entry_datetime, net_income_cents, current_balance_cents) VALUES (?, ?, ?)"
+        "(entry_datetime, net_income_cents, current_balance_cents) "
+        "VALUES (?, ?, ?)"
         )
 
     cursor.execute(
         add_cash_amounts_query, 
-        (entry_id, current_datetime, cash_amounts.net_income_cents, 
-         cash_amounts.current_balance_cents)
+        (current_datetime, cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
     )
     conn.commit()
     conn.close()

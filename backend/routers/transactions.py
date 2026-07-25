@@ -18,19 +18,15 @@ def add_transaction(transaction: Transaction):
     conn = sqlite3.connect("finance_database.sqlite3")
     cursor = conn.cursor()
 
-    get_n_entries_query = "SELECT COUNT(entry_id) FROM transaction_table"
-    cursor.execute(get_n_entries_query)
-    entry_id = cursor.fetchall()[0][0]
-
     add_transaction_query = (
         "INSERT INTO transaction_table "
-        "(entry_id, entry_datetime, transaction_type, transaction_desc, amount_cents) "
-        "VALUES (?, ?, ?, ?, ?)"
+        "(entry_datetime, transaction_type, transaction_desc, amount_cents) "
+        "VALUES (?, ?, ?, ?)"
     )
 
     cursor.execute(
         add_transaction_query, 
-        (entry_id, transaction.datetime, transaction.type, transaction.desc, transaction.amount_cents)
+        (transaction.datetime, transaction.type, transaction.desc, transaction.amount_cents)
     )
     conn.commit()
     conn.close()
