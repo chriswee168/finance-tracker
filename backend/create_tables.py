@@ -1,8 +1,13 @@
-import sqlite3
+import sqlite3, os
+from utils.constants import *
 
 # Create all required SQL tables if they do not exist.
 def create_tables():
-    conn = sqlite3.connect("finance_database.sqlite3")
+    # If it doesnt exist.
+    if not os.path.exists(DATABASE_DIR_PATH):
+        os.makedirs(DATABASE_DIR_PATH)
+
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
     
     # amount_history_table: record the net income and current balance overtime.

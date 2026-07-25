@@ -2,6 +2,7 @@ import time
 from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
 import sqlite3, json
+from utils.constants import *
 
 route = APIRouter()
 
@@ -13,7 +14,7 @@ class CashAmounts(BaseModel):
 # Add net income and current balance to SQL tables.
 @route.post("/cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
 def add_cash_amounts(cash_amounts: CashAmounts):
-    conn = sqlite3.connect("finance_database.sqlite3")
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
     current_datetime = time.strftime("%Y-%m-%d %I:%M:%S%p")
@@ -36,7 +37,7 @@ def add_cash_amounts(cash_amounts: CashAmounts):
 # Save the current net income and current balance to JSON config.
 @route.put("/current-cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
 def save_current_cash_amounts(cash_amounts: CashAmounts):
-    with open("config/cash_amounts.json", "w") as f:
+    with open(CASH_AMOUNT_CONFIG_PATH, "w") as f:
         json.dump({
             "net_income_cents": cash_amounts.net_income_cents,
             "current_balance_cents": cash_amounts.current_balance_cents
@@ -53,7 +54,7 @@ def save_current_cash_amounts(cash_amounts: CashAmounts):
 # Get the current net income and current balance from JSON config.
 @route.get("/current-cash-amounts", status_code=status.HTTP_200_OK)
 def get_current_cash_amounts():
-    with open("config/cash_amounts.json", "r") as f:
+    with open(CASH_AMOUNT_CONFIG_PATH, "r") as f:
         amount_data = json.load(f)
     
     return amount_data

@@ -2,6 +2,7 @@ from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
 import sqlite3
 import time
+from utils.constants import *
 
 route = APIRouter()
 
@@ -15,7 +16,7 @@ class Transaction(BaseModel):
 # Add transaction entry to transaction table.
 @route.post("/transaction-entries", status_code=status.HTTP_204_NO_CONTENT)
 def add_transaction(transaction: Transaction):
-    conn = sqlite3.connect("finance_database.sqlite3")
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
     add_transaction_query = (
@@ -44,7 +45,7 @@ def add_transaction(transaction: Transaction):
 # Obtain the latest N transaction entries.
 @route.get("/transaction-entries", status_code=status.HTTP_200_OK, response_model=list[Transaction])
 def get_transaction(n_entries: int):
-    conn = sqlite3.connect("finance_database.sqlite3")
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
     get_entries_query = "SELECT * FROM transaction_table ORDER BY entry_id DESC LIMIT ?"
