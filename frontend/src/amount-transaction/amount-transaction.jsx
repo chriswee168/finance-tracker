@@ -163,10 +163,8 @@ export default function AmountTransaction({entries, setEntries})
 
   return (
     <>
-      <AmountBox textLabel='Net Income' amountDollars={netIncomeStates.amountDollars} 
-        sign={netIncomeStates.sign} colour={netIncomeStates.colour}/>
-      <AmountBox textLabel='Current Balance' amountDollars={currentBalanceStates.amountDollars} 
-        sign={currentBalanceStates.sign} colour={currentBalanceStates.colour}/>
+      <AmountBox textLabel='Net Income' amountDollars={netIncomeBox} />
+      <AmountBox textLabel='Current Balance' amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
         netIncomeStates={netIncomeStates} 
