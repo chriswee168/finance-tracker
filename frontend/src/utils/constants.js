@@ -18,3 +18,7 @@ export const CASH_SCALE_FACTOR = 100;
 
 // Max number of entries transaction history window can display.
 export const MAX_TRANSACTION_ENTRIES = 100;
+
+// Timestamp interval in seconds at which net income should be refreshed and saved on
+// FastAPI backend.
+export const TIMESTAMP_INTERVAL_SECS = 24 * 7 * 3600;
