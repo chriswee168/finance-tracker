@@ -28,15 +28,15 @@ export default function TransactionHistory({entries, setEntries})
       .then(
         (data) => {
           const tempEntries = [];
-          for (let i = 0; i < data.length; i++)
+          for (const entry of data)
           {
             tempEntries.push(
               <TransactionEntry 
-                key={i} 
-                datetime={data[i].datetime}
-                type={data[i].type}
-                amountCents={data[i].amount_cents}
-                desc={data[i].desc}
+                key={crypto.randomUUID()} 
+                datetime={entry.datetime}
+                type={entry.type}
+                amountCents={entry.amount_cents}
+                desc={entry.desc}
               />
             );
           }
@@ -65,7 +65,7 @@ export const addToHistoryList = (entries, setEntries, data) =>
 {
   const newEntry = 
     <TransactionEntry 
-      key={entries.length} 
+      key={crypto.randomUUID()}
       datetime={data.datetime}
       type={data.type}
       amountCents={data.amount_cents}
