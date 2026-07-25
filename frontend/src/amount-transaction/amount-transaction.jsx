@@ -231,8 +231,8 @@ export const addNegativeSign = (amountNum, signChar) =>
 /**
  * Function to save current net income and current balance to JSON.
  * 
- * @param {string} netIncomeDollars Net income dollars in string format.
- * @param {string} currentBalanceDollars Current balance dollars in string format.
+ * @param {number} netIncomeDollars Net income in dollars.
+ * @param {number} currentBalanceDollars Current balance in dollars.
  */
 export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
 {
