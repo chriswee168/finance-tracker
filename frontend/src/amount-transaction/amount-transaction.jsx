@@ -24,12 +24,9 @@ import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
  */
 export default function AmountTransaction({entries, setEntries})
 {
-
-  // Net income and current balance states.
-  const [netIncomeStates, setNetIncomeStates] = 
-    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
-  const [currentBalanceStates, setCurrentBalanceStates] = 
-    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
+  // Net income and current balance states for amount boxes.
+  const [netIncomeBox, setNetIncomeBox] = useState(0.0);
+  const [currentBalanceBox, setCurrentBalanceBox] = useState(0.0);
 
   // Transaction type state. (0 = income, 1 = expense).
   const [transactionOption, setTransactionOption] = useState(0);
