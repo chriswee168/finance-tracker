@@ -192,6 +192,7 @@ export default function AmountTransaction({entries, setEntries})
               if (currentEpochSecsExceeded(timestamp))
               {
                 incrementTimestamp(timestamp, setTimestamp);
+                recordAmounts(netIncomeStates.amountDollars, currentBalanceStates.amountDollars);
                 netIncomeAmount = 0.0;
               }
               
@@ -264,4 +265,26 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
   const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
   setTimestamp(newTimestamp);
   apiSendJSON(URL_PATHS.TIMESTAMP, "PUT", {secs: newTimestamp});
+}
+
+/**
+ * Record the current balance and net income to amount history SQL table
+ * on FastAPI backend.
+ * 
+ * @param {string} netIncome Net income string in dollars.
+ * @param {string} currentBalance Current balance string in dollars.
+ */
+const recordAmounts = (netIncomeDollars, currentBalanceDollars) =>
+{
+  const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
+  const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
+
+  apiSendJSON(
+    URL_PATHS.AMOUNTS_HISTORY, 
+    "POST", 
+    {
+      net_income_cents: netIncomeCents,
+      current_balance_cents: currentBalanceCents
+    }
+  );
 }
