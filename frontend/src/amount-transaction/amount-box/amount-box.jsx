@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./amount-box.module.css";
 import { SIGN_COLOURS } from "../../utils/constants";
-import getColourSign from "../../utils/getColourSign";
+import { getColourSignAmount } from "../../utils/getColourSign";
 
 /**
  * Create the amount box component to display a cash amount.
@@ -14,7 +14,7 @@ import getColourSign from "../../utils/getColourSign";
 export default function AmountBox({textLabel, amountDollars})
 {
   // Use the appropriate sign and colour.
-  const [colour, sign] = getColourSign(amountDollars);
+  const [colour, sign] = getColourSignAmount(amountDollars);
   const amountDollarsAbs = Math.abs(amountDollars);
   return (
     <div className={styles.amountBox}>
