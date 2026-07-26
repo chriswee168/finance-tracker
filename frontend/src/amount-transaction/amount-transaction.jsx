@@ -107,15 +107,6 @@ export default function AmountTransaction({entries, setEntries})
     return [sign, colour];
   }
 
-  // Set the amount state directly whether positive or negative.
-  const setAmountState = (amount, setStateFunc) =>
-  {
-    let [sign, colour] = getAmountSign(amount);
-    // Remove any negative sign from amount in string format.
-    const amountStr = String(amount).replace('-','');
-    setStateFunc({amountDollars: amountStr, sign: sign, colour: colour});
-  }
-
   // Function to update the net income and current balance in real time as transactions
   // are entered.
   const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
@@ -145,18 +136,20 @@ export default function AmountTransaction({entries, setEntries})
     apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
       .then(
         (data) => {
-          let netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
-          const currentBalanceDollars = (data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          let netIncomeCents = data.net_income_cents;
           
           // Refresh net income if amount of time passed since previous timestamp exceeds the
           // interval in seconds.
           if (currentEpochSecsExceeded(timestampTemp))
           {
-            netIncomeDollars = '0.00';
+            netIncomeCents = 0;
           }
 
-          setAmountState(netIncomeDollars, setNetIncomeStates);
-          setAmountState(currentBalanceDollars, setCurrentBalanceStates);
+          const netIncomeDollars = Number((netIncomeCents / CASH_SCALE_FACTOR).toFixed(CASH_DP));
+          const currentBalanceDollars = Number((data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP));
+
+          setNetIncomeBox(netIncomeDollars);
+          setCurrentBalanceBox(currentBalanceDollars);
         }
       );
   }, []);
