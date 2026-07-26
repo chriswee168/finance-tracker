@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
+import { CASH_DP, CASH_SCALE_FACTOR, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, SIGN_COLOURS, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import styles from "./transaction-box.module.css";
 import TransactionOptions from "./transaction-options/transaction-options";
@@ -103,8 +103,8 @@ export default function AmountTransaction({entries, setEntries})
 
   return (
     <>
-      <AmountBox textLabel='Net Income' amountDollars={netIncomeBox} />
-      <AmountBox textLabel='Current Balance' amountDollars={currentBalanceBox} />
+      <AmountBox textLabel={NET_INCOME_LABEL} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
         netIncome={netIncomeBox}
