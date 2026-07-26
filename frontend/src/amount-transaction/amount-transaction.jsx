@@ -40,23 +40,6 @@ export default function AmountTransaction({entries, setEntries})
   // data.
   const [timestamp, setTimestamp] = useState(0);
 
-  // Function to convert string of transaction option (0 = income, 1 = expense).
-  const intToStrOp = transactionOpInt =>
-  {
-    let transactionOpStr;
-    switch (transactionOpInt)
-    {
-      case 0:
-        transactionOpStr = "income";
-        break;
-      case 1:
-        transactionOpStr = "expense";
-        break;
-    }
-
-    return transactionOpStr;
-  }
-
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
