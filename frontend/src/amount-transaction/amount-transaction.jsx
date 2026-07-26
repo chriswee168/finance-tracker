@@ -40,6 +40,9 @@ export default function AmountTransaction({entries, setEntries})
   // data.
   const [timestamp, setTimestamp] = useState(0);
 
+  // String displaying the next point in time net income will be reset for next period.
+  const [nextResetTime, setNextResetTime] = useState('');
+
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
@@ -85,6 +88,7 @@ export default function AmountTransaction({entries, setEntries})
       .then(
         (data) => {
           timestampTemp = data.timestamp;
+          setNextResetTime(getNextDate(timestampTemp));
           setTimestamp(timestampTemp)
         }
       );
@@ -115,7 +119,7 @@ export default function AmountTransaction({entries, setEntries})
 
   return (
     <>
-      <AmountBox textLabel={NET_INCOME_LABEL} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets on ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
@@ -138,7 +142,9 @@ export default function AmountTransaction({entries, setEntries})
               let tempNetIncomeBox = netIncomeBox;
               if (currentEpochSecsExceeded(timestamp))
               {
-                incrementTimestamp(timestamp, setTimestamp);
+                // Get the next day and time.
+                const newTimestamp = incrementTimestamp(timestamp, setTimestamp);
+                setNextResetTime(getNextDate(newTimestamp));
 
                 // Record the net income and current balance in amount history on FastAPI backend.
                 apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY);
@@ -196,12 +202,16 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
  * 
  * @param {number} timestamp Current epoch timestamp in seconds.
  * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
+ * 
+ * @returns New epoch timestamp.
  */
 const incrementTimestamp = (timestamp, setTimestamp) =>
 {
   const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
   setTimestamp(newTimestamp);
   apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
+
+  return newTimestamp;
 }
 
 /**
@@ -239,4 +249,20 @@ export const apiSendAmounts = (
   .catch(
     (error) => console.log(error)
   );
+}
+
+/**
+ * Get the day and time in the future when net income will reset for the next period.
+ * 
+ * @param {number} timestamp Epoch time in seconds.
+ * 
+ * @returns Day and time as string.
+ */
+const getNextDate = (timestamp) =>
+{
+  const nextEpoch = timestamp + TIMESTAMP_INTERVAL_SECS;
+  const date = new Date(Math.round(nextEpoch * 1000));
+  const day = date.toLocaleDateString("en-AU", { weekday: "short" });
+  const time = date.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  return `${day} ${time}`;
 }
