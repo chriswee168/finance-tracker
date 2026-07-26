@@ -55,10 +55,22 @@ export default function AmountTransaction({entries, setEntries})
     }
     
     // Send transaction entry to backend and add to SQL database.
-    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj);
-
-    // Also send transaction entry to transaction history list.
-    addToHistoryList(entries, setEntries, transactionObj);
+    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj)
+      .then((response) => {
+        if (!response.ok)
+        {
+          if (response.status == 422)
+          {
+            throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+          }
+          throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
+        }
+        // Also send transaction entry to transaction history list.
+        addToHistoryList(entries, setEntries, transactionObj);
+      })
+      .catch(
+        (error) => console.log(error)
+      );
 
     // Reset transaction box states.
     setTransactionOption("income");

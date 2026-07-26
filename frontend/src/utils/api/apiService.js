@@ -9,26 +9,13 @@
  */
 export async function apiSendJSON(urlPath, httpMethod, body)
 {
-  try
-  {
-      const response = await fetch(urlPath, {
-        method: httpMethod,
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(body)
-      });
-    
-      if (!response.ok)
-      {
-          throw new Error(`${response.statusText}`);
-      }
+  const response = await fetch(urlPath, {
+    method: httpMethod,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  });
 
-      return response;
-  }
-  catch (error)
-  {
-    console.log(error);
-    return null;
-  }
+  return response
 }
 
 /**
