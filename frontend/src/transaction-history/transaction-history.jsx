@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 import styles from "./transaction-history.module.css";
 import { apiGetJSON } from "../utils/api/apiService";
-import { URL_PATHS } from "../utils/api/apiConfig";
+import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 
 /**
@@ -91,7 +91,7 @@ export const addToHistoryList = (entries, setEntries, data) =>
  */
 export const createEntryGetURL = (nEntries) =>
 {
-  const url = new URL(URL_PATHS.TRANSACTIONS);
+  const url = new URL(REQUEST_URLS.TRANSACTIONS);
   url.searchParams.append("n_entries", nEntries);
   return url;
 }
