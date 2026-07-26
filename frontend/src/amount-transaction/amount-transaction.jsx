@@ -178,7 +178,7 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
  * @param {number} netIncomeDollars Net income in dollars.
  * @param {number} currentBalanceDollars Current balance in dollars.
  */
-export const apiSaveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
+export const apiSaveCurrentAmounts = (netIncomeDollars, currentBalanceDollars) =>
 {
   const netIncomeCents = dollarsToCents(netIncomeDollars);
   const currentBalanceCents = dollarsToCents(currentBalanceDollars);
