@@ -3,20 +3,20 @@
  * 
  * @param {number} num1 Number 1.
  * @param {number} num2 Number 2.
- * @param {number} operator Operator (0 = add, 1 = subtract).
+ * @param {string} transactionOption Transaction option (income/expense).
  * @param {number} dp Decimal places for output result.
  * 
  * @returns Calculated result.
  */
-export default function twoNumOp(num1, num2, operator, dp)
+export default function twoNumOp(num1, num2, transactionOption, dp)
 {
   let result;
-  switch (operator)
+  switch (transactionOption)
   {
-    case 0:
+    case "income":
       result = num1 + num2;
       break;
-    case 1:
+    case "expense":
       result = num1 - num2;
       break;
   }
