@@ -1,3 +1,4 @@
+import { centsToDollars } from "../../utils/cashUnitConversion";
 import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../../utils/constants";
 import styles from "./transaction-entry.module.css";
 
@@ -17,7 +18,7 @@ export default function TransactionEntry({datetime, type, amountCents, desc})
 {
   // Convert cents to dollars and select the appropriate sign and colour.
   // to indicate transaction type.
-  const amountDollars = (amountCents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+  const amountDollars = centsToDollars(amountCents);
   let sign, colour;
   switch (type)
   {

@@ -12,6 +12,7 @@ import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
 import CurrentBalanceInit from "./current-balance-init/current-balance-init";
 import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
+import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -60,7 +61,7 @@ export default function AmountTransaction({entries, setEntries})
   const submitFunc = () =>
   {
     // Cash amount dollars to cents.
-    const cashAmountCents = parseInt(cashAmount * CASH_SCALE_FACTOR);
+    const cashAmountCents = dollarsToCents(cashAmount);
     const transactionOpStr = intToStrOp(transactionOption);
 
     const datetime = getCurrentDatetime();
@@ -133,8 +134,8 @@ export default function AmountTransaction({entries, setEntries})
             netIncomeCents = 0;
           }
 
-          const netIncomeDollars = Number((netIncomeCents / CASH_SCALE_FACTOR).toFixed(CASH_DP));
-          const currentBalanceDollars = Number((data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP));
+          const netIncomeDollars = centsToDollars(netIncomeCents);
+          const currentBalanceDollars = centsToDollars(data.current_balance_cents);
 
           setNetIncomeBox(netIncomeDollars);
           setCurrentBalanceBox(currentBalanceDollars);
@@ -221,8 +222,8 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
  */
 export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
 {
-  const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
-  const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
+  const netIncomeCents = dollarsToCents(netIncomeDollars);
+  const currentBalanceCents = dollarsToCents(currentBalanceDollars);
 
   apiSendJSON(
     URL_PATHS.CURRENT_AMOUNTS, 
@@ -256,8 +257,8 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
  */
 const recordAmounts = (netIncomeDollars, currentBalanceDollars) =>
 {
-  const netIncomeCents = parseInt(netIncomeDollars * CASH_SCALE_FACTOR);
-  const currentBalanceCents = parseInt(currentBalanceDollars * CASH_SCALE_FACTOR);
+  const netIncomeCents = dollarsToCents(netIncomeDollars);
+  const currentBalanceCents = dollarsToCents(currentBalanceDollars);
 
   apiSendJSON(
     URL_PATHS.AMOUNTS_HISTORY, 
