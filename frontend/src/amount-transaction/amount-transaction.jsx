@@ -6,7 +6,7 @@ import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
-import { URL_PATHS } from "../utils/api/apiConfig";
+import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
@@ -55,7 +55,7 @@ export default function AmountTransaction({entries, setEntries})
     }
     
     // Send transaction entry to backend and add to SQL database.
-    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj)
+    apiSendJSON(REQUEST_URLS.TRANSACTIONS, "POST", transactionObj)
       .then((response) => {
         if (!response.ok)
         {
@@ -81,7 +81,7 @@ export default function AmountTransaction({entries, setEntries})
   // Synchronize timestamp.
   let timestampTemp = 0;
   useEffect(() => {
-    apiGetJSON(URL_PATHS.TIMESTAMP)
+    apiGetJSON(REQUEST_URLS.TIMESTAMP)
       .then(
         (data) => {
           timestampTemp = data.timestamp;
@@ -92,7 +92,7 @@ export default function AmountTransaction({entries, setEntries})
 
   // Synchronize net income and current balance amounts from persistent JSON data.
   useEffect(() => {
-    apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
+    apiGetJSON(REQUEST_URLS.CURRENT_AMOUNTS)
       .then(
         (data) => {
           let netIncomeCents = data.net_income_cents;
@@ -141,7 +141,7 @@ export default function AmountTransaction({entries, setEntries})
                 incrementTimestamp(timestamp, setTimestamp);
 
                 // Record the net income and current balance in amount history on FastAPI backend.
-                apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", URL_PATHS.AMOUNTS_HISTORY);
+                apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY);
                 tempNetIncomeBox = 0.0;
               }
               
@@ -160,7 +160,7 @@ export default function AmountTransaction({entries, setEntries})
                   transactionOption, setCurrentBalanceBox
                 );
 
-                apiSendAmounts(newNetIncomeBox, newCurrentBalanceBox, "PUT", URL_PATHS.CURRENT_AMOUNTS);
+                apiSendAmounts(newNetIncomeBox, newCurrentBalanceBox, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
               }
               
               submitFunc();
@@ -201,7 +201,7 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
 {
   const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
   setTimestamp(newTimestamp);
-  apiSendJSON(URL_PATHS.TIMESTAMP, "PUT", {secs: newTimestamp});
+  apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
 }
 
 /**
