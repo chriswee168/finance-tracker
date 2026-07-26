@@ -1,7 +1,6 @@
 from fastapi import APIRouter, status, Response
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import sqlite3
-import time
 from utils.constants import *
 
 route = APIRouter()
@@ -11,7 +10,9 @@ class Transaction(BaseModel):
     datetime: str
     type: str
     desc: str
-    amount_cents: int
+    amount_cents: int = Field(
+        gt=0, description="Transaction cash amount must be greater than zero."
+    )
 
 # Add transaction entry to transaction table.
 @route.post("/transaction-entries", status_code=status.HTTP_204_NO_CONTENT)
