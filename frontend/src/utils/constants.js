@@ -22,3 +22,7 @@ export const MAX_TRANSACTION_ENTRIES = 100;
 // Timestamp interval in seconds at which net income should be refreshed and saved on
 // FastAPI backend.
 export const TIMESTAMP_INTERVAL_SECS = 24 * 7 * 3600;
+
+// Amount box labels for net income and current balance.
+export const NET_INCOME_LABEL = "Weekly Net Income";
+export const CURRENT_BALANCE_LABEL = "Current Balance";
