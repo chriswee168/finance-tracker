@@ -1,27 +1,28 @@
-from fastapi import APIRouter, status
-import sqlite3
-import os
+import sqlite3, os
+from utils.constants import *
 
-route = APIRouter()
-
-# Create SQL table to record net income overtime.
-@route.post("/create-tables", status_code=status.HTTP_204_NO_CONTENT)
+# Create all required SQL tables if they do not exist.
 def create_tables():
-    conn = sqlite3.connect("finance_database.sqlite3")
+    # If it doesnt exist.
+    if not os.path.exists(DATABASE_DIR_PATH):
+        os.makedirs(DATABASE_DIR_PATH)
+
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
     
     # amount_history_table: record the net income and current balance overtime.
     # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
         "CREATE TABLE IF NOT EXISTS amount_history_table(" \
-        "   entry_date DATE PRIMARY KEY," \
+        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "   entry_datetime TEXT," \
         "   net_income_cents INT," \
         "   current_balance_cents INT" \
         ");"
 
         "CREATE TABLE IF NOT EXISTS transaction_table(" \
-        "   entry_id INT PRIMARY KEY," \
-        "   entry_date DATE,"
+        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT," \
+        "   entry_datetime TEXT,"
         "   transaction_type VARCHAR(7)," \
         "   transaction_desc TEXT," \
         "   amount_cents INT" \

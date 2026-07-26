@@ -1,24 +1,26 @@
 import { useState } from "react";
 import styles from "./amount-box.module.css";
+import { SIGN_COLOURS } from "../../utils/constants";
+import getColourSign from "../../utils/getColourSign";
 
 /**
  * Create the amount box component to display a cash amount.
  * @param {Object} param0 
- * @param {string} param0.textLabel Text to display above dollar amount.
- * @param {string} param0.amountDollars Amount in dollars.
- * @param {string} param0.sign Positive or negative sign to indicate amount increase or decrease.
- * @param {string} param0.colour Colour of positive/negative sign.
+ * @param {string} param0.textLabel Text to display above cash amount.
+ * @param {number} param0.amountDollars Amount in dollars.
  * 
  * @returns Amount box component.
  */
-export default function AmountBox({textLabel, amountDollars, sign, colour})
+export default function AmountBox({textLabel, amountDollars})
 {
+  // Use the appropriate sign and colour.
+  const [colour, sign] = getColourSign(amountDollars);
+  const amountDollarsAbs = Math.abs(amountDollars);
   return (
     <div className={styles.amountBox}>
       <p className={styles.textLabel}>{textLabel}</p>
       <p className={styles.amountDollars}>
-        <span style={{color: colour}}>{sign}</span>
-        ${amountDollars}
+        <span style={{color: colour}}>{sign}</span>${amountDollarsAbs}
       </p>
     </div>
   )

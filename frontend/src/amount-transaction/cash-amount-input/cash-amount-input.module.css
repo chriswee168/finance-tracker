@@ -1,8 +1,7 @@
 
-/* Rules for cash amount elements. */
+/* Input box for cash amount. */
 .cashAmountInput
 {
-    border-style: solid;
     width: 320px;
     height: 45px;
     left: 50%;
@@ -11,29 +10,8 @@
     line-height: 16px;
 }
 
+/* Label to indicate cash amount is to be given in dollars. */
 .cashAmountLabel
 {
-    padding-left: 2%;    
-}
-
-.cashAmountTextbox
-{
-    border-style: none;
-    border-radius: 20px;
-    width: 93%;
-    height: 50%;
-    background-color: rgb(206, 206, 206);
-    padding-left: 10px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    font-size: 19px;
-    font-family: var(--p-font-family);
-    font-weight: bold;
-
-    &:focus
-    {
-        outline: none;
-        background-color: rgb(183, 183, 183);
-    }
+    padding-left: 2%;
 }

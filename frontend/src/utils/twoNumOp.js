@@ -1,4 +1,3 @@
-
 /**
  * Function to perform a mathematical operation between two numbers.
  * 
@@ -22,5 +21,5 @@ export default function twoNumOp(num1, num2, operator, dp)
       break;
   }
 
-  return result.toFixed(dp);
+  return Number(result.toFixed(dp));
 }
