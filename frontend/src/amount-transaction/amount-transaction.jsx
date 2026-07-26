@@ -55,10 +55,22 @@ export default function AmountTransaction({entries, setEntries})
     }
     
     // Send transaction entry to backend and add to SQL database.
-    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj);
-
-    // Also send transaction entry to transaction history list.
-    addToHistoryList(entries, setEntries, transactionObj);
+    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj)
+      .then((response) => {
+        if (!response.ok)
+        {
+          if (response.status == 422)
+          {
+            throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+          }
+          throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
+        }
+        // Also send transaction entry to transaction history list.
+        addToHistoryList(entries, setEntries, transactionObj);
+      })
+      .catch(
+        (error) => console.log(error)
+      );
 
     // Reset transaction box states.
     setTransactionOption("income");
@@ -133,17 +145,22 @@ export default function AmountTransaction({entries, setEntries})
               
               const transactionAmount = Number(cashAmount);
 
-              // Obtain the new net income and current balance and save to FastAPI backend.
-              const newNetIncomeBox = updateAmount(
-                tempNetIncomeBox, transactionAmount,
-                transactionOption, setNetIncomeBox
-              );
-              const newCurrentBalanceBox = updateAmount(
-                currentBalanceBox, transactionAmount,
-                transactionOption, setCurrentBalanceBox
-              );
+              // Transaction cash amount must be larger than zero.
+              if (transactionAmount > 0)
+              {
+                // Obtain the new net income and current balance and save to FastAPI backend.
+                const newNetIncomeBox = updateAmount(
+                  tempNetIncomeBox, transactionAmount,
+                  transactionOption, setNetIncomeBox
+                );
+                const newCurrentBalanceBox = updateAmount(
+                  currentBalanceBox, transactionAmount,
+                  transactionOption, setCurrentBalanceBox
+                );
 
-              apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+                apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+              }
+              
               submitFunc();
             }
           }>
