@@ -24,12 +24,9 @@ import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
  */
 export default function AmountTransaction({entries, setEntries})
 {
-
-  // Net income and current balance states.
-  const [netIncomeStates, setNetIncomeStates] = 
-    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
-  const [currentBalanceStates, setCurrentBalanceStates] = 
-    useState({amountDollars: '0.00', sign: '', colour: SIGN_COLOURS.green});
+  // Net income and current balance states for amount boxes.
+  const [netIncomeBox, setNetIncomeBox] = useState(0.0);
+  const [currentBalanceBox, setCurrentBalanceBox] = useState(0.0);
 
   // Transaction type state. (0 = income, 1 = expense).
   const [transactionOption, setTransactionOption] = useState(0);
@@ -110,27 +107,6 @@ export default function AmountTransaction({entries, setEntries})
     return [sign, colour];
   }
 
-  // Set the amount state directly whether positive or negative.
-  const setAmountState = (amount, setStateFunc) =>
-  {
-    let [sign, colour] = getAmountSign(amount);
-    // Remove any negative sign from amount in string format.
-    const amountStr = String(amount).replace('-','');
-    setStateFunc({amountDollars: amountStr, sign: sign, colour: colour});
-  }
-
-  // Function to update the net income and current balance in real time as transactions
-  // are entered.
-  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
-  {
-    let initialAmountNum = Number(initialAmount);
-    let cashAmountNum = Number(cashAmount);
-    initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
-    const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
-    setAmountState(newAmount, setStateFunc);
-    return newAmount;
-  }
-
   // Synchronize timestamp.
   let timestampTemp = 0;
   useEffect(() => {
@@ -148,33 +124,33 @@ export default function AmountTransaction({entries, setEntries})
     apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
       .then(
         (data) => {
-          let netIncomeDollars = (data.net_income_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
-          const currentBalanceDollars = (data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP);
+          let netIncomeCents = data.net_income_cents;
           
           // Refresh net income if amount of time passed since previous timestamp exceeds the
           // interval in seconds.
           if (currentEpochSecsExceeded(timestampTemp))
           {
-            netIncomeDollars = '0.00';
+            netIncomeCents = 0;
           }
 
-          setAmountState(netIncomeDollars, setNetIncomeStates);
-          setAmountState(currentBalanceDollars, setCurrentBalanceStates);
+          const netIncomeDollars = Number((netIncomeCents / CASH_SCALE_FACTOR).toFixed(CASH_DP));
+          const currentBalanceDollars = Number((data.current_balance_cents / CASH_SCALE_FACTOR).toFixed(CASH_DP));
+
+          setNetIncomeBox(netIncomeDollars);
+          setCurrentBalanceBox(currentBalanceDollars);
         }
       );
   }, []);
 
   return (
     <>
-      <AmountBox textLabel='Net Income' amountDollars={netIncomeStates.amountDollars} 
-        sign={netIncomeStates.sign} colour={netIncomeStates.colour}/>
-      <AmountBox textLabel='Current Balance' amountDollars={currentBalanceStates.amountDollars} 
-        sign={currentBalanceStates.sign} colour={currentBalanceStates.colour}/>
+      <AmountBox textLabel='Net Income' amountDollars={netIncomeBox} />
+      <AmountBox textLabel='Current Balance' amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
-        netIncomeStates={netIncomeStates} 
-        currentBalanceStates={currentBalanceStates}
-        setCurrentBalanceStates={setCurrentBalanceStates}
+        netIncome={netIncomeBox}
+        currentBalance={currentBalanceBox}
+        setCurrentBalance={setCurrentBalanceBox}
       />
             
       <div className={styles.transactionBox}>
@@ -188,24 +164,27 @@ export default function AmountTransaction({entries, setEntries})
           onClick={
             () => {
               // Update the epoch timestamp on FastAPI backend and reset net income to zero.
-              let netIncomeAmount = netIncomeStates.amountDollars;
+              let tempNetIncomeBox = netIncomeBox;
               if (currentEpochSecsExceeded(timestamp))
               {
                 incrementTimestamp(timestamp, setTimestamp);
-                recordAmounts(netIncomeStates.amountDollars, currentBalanceStates.amountDollars);
-                netIncomeAmount = 0.0;
+                recordAmounts(tempNetIncomeBox, currentBalanceBox);
+                tempNetIncomeBox = 0.0;
               }
               
+              const transactionAmount = Number(cashAmount);
+
               // Obtain the new net income and current balance and save to FastAPI backend.
-              const newNetIncome = updateAmount(
-                netIncomeAmount, transactionOption, 
-                netIncomeStates.sign, setNetIncomeStates
+              const newNetIncomeBox = updateAmount(
+                tempNetIncomeBox, transactionAmount,
+                transactionOption, setNetIncomeBox
               );
-              const newCurrentBalance = updateAmount(
-                currentBalanceStates.amountDollars, transactionOption, 
-                currentBalanceStates.sign, setCurrentBalanceStates
+              const newCurrentBalanceBox = updateAmount(
+                currentBalanceBox, transactionAmount,
+                transactionOption, setCurrentBalanceBox
               );
-              saveCurrentAmounts(newNetIncome, newCurrentBalance);
+
+              saveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
               submitFunc();
             }
           }>
@@ -217,27 +196,28 @@ export default function AmountTransaction({entries, setEntries})
 }
 
 /**
- * Add negative sign if sign character is '-'.
+ * Function to update the net income and current balance in real time as transactions
+ * are entered.
  * 
- * @param {number} amountNum Cash amount as number type.
- * @param {string} signChar Sign character.
+ * @param {number} initialAmount Initial cash amount.
+ * @param {number} transactionAmount Transaction cash amount.
+ * @param {number} transactionOption Transaction option (0 = income, 1 = expense)
+ * @param {Dispatch<SetStateAction<number>>} setStateFunc Setter for cash amount state.
  * 
  * @returns New cash amount number.
  */
-export const addNegativeSign = (amountNum, signChar) =>
+const updateAmount = (initialAmount, transactionAmount, transactionOption, setStateFunc) =>
 {
-  if (signChar == '-')
-  {
-    amountNum = -amountNum;
-  }
-  return amountNum;
+  const newAmount = twoNumOp(initialAmount, transactionAmount, transactionOption, CASH_DP);
+  setStateFunc(newAmount);
+  return newAmount;
 }
 
 /**
  * Function to save current net income and current balance to JSON.
  * 
- * @param {string} netIncomeDollars Net income dollars in string format.
- * @param {string} currentBalanceDollars Current balance dollars in string format.
+ * @param {number} netIncomeDollars Net income in dollars.
+ * @param {number} currentBalanceDollars Current balance in dollars.
  */
 export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
 {
