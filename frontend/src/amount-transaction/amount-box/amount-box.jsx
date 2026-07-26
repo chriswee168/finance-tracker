@@ -15,13 +15,12 @@ export default function AmountBox({textLabel, amountDollars})
 {
   // Use the appropriate sign and colour.
   const [colour, sign] = getColourSign(amountDollars);
-
+  const amountDollarsAbs = Math.abs(amountDollars);
   return (
     <div className={styles.amountBox}>
       <p className={styles.textLabel}>{textLabel}</p>
       <p className={styles.amountDollars}>
-        <span style={{color: colour}}>{sign}</span>
-        ${amountDollars}
+        <span style={{color: colour}}>{sign}</span>${amountDollarsAbs}
       </p>
     </div>
   )
