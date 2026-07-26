@@ -84,30 +84,6 @@ export default function AmountTransaction({entries, setEntries})
     setTransactionDesc('');
   }
 
-  // Returns the appropriate sign and its colour based on whether
-  // amount is below or above zero.
-  const getAmountSign = (amount) =>
-  {
-    let sign, colour;
-    if (amount > 0)
-    {
-      colour = SIGN_COLOURS.green;
-      sign = '+';
-    }
-    else if (amount < 0)
-    {
-      colour = SIGN_COLOURS.red;
-      sign = '-';
-    }
-    else
-    {
-      colour = SIGN_COLOURS.black;
-      sign = '';
-    }
-
-    return [sign, colour];
-  }
-
   // Synchronize timestamp.
   let timestampTemp = 0;
   useEffect(() => {
