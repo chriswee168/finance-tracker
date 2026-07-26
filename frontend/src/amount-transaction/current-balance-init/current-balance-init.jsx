@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./current-balance-init.module.css";
 import { SIGN_COLOURS } from "../../utils/constants";
-import { saveCurrentAmounts } from "../amount-transaction";
+import { apiSaveCurrentAmounts } from "../amount-transaction";
 
 /**
  * Component to prompt the user to set the current balance.
@@ -29,7 +29,7 @@ export default function CurrentBalanceInit({
     setCurrentBalance(amountNum);
     // Send initial current balance to FastAPI backend along with
     // existing net income.
-    saveCurrentAmounts(netIncome, amountNum);
+    apiSaveCurrentAmounts(netIncome, amountNum);
     // Clear user input.
     setAmount('');
   }
