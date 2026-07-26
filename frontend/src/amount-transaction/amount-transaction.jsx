@@ -107,18 +107,6 @@ export default function AmountTransaction({entries, setEntries})
     return [sign, colour];
   }
 
-  // Function to update the net income and current balance in real time as transactions
-  // are entered.
-  const updateAmount = (initialAmount, transactionOption, initialSign, setStateFunc) =>
-  {
-    let initialAmountNum = Number(initialAmount);
-    let cashAmountNum = Number(cashAmount);
-    initialAmountNum = addNegativeSign(initialAmountNum, initialSign);
-    const newAmount = twoNumOp(initialAmountNum, cashAmountNum, transactionOption, CASH_DP);
-    setAmountState(newAmount, setStateFunc);
-    return newAmount;
-  }
-
   // Synchronize timestamp.
   let timestampTemp = 0;
   useEffect(() => {
@@ -176,24 +164,27 @@ export default function AmountTransaction({entries, setEntries})
           onClick={
             () => {
               // Update the epoch timestamp on FastAPI backend and reset net income to zero.
-              let netIncomeAmount = netIncomeStates.amountDollars;
+              let tempNetIncomeBox = netIncomeBox;
               if (currentEpochSecsExceeded(timestamp))
               {
                 incrementTimestamp(timestamp, setTimestamp);
-                recordAmounts(netIncomeStates.amountDollars, currentBalanceStates.amountDollars);
-                netIncomeAmount = 0.0;
+                recordAmounts(tempNetIncomeBox, currentBalanceBox);
+                tempNetIncomeBox = 0.0;
               }
               
+              const transactionAmount = Number(cashAmount);
+
               // Obtain the new net income and current balance and save to FastAPI backend.
-              const newNetIncome = updateAmount(
-                netIncomeAmount, transactionOption, 
-                netIncomeStates.sign, setNetIncomeStates
+              const newNetIncomeBox = updateAmount(
+                tempNetIncomeBox, transactionAmount,
+                transactionOption, setNetIncomeBox
               );
-              const newCurrentBalance = updateAmount(
-                currentBalanceStates.amountDollars, transactionOption, 
-                currentBalanceStates.sign, setCurrentBalanceStates
+              const newCurrentBalanceBox = updateAmount(
+                currentBalanceBox, transactionAmount,
+                transactionOption, setCurrentBalanceBox
               );
-              saveCurrentAmounts(newNetIncome, newCurrentBalance);
+
+              saveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
               submitFunc();
             }
           }>
@@ -202,6 +193,24 @@ export default function AmountTransaction({entries, setEntries})
       </div>
     </>
   )
+}
+
+/**
+ * Function to update the net income and current balance in real time as transactions
+ * are entered.
+ * 
+ * @param {number} initialAmount Initial cash amount.
+ * @param {number} transactionAmount Transaction cash amount.
+ * @param {number} transactionOption Transaction option (0 = income, 1 = expense)
+ * @param {Dispatch<SetStateAction<number>>} setStateFunc Setter for cash amount state.
+ * 
+ * @returns New cash amount number.
+ */
+const updateAmount = (initialAmount, transactionAmount, transactionOption, setStateFunc) =>
+{
+  const newAmount = twoNumOp(initialAmount, transactionAmount, transactionOption, CASH_DP);
+  setStateFunc(newAmount);
+  return newAmount;
 }
 
 /**
