@@ -29,8 +29,8 @@ export default function AmountTransaction({entries, setEntries})
   const [netIncomeBox, setNetIncomeBox] = useState(0.0);
   const [currentBalanceBox, setCurrentBalanceBox] = useState(0.0);
 
-  // Transaction type state. (0 = income, 1 = expense).
-  const [transactionOption, setTransactionOption] = useState(0);
+  // Transaction type state. (income/expense).
+  const [transactionOption, setTransactionOption] = useState("income");
 
   // Cash amount and transaction description states.
   const [cashAmount, setAmount] = useState('');
@@ -40,34 +40,16 @@ export default function AmountTransaction({entries, setEntries})
   // data.
   const [timestamp, setTimestamp] = useState(0);
 
-  // Function to convert string of transaction option (0 = income, 1 = expense).
-  const intToStrOp = transactionOpInt =>
-  {
-    let transactionOpStr;
-    switch (transactionOpInt)
-    {
-      case 0:
-        transactionOpStr = "income";
-        break;
-      case 1:
-        transactionOpStr = "expense";
-        break;
-    }
-
-    return transactionOpStr;
-  }
-
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
     // Cash amount dollars to cents.
     const cashAmountCents = dollarsToCents(cashAmount);
-    const transactionOpStr = intToStrOp(transactionOption);
 
     const datetime = getCurrentDatetime();
     const transactionObj = {
       datetime: getCurrentDatetime(),
-      type: transactionOpStr,
+      type: transactionOption,
       desc: transactionDesc,
       amount_cents: cashAmountCents
     }
@@ -79,7 +61,7 @@ export default function AmountTransaction({entries, setEntries})
     addToHistoryList(entries, setEntries, transactionObj);
 
     // Reset transaction box states.
-    setTransactionOption(0);
+    setTransactionOption("income");
     setAmount('');
     setTransactionDesc('');
   }
@@ -178,7 +160,7 @@ export default function AmountTransaction({entries, setEntries})
  * 
  * @param {number} initialAmount Initial cash amount.
  * @param {number} transactionAmount Transaction cash amount.
- * @param {number} transactionOption Transaction option (0 = income, 1 = expense)
+ * @param {string} transactionOption Transaction option (income/expense).
  * @param {Dispatch<SetStateAction<number>>} setStateFunc Setter for cash amount state.
  * 
  * @returns New cash amount number.

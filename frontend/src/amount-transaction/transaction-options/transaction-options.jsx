@@ -4,8 +4,8 @@ import styles from "./transaction-options.module.css";
  * Component to display options to select income or expense for transaction type.
  * 
  * @param {Object} param0
- * @param {number} param0.transactionOption Transaction type state. (0 = income, 1 = expense)
- * @param {Dispatch<SetStateAction<number>>} param0.setTransactionOption Setter for transaction type.
+ * @param {string} param0.transactionOption Transaction type state. (income/expense).
+ * @param {Dispatch<SetStateAction<string>>} param0.setTransactionOption Setter for transaction type.
  * 
  * @returns Transaction options component.
  */
@@ -16,16 +16,16 @@ export default function TransactionOptions({transactionOption, setTransactionOpt
       <label className={styles.transactionOptionLabel}>Transaction option: </label>
       <div className={
         `${styles.transactionOption} 
-        ${transactionOption == 0 ? styles.incomeOptionSelected : styles.incomeOption}`
+        ${transactionOption == "income" ? styles.incomeOptionSelected : styles.incomeOption}`
         }
-        onClick={() => setTransactionOption(0)}
+        onClick={() => setTransactionOption("income")}
         >INCOME
       </div>
       <div className={
         `${styles.transactionOption} 
-        ${transactionOption == 1 ? styles.expenseOptionSelected : styles.expenseOption}`
+        ${transactionOption == "expense" ? styles.expenseOptionSelected : styles.expenseOption}`
         }
-        onClick={() => setTransactionOption(1)}
+        onClick={() => setTransactionOption("expense")}
         >EXPENSE
       </div>
     </div>
