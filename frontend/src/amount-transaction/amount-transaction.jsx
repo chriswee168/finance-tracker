@@ -214,23 +214,6 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
 }
 
 /**
- * Add negative sign if sign character is '-'.
- * 
- * @param {number} amountNum Cash amount as number type.
- * @param {string} signChar Sign character.
- * 
- * @returns New cash amount number.
- */
-export const addNegativeSign = (amountNum, signChar) =>
-{
-  if (signChar == '-')
-  {
-    amountNum = -amountNum;
-  }
-  return amountNum;
-}
-
-/**
  * Function to save current net income and current balance to JSON.
  * 
  * @param {number} netIncomeDollars Net income in dollars.
