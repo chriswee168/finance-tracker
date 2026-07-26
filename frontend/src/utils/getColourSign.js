@@ -7,7 +7,7 @@ import { SIGN_COLOURS } from "./constants";
  * @param {number} amount Cash amount as number.
  * @returns Colour code and sign as char.
  */
-export function getColourSign(amount)
+export function getColourSignAmount(amount)
 {
     let sign, colour;
     if (amount > 0)
