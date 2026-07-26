@@ -178,7 +178,7 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
  * @param {number} netIncomeDollars Net income in dollars.
  * @param {number} currentBalanceDollars Current balance in dollars.
  */
-export const apiSaveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
+export const apiSaveCurrentAmounts = (netIncomeDollars, currentBalanceDollars) =>
 {
   const netIncomeCents = dollarsToCents(netIncomeDollars);
   const currentBalanceCents = dollarsToCents(currentBalanceDollars);
@@ -210,8 +210,8 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
  * Record the current balance and net income to amount history SQL table
  * on FastAPI backend.
  * 
- * @param {string} netIncome Net income string in dollars.
- * @param {string} currentBalance Current balance string in dollars.
+ * @param {number} netIncomeDollars Net income string in dollars.
+ * @param {number} currentBalanceDollars Current balance string in dollars.
  */
 const apiRecordAmounts = (netIncomeDollars, currentBalanceDollars) =>
 {
