@@ -143,7 +143,7 @@ export default function AmountTransaction({entries, setEntries})
                 transactionOption, setCurrentBalanceBox
               );
 
-              saveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+              apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
               submitFunc();
             }
           }>
@@ -178,7 +178,7 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
  * @param {number} netIncomeDollars Net income in dollars.
  * @param {number} currentBalanceDollars Current balance in dollars.
  */
-export const saveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
+export const apiSaveCurrentAmounts = async (netIncomeDollars, currentBalanceDollars) =>
 {
   const netIncomeCents = dollarsToCents(netIncomeDollars);
   const currentBalanceCents = dollarsToCents(currentBalanceDollars);
