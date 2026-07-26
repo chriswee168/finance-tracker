@@ -145,17 +145,22 @@ export default function AmountTransaction({entries, setEntries})
               
               const transactionAmount = Number(cashAmount);
 
-              // Obtain the new net income and current balance and save to FastAPI backend.
-              const newNetIncomeBox = updateAmount(
-                tempNetIncomeBox, transactionAmount,
-                transactionOption, setNetIncomeBox
-              );
-              const newCurrentBalanceBox = updateAmount(
-                currentBalanceBox, transactionAmount,
-                transactionOption, setCurrentBalanceBox
-              );
+              // Transaction cash amount must be larger than zero.
+              if (transactionAmount > 0)
+              {
+                // Obtain the new net income and current balance and save to FastAPI backend.
+                const newNetIncomeBox = updateAmount(
+                  tempNetIncomeBox, transactionAmount,
+                  transactionOption, setNetIncomeBox
+                );
+                const newCurrentBalanceBox = updateAmount(
+                  currentBalanceBox, transactionAmount,
+                  transactionOption, setCurrentBalanceBox
+                );
 
-              apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+                apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+              }
+              
               submitFunc();
             }
           }>
