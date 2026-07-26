@@ -139,7 +139,9 @@ export default function AmountTransaction({entries, setEntries})
               if (currentEpochSecsExceeded(timestamp))
               {
                 incrementTimestamp(timestamp, setTimestamp);
-                apiRecordAmounts(tempNetIncomeBox, currentBalanceBox);
+
+                // Record the net income and current balance in amount history on FastAPI backend.
+                apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", URL_PATHS.AMOUNTS_HISTORY);
                 tempNetIncomeBox = 0.0;
               }
               
@@ -158,7 +160,7 @@ export default function AmountTransaction({entries, setEntries})
                   transactionOption, setCurrentBalanceBox
                 );
 
-                apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+                apiSendAmounts(newNetIncomeBox, newCurrentBalanceBox, "PUT", URL_PATHS.CURRENT_AMOUNTS);
               }
               
               submitFunc();
@@ -190,27 +192,6 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
 }
 
 /**
- * Function to save current net income and current balance to JSON.
- * 
- * @param {number} netIncomeDollars Net income in dollars.
- * @param {number} currentBalanceDollars Current balance in dollars.
- */
-export const apiSaveCurrentAmounts = (netIncomeDollars, currentBalanceDollars) =>
-{
-  const netIncomeCents = dollarsToCents(netIncomeDollars);
-  const currentBalanceCents = dollarsToCents(currentBalanceDollars);
-
-  apiSendJSON(
-    URL_PATHS.CURRENT_AMOUNTS, 
-    "PUT", 
-    {
-      net_income_cents: netIncomeCents,
-      current_balance_cents: currentBalanceCents
-    }
-  )
-}
-
-/**
  * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
  * 
  * @param {number} timestamp Current epoch timestamp in seconds.
@@ -224,23 +205,38 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
 }
 
 /**
- * Record the current balance and net income to amount history SQL table
- * on FastAPI backend.
+ * Function to send net income and current balance to a request URL.
  * 
- * @param {number} netIncomeDollars Net income string in dollars.
- * @param {number} currentBalanceDollars Current balance string in dollars.
+ * @param {number} netIncomeDollars Net income in dollars.
+ * @param {number} currentBalanceDollars Current balance in dollars.
+ * @param {string} httpMethod HTTP method (POST/PUT).
+ * @param {string} requestURL URL to send net income and current balance to.
  */
-const apiRecordAmounts = (netIncomeDollars, currentBalanceDollars) =>
+export const apiSendAmounts = (
+  netIncomeDollars, 
+  currentBalanceDollars,
+  httpMethod,
+  requestURL
+) =>
 {
   const netIncomeCents = dollarsToCents(netIncomeDollars);
   const currentBalanceCents = dollarsToCents(currentBalanceDollars);
 
   apiSendJSON(
-    URL_PATHS.AMOUNTS_HISTORY, 
-    "POST", 
+    requestURL, 
+    httpMethod, 
     {
       net_income_cents: netIncomeCents,
       current_balance_cents: currentBalanceCents
     }
+  )
+  .then((response) => {
+    if (!response.ok)
+    {
+      throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
+    }
+  })
+  .catch(
+    (error) => console.log(error)
   );
 }
