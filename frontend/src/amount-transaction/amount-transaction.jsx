@@ -40,6 +40,9 @@ export default function AmountTransaction({entries, setEntries})
   // data.
   const [timestamp, setTimestamp] = useState(0);
 
+  // String displaying the next point in time net income will be reset for next period.
+  const [nextResetTime, setNextResetTime] = useState('');
+
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
@@ -115,7 +118,7 @@ export default function AmountTransaction({entries, setEntries})
 
   return (
     <>
-      <AmountBox textLabel={NET_INCOME_LABEL} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets on ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
