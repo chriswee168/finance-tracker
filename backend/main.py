@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from routers import cash_amounts, transactions, timestamp
 from fastapi.middleware.cors import CORSMiddleware
-from create_tables import create_tables
+from utils.create_tables import create_tables
 
 # Call on FastAPI server startup.
 @asynccontextmanager
