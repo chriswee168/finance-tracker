@@ -8,13 +8,14 @@
     position: relative;
     bottom: 24.5%;
     left: 42.4%;
-    text-align: center;
+    text-align: left;
 }
 
 /* Title for transaction history window. */
 .historyTitle
 {
-    line-height: 70px;
+    line-height: 40px;
+    padding-left: 10px;
 }
 
 /* Display for all transactions made. */
