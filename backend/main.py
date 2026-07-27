@@ -20,11 +20,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Origins to allow for Cross-Origin Resource Sharing in browser.
+origins = [
+    "http://localhost:5173", # Vite development.
+    "http://127.0.0.1:5173",
+    "http://localhost:4173", # Vite production preview.
+    "http://127.0.0.1:4173"
+]
+
+# Add CORS middleware.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173"
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
