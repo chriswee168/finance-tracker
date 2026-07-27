@@ -53,7 +53,7 @@ def add_transaction(transaction: Transaction):
     }
 
 # Obtain the latest N transaction entries.
-@route.get("/transaction-entries", status_code=status.HTTP_200_OK, response_model=list[Transaction])
+@route.get("/transaction-entries", status_code=status.HTTP_200_OK)
 def get_transaction(n_entries: int):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
