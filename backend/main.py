@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from routers import cash_amounts, transactions, timestamp
 from fastapi.middleware.cors import CORSMiddleware
-from create_tables import create_tables
+from utils.create_tables import create_tables
+from utils.init_json_configs import *
 
 # Call on FastAPI server startup.
 @asynccontextmanager
@@ -11,8 +12,11 @@ async def lifespan(app: FastAPI):
     create_tables()
     print("Called create_tables() function...")
 
-    # Initialise the timestamp if timestamp.json doesn't exist.
-    timestamp.init_timestamp()
+    # Initialise the timestamp if timestamp JSON file doesn't exist.
+    init_timestamp()
+
+    # Initalise cash amounts if cash amount JSON file doesn't exist.
+    init_cash_amounts()
     
     yield
 
@@ -20,15 +24,27 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Origins to allow for Cross-Origin Resource Sharing in browser.
+origins = [
+    "http://localhost:5173", # Vite development.
+    "http://127.0.0.1:5173",
+    "http://localhost:4173", # Vite production preview.
+    "http://127.0.0.1:4173"
+]
+
+# Add CORS middleware.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173"
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Check API status.
+@app.get("/")
+def get_api_status():
+    return {"status": "Backend API online."}
 
 # Link all routers.
 app.include_router(cash_amounts.route)
