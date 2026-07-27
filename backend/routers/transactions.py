@@ -14,8 +14,8 @@ class Transaction(BaseModel):
         gt=0, description="Transaction cash amount must be greater than zero."
     )
 
-# Add transaction entry to transaction table.
-@route.post("/transaction-entries", status_code=status.HTTP_204_NO_CONTENT)
+# Add transaction entry to transaction table and return new entry with ID.
+@route.post("/transaction-entries", status_code=status.HTTP_201_CREATED)
 def add_transaction(transaction: Transaction):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
@@ -30,18 +30,27 @@ def add_transaction(transaction: Transaction):
         add_transaction_query, 
         (transaction.datetime, transaction.type, transaction.desc, transaction.amount_cents)
     )
+
+    latest_entry_id = cursor.lastrowid # Get ID of newly added transaction entry.
     conn.commit()
     conn.close()
 
     print((
         "Added transaction:\n" \
+        f"ID: {latest_entry_id}\n" \
         f"Datetime: {transaction.datetime}\n" \
         f"Transaction type: {transaction.type}\n" \
         f"Description: {transaction.desc}\n" \
         f"Cash amount (cents): {transaction.amount_cents}"
     ))
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return {
+        "entry_id": latest_entry_id,
+        "datetime": transaction.datetime,
+        "type": transaction.type,
+        "desc": transaction.desc,
+        "amount_cents": transaction.amount_cents
+    }
 
 # Obtain the latest N transaction entries.
 @route.get("/transaction-entries", status_code=status.HTTP_200_OK, response_model=list[Transaction])
