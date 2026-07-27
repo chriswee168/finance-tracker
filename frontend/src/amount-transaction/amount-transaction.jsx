@@ -119,7 +119,7 @@ export default function AmountTransaction({entries, setEntries})
 
   return (
     <>
-      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets on ${nextResetTime})`} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
