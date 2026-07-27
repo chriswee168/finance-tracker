@@ -1,0 +1,17 @@
+
+/* Input box for cash amount. */
+.cashAmountInput
+{
+    width: 320px;
+    height: 45px;
+    left: 50%;
+    transform: translate(-50%);
+    position: relative;
+    line-height: 16px;
+}
+
+/* Label to indicate cash amount is to be given in dollars. */
+.cashAmountLabel
+{
+    padding-left: 2%;
+}

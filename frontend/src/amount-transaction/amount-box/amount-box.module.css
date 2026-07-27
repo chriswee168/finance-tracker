@@ -1,0 +1,23 @@
+/* Styles for cash amount box. */
+.amountBox
+{
+    width: 350px;
+    height: 50px;
+    text-align: center;
+    position: relative;
+}
+
+/* Styles for text label and the cash amount displayed in dollars. */
+.textLabel
+{
+    position: relative;
+    bottom: 20%;
+    font-family: var(--p-font-family);
+}
+.amountDollars
+{
+    font-size: 30px;
+    bottom: 40px;
+    position: relative;
+    font-family: var(--p-font-family);
+}

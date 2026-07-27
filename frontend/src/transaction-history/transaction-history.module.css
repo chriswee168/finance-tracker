@@ -1,0 +1,70 @@
+/* Main transaction history window. */
+.transactionHistory
+{
+    border-radius: 10px;
+    background-color: var(--widget-back-colour);
+    height: 579px;
+    width: 489px;
+    position: relative;
+    bottom: 24.5%;
+    left: 42.4%;
+    text-align: center;
+}
+
+/* Title for transaction history window. */
+.historyTitle
+{
+    line-height: 70px;
+}
+
+/* Display for all transactions made. */
+.transactionList
+{
+    border-radius: 10px;
+    height: 470px;
+    width: 470px;
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    background-color: var(--sub-box-colour);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar
+    {
+        background-color: transparent;
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+        background-color: var(--webkit-scrollbar-thumb-colour);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track
+    {
+        background-color: var(--webkit-scrollbar-track-colour);
+    }
+}
+
+/* Default message to display when no transactions exist. */
+.defaultMsg
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--p-font-family);
+    font-size: 25px;
+    font-weight: bold;
+    color: var(--focus-colour)
+}

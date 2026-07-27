@@ -1,111 +1,83 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+/* Global variables. */
+:root
+{
+    --app-back-colour: rgb(245, 245, 245);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+    --p-font-family: monospace;
+    --widget-back-colour: rgb(233, 233, 233);
+    --sub-box-colour: rgb(206, 206, 206);
+    --webkit-scrollbar-thumb-colour: rgb(69, 69, 69);
+    --webkit-scrollbar-track-colour: grey;
+    
+    --focus-colour: rgb(183, 183, 183);
+    
+    --green: rgb(48, 192, 0);
+    --red: rgb(195, 0, 0);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* Properties for all labels. */
+label
+{
+    font-size: 110%;
+    font-family: var(--p-font-family);
 }
 
-body {
-  margin: 0;
+/* Use Arial for headings and buttons. */
+h1, h3, h4, button
+{
+    font-family: Arial;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+/* Properties for all button elements. */
+button
+{
+    position: relative;
+    left: 50%;
+    top: 4%;
+    transform: translate(-50%);
+    width: 170px;
+    height: 30px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 25px;
+    border-style: none;
+    background-color: var(--sub-box-colour);
+
+    transition: 0.25s;
+
+    &:hover
+    {
+        background-color: rgb(173, 173, 173);
+    }
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* For all numbered input elements. */
+input[type="number"]
+{
+    border-style: none;
+    width: 94%;
+    height: 50%;
+    background-color: var(--sub-box-colour);
+    padding-left: 5px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 19px;
+    font-family: var(--p-font-family);
+    font-weight: bold;
+    transition: 0.25s;
+    appearance: textfield;
+
+    &:focus
+    {
+        outline: none;
+        background-color: var(--focus-colour);
+    }
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Remove spin buttons for input elements. */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
