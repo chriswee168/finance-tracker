@@ -8,13 +8,6 @@ route = APIRouter()
 class EpochTime(BaseModel):
     secs: int
 
-# Set the initial epoch timestamp if timestamp.json doesn't exist.
-def init_timestamp():
-    if not os.path.exists(TIMESTAMP_CONFIG_PATH):
-        with open(TIMESTAMP_CONFIG_PATH, "w") as f:
-            json.dump({"timestamp": int(time.time())}, f, indent=4)
-
-
 # Save the current timestamp to JSON config.
 @route.put("/utc-epoch-timestamp", status_code=status.HTTP_204_NO_CONTENT)
 def save_timestamp(epoch_time: EpochTime):
