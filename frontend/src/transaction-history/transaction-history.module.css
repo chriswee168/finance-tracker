@@ -22,10 +22,10 @@
 .transactionList
 {
     border-radius: 10px;
-    height: 470px;
+    height: 505px;
     width: 470px;
     position: absolute;
-    top: 13%;
+    top: 7%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
