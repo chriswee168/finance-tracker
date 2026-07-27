@@ -11,7 +11,8 @@
 /* Title for component prompting the initial current balance. */
 .currentBalanceTitle
 {
-    text-align: center;
+    text-align: left;
+    padding-left: 10px;
     margin: 10px;
 }
 
