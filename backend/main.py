@@ -37,6 +37,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Check API status.
+@app.get("/")
+def get_api_status():
+    return {"status": "Backend API online."}
+
 # Link all routers.
 app.include_router(cash_amounts.route)
 app.include_router(transactions.route)
