@@ -1,9 +1,5 @@
 import { useState } from 'react'
 import styles from './App.module.css'
-import NetIncome from './amount-transaction/amount-box/amount-box'
-import TrendArrowSet from './amount-transaction/amount-box/trend-arrow-set'
-import { SIGN_COLOURS, TREND_ARROW_COLOURS } from './utils/constants'
-import AmountBox from './amount-transaction/amount-box/amount-box'
 import AmountTransaction from './amount-transaction/amount-transaction'
 import TransactionHistory from './transaction-history/transaction-history'
 
