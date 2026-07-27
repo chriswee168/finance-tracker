@@ -64,6 +64,12 @@ def get_transaction(n_entries: int):
     conn.close()
 
     return [
-        {"datetime": entry[1], "type": entry[2], "desc": entry[3], "amount_cents": entry[4]} 
+        {
+            "entry_id": entry[0], 
+            "datetime": entry[1], 
+            "type": entry[2], 
+            "desc": entry[3], 
+            "amount_cents": entry[4]
+        } 
         for entry in all_entries
     ]
