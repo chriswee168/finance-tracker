@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 import styles from "./transaction-history.module.css";
 import { apiGetJSON } from "../utils/api/apiService";
-import { URL_PATHS } from "../utils/api/apiConfig";
+import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 
 /**
@@ -32,7 +32,7 @@ export default function TransactionHistory({entries, setEntries})
           {
             tempEntries.push(
               <TransactionEntry 
-                key={crypto.randomUUID()} 
+                key={entry.entry_id}
                 datetime={entry.datetime}
                 type={entry.type}
                 amountCents={entry.amount_cents}
@@ -47,7 +47,7 @@ export default function TransactionHistory({entries, setEntries})
 
   return (
     <div className={styles.transactionHistory}>
-      <h1 className={styles.historyTitle}>TRANSACTION HISTORY</h1>
+      <h3 className={styles.historyTitle}>TRANSACTION HISTORY</h3>
       <div className={styles.transactionList}>
         {entries.length == 0 ? defaultMsg : entries}
       </div>
@@ -65,7 +65,7 @@ export const addToHistoryList = (entries, setEntries, data) =>
 {
   const newEntry = 
     <TransactionEntry 
-      key={crypto.randomUUID()}
+      key={data.entry_id}
       datetime={data.datetime}
       type={data.type}
       amountCents={data.amount_cents}
@@ -91,7 +91,7 @@ export const addToHistoryList = (entries, setEntries, data) =>
  */
 export const createEntryGetURL = (nEntries) =>
 {
-  const url = new URL(URL_PATHS.TRANSACTIONS);
+  const url = new URL(REQUEST_URLS.TRANSACTIONS);
   url.searchParams.append("n_entries", nEntries);
   return url;
 }

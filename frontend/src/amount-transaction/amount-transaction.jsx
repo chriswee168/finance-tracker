@@ -6,7 +6,7 @@ import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
-import { URL_PATHS } from "../utils/api/apiConfig";
+import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
@@ -40,6 +40,9 @@ export default function AmountTransaction({entries, setEntries})
   // data.
   const [timestamp, setTimestamp] = useState(0);
 
+  // String displaying the next point in time net income will be reset for next period.
+  const [nextResetTime, setNextResetTime] = useState('');
+
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
@@ -55,8 +58,8 @@ export default function AmountTransaction({entries, setEntries})
     }
     
     // Send transaction entry to backend and add to SQL database.
-    apiSendJSON(URL_PATHS.TRANSACTIONS, "POST", transactionObj)
-      .then((response) => {
+    apiSendJSON(REQUEST_URLS.TRANSACTIONS, "POST", transactionObj)
+      .then(async (response) => {
         if (!response.ok)
         {
           if (response.status == 422)
@@ -65,8 +68,13 @@ export default function AmountTransaction({entries, setEntries})
           }
           throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
         }
-        // Also send transaction entry to transaction history list.
-        addToHistoryList(entries, setEntries, transactionObj);
+        else
+        {
+          const returnedEntry = await response.json();
+
+          // Send transaction entry to transaction history list.
+          addToHistoryList(entries, setEntries, returnedEntry);
+        }
       })
       .catch(
         (error) => console.log(error)
@@ -81,10 +89,11 @@ export default function AmountTransaction({entries, setEntries})
   // Synchronize timestamp.
   let timestampTemp = 0;
   useEffect(() => {
-    apiGetJSON(URL_PATHS.TIMESTAMP)
+    apiGetJSON(REQUEST_URLS.TIMESTAMP)
       .then(
         (data) => {
           timestampTemp = data.timestamp;
+          setNextResetTime(getNextDate(timestampTemp));
           setTimestamp(timestampTemp)
         }
       );
@@ -92,7 +101,7 @@ export default function AmountTransaction({entries, setEntries})
 
   // Synchronize net income and current balance amounts from persistent JSON data.
   useEffect(() => {
-    apiGetJSON(URL_PATHS.CURRENT_AMOUNTS)
+    apiGetJSON(REQUEST_URLS.CURRENT_AMOUNTS)
       .then(
         (data) => {
           let netIncomeCents = data.net_income_cents;
@@ -115,7 +124,7 @@ export default function AmountTransaction({entries, setEntries})
 
   return (
     <>
-      <AmountBox textLabel={NET_INCOME_LABEL} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <CurrentBalanceInit 
@@ -138,8 +147,12 @@ export default function AmountTransaction({entries, setEntries})
               let tempNetIncomeBox = netIncomeBox;
               if (currentEpochSecsExceeded(timestamp))
               {
-                incrementTimestamp(timestamp, setTimestamp);
-                apiRecordAmounts(tempNetIncomeBox, currentBalanceBox);
+                // Get the next day and time.
+                const newTimestamp = incrementTimestamp(timestamp, setTimestamp);
+                setNextResetTime(getNextDate(newTimestamp));
+
+                // Record the net income and current balance in amount history on FastAPI backend.
+                apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY);
                 tempNetIncomeBox = 0.0;
               }
               
@@ -158,7 +171,7 @@ export default function AmountTransaction({entries, setEntries})
                   transactionOption, setCurrentBalanceBox
                 );
 
-                apiSaveCurrentAmounts(newNetIncomeBox, newCurrentBalanceBox);
+                apiSendAmounts(newNetIncomeBox, newCurrentBalanceBox, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
               }
               
               submitFunc();
@@ -190,57 +203,71 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
 }
 
 /**
- * Function to save current net income and current balance to JSON.
- * 
- * @param {number} netIncomeDollars Net income in dollars.
- * @param {number} currentBalanceDollars Current balance in dollars.
- */
-export const apiSaveCurrentAmounts = (netIncomeDollars, currentBalanceDollars) =>
-{
-  const netIncomeCents = dollarsToCents(netIncomeDollars);
-  const currentBalanceCents = dollarsToCents(currentBalanceDollars);
-
-  apiSendJSON(
-    URL_PATHS.CURRENT_AMOUNTS, 
-    "PUT", 
-    {
-      net_income_cents: netIncomeCents,
-      current_balance_cents: currentBalanceCents
-    }
-  )
-}
-
-/**
  * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
  * 
  * @param {number} timestamp Current epoch timestamp in seconds.
  * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
+ * 
+ * @returns New epoch timestamp.
  */
 const incrementTimestamp = (timestamp, setTimestamp) =>
 {
   const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
   setTimestamp(newTimestamp);
-  apiSendJSON(URL_PATHS.TIMESTAMP, "PUT", {secs: newTimestamp});
+  apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
+
+  return newTimestamp;
 }
 
 /**
- * Record the current balance and net income to amount history SQL table
- * on FastAPI backend.
+ * Function to send net income and current balance to a request URL.
  * 
- * @param {number} netIncomeDollars Net income string in dollars.
- * @param {number} currentBalanceDollars Current balance string in dollars.
+ * @param {number} netIncomeDollars Net income in dollars.
+ * @param {number} currentBalanceDollars Current balance in dollars.
+ * @param {string} httpMethod HTTP method (POST/PUT).
+ * @param {string} requestURL URL to send net income and current balance to.
  */
-const apiRecordAmounts = (netIncomeDollars, currentBalanceDollars) =>
+export const apiSendAmounts = (
+  netIncomeDollars, 
+  currentBalanceDollars,
+  httpMethod,
+  requestURL
+) =>
 {
   const netIncomeCents = dollarsToCents(netIncomeDollars);
   const currentBalanceCents = dollarsToCents(currentBalanceDollars);
 
   apiSendJSON(
-    URL_PATHS.AMOUNTS_HISTORY, 
-    "POST", 
+    requestURL, 
+    httpMethod, 
     {
       net_income_cents: netIncomeCents,
       current_balance_cents: currentBalanceCents
     }
+  )
+  .then((response) => {
+    if (!response.ok)
+    {
+      throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
+    }
+  })
+  .catch(
+    (error) => console.log(error)
   );
+}
+
+/**
+ * Get the day and time in the future when net income will reset for the next period.
+ * 
+ * @param {number} timestamp Epoch time in seconds.
+ * 
+ * @returns Day and time as string.
+ */
+const getNextDate = (timestamp) =>
+{
+  const nextEpoch = timestamp + TIMESTAMP_INTERVAL_SECS;
+  const date = new Date(Math.round(nextEpoch * 1000));
+  const day = date.toLocaleDateString("en-AU", { weekday: "short" });
+  const time = date.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  return `${day} ${time}`;
 }
