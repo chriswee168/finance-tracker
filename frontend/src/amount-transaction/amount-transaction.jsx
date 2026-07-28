@@ -7,7 +7,7 @@ import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
 import twoNumOp from "../utils/twoNumOp";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
-import { apiGetJSON, apiSendJSON } from "../utils/api/apiService";
+import { apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
 import CurrentBalanceInit from "./current-balance-init/current-balance-init";
@@ -89,19 +89,24 @@ export default function AmountTransaction({entries, setEntries})
   // Synchronize timestamp.
   let timestampTemp = 0;
   useEffect(() => {
-    apiGetJSON(REQUEST_URLS.TIMESTAMP)
+    fetch(REQUEST_URLS.TIMESTAMP)
+      .then(response => response.json())
       .then(
         (data) => {
           timestampTemp = data.timestamp;
           setNextResetTime(getNextDate(timestampTemp));
           setTimestamp(timestampTemp)
         }
+      )
+      .catch(
+        error => console.log(error)
       );
   }, []);
 
   // Synchronize net income and current balance amounts from persistent JSON data.
   useEffect(() => {
-    apiGetJSON(REQUEST_URLS.CURRENT_AMOUNTS)
+    fetch(REQUEST_URLS.CURRENT_AMOUNTS)
+      .then(response => response.json())
       .then(
         (data) => {
           let netIncomeCents = data.net_income_cents;
@@ -119,7 +124,9 @@ export default function AmountTransaction({entries, setEntries})
           setNetIncomeBox(netIncomeDollars);
           setCurrentBalanceBox(currentBalanceDollars);
         }
-      );
+      ).catch(
+        error => console.log(error)
+      );;
   }, []);
 
   return (
