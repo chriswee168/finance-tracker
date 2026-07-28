@@ -32,7 +32,7 @@ export default function TransactionHistory({entries, setEntries})
           {
             tempEntries.push(
               <TransactionEntry 
-                key={crypto.randomUUID()} 
+                key={entry.entry_id}
                 datetime={entry.datetime}
                 type={entry.type}
                 amountCents={entry.amount_cents}
@@ -65,7 +65,7 @@ export const addToHistoryList = (entries, setEntries, data) =>
 {
   const newEntry = 
     <TransactionEntry 
-      key={crypto.randomUUID()}
+      key={data.entry_id}
       datetime={data.datetime}
       type={data.type}
       amountCents={data.amount_cents}

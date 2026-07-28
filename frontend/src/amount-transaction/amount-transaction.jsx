@@ -59,7 +59,7 @@ export default function AmountTransaction({entries, setEntries})
     
     // Send transaction entry to backend and add to SQL database.
     apiSendJSON(REQUEST_URLS.TRANSACTIONS, "POST", transactionObj)
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok)
         {
           if (response.status == 422)
@@ -68,8 +68,13 @@ export default function AmountTransaction({entries, setEntries})
           }
           throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
         }
-        // Also send transaction entry to transaction history list.
-        addToHistoryList(entries, setEntries, transactionObj);
+        else
+        {
+          const returnedEntry = await response.json();
+
+          // Send transaction entry to transaction history list.
+          addToHistoryList(entries, setEntries, returnedEntry);
+        }
       })
       .catch(
         (error) => console.log(error)
