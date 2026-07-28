@@ -3,7 +3,7 @@
 {
     border-radius: 10px;
     background-color: var(--widget-back-colour);
-    height: 579px;
+    height: 582px;
     width: 489px;
     position: relative;
     bottom: 24.5%;
@@ -22,7 +22,7 @@
 .transactionList
 {
     border-radius: 10px;
-    height: 505px;
+    height: 506px;
     width: 470px;
     position: absolute;
     top: 7%;
