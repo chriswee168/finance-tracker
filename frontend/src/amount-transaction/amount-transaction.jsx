@@ -35,6 +35,8 @@ export default function AmountTransaction({entries, setEntries})
   // Cash amount and transaction description states.
   const [cashAmount, setAmount] = useState('');
   const [transactionDesc, setTransactionDesc] = useState('');
+  // Used to control what placeholder text should be displayed for cash input box.
+  const [cashValid, setCashValid] = useState(true);
 
   // Timestamp state for refreshing the net income periodically and saving
   // data.
@@ -46,39 +48,56 @@ export default function AmountTransaction({entries, setEntries})
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
   {
-    // Cash amount dollars to cents.
-    const cashAmountCents = dollarsToCents(cashAmount);
+    try
+    {
+      let cashAmountNum = Number(cashAmount);
+      if (isNaN(cashAmountNum))
+      {
+        throw new Error("Invalid cash amount.");
+      }
 
-    const datetime = getCurrentDatetime();
-    const transactionObj = {
-      datetime: getCurrentDatetime(),
-      type: transactionOption,
-      desc: transactionDesc,
-      amount_cents: cashAmountCents
-    }
-    
-    // Send transaction entry to backend and add to SQL database.
-    apiSendJSON(REQUEST_URLS.TRANSACTIONS, "POST", transactionObj)
-      .then(async (response) => {
-        if (!response.ok)
-        {
-          if (response.status == 422)
+      // Cash amount dollars to cents.
+      const cashAmountCents = dollarsToCents(cashAmountNum);
+
+      const datetime = getCurrentDatetime();
+      const transactionObj = {
+        datetime: getCurrentDatetime(),
+        type: transactionOption,
+        desc: transactionDesc,
+        amount_cents: cashAmountCents
+      }
+      
+      // Send transaction entry to backend and add to SQL database.
+      apiSendJSON(REQUEST_URLS.TRANSACTIONS, "POST", transactionObj)
+        .then(async (response) => {
+          if (!response.ok)
           {
-            throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+            if (response.status == 422)
+            {
+              throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+            }
+            throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
           }
-          throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
-        }
-        else
-        {
-          const returnedEntry = await response.json();
+          else
+          {
+            const returnedEntry = await response.json();
 
-          // Send transaction entry to transaction history list.
-          addToHistoryList(entries, setEntries, returnedEntry);
-        }
-      })
-      .catch(
-        (error) => console.log(error)
-      );
+            // Send transaction entry to transaction history list.
+            addToHistoryList(entries, setEntries, returnedEntry);
+          }
+        })
+        .catch(
+          (error) => {
+            console.log(error);
+            setCashValid(false);
+          }
+        );
+    }
+    catch (error)
+    {
+      console.log(error);
+      setCashValid(false);
+    }
 
     // Reset transaction box states.
     setTransactionOption("income");
@@ -144,7 +163,7 @@ export default function AmountTransaction({entries, setEntries})
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
 
         <TransactionOptions transactionOption={transactionOption} setTransactionOption={setTransactionOption} />
-        <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} />
+        <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} valid={cashValid} setValid={setCashValid}/>
         <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
       
         <button
