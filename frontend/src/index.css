@@ -52,7 +52,7 @@ button
 }
 
 /* For all numbered input elements. */
-input[type="number"]
+input[type="text"]
 {
     border-style: none;
     width: 94%;
