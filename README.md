@@ -31,9 +31,9 @@ This project is a first attempt a building a full stack localised app using Reac
 
 ## Installation and Setup (Windows 11)
 
-Open terminal in project directory and run the following command blocks to build and start app:
+#### 1. Open terminal in project directory and install Python libraries and start FastAPI server:
 
-#### 1. Install Python libraries and start FastAPI server.
+For Windows OS 11:
 ```powershell
 cd backend
 python -m venv venv
