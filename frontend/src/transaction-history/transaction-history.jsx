@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 import styles from "./transaction-history.module.css";
-import { apiGetJSON } from "../utils/api/apiService";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 
@@ -24,7 +23,8 @@ export default function TransactionHistory({entries, setEntries})
 
   // Get transaction entries from backend SQL database.
   useEffect(() => {
-    apiGetJSON(url)
+    fetch(url)
+      .then(response => response.json())
       .then(
         (data) => {
           const tempEntries = [];
@@ -42,7 +42,9 @@ export default function TransactionHistory({entries, setEntries})
           }
           setEntries(tempEntries);
         }
-      )
+      ).catch(
+        error => console.log(error)
+      );
   }, []);
 
   return (
