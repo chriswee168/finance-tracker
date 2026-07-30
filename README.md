@@ -4,7 +4,7 @@ This project is a first attempt a building a full stack localised app using Reac
 
 ### Table Of Contents
 1. Requirements
-2. Installation/Setup
+2. Installation and Setup
 3. Usage
 4. Technical Details
     - React Frontend
@@ -29,7 +29,7 @@ This project is a first attempt a building a full stack localised app using Reac
 - **SQLite3**: Serverless SQL database engine for working with SQL tables locally.
 - **Pydantic**: Python library used for data validation during FastAPI HTTP requests from React frontend.
 
-## Installation and Setup (Windows 11)
+## Installation and Setup
 
 #### 1. Open terminal in project directory and install Python libraries and start FastAPI server:
 
