@@ -41,8 +41,19 @@ python -m venv venv
 pip install -r requirements.txt
 fastapi run main.py
 ```
-#### 2. Open a second terminal in project directory to install all packages and build React production preview.
-```powershell
+
+For Linux and Mac OS:
+```bash
+cd backend
+python -m venv venv
+./venv/Scripts/activate
+pip install -r requirements.txt
+fastapi run main.py
+```
+
+#### 2. Open a second terminal in project directory to install all packages and build React production preview:
+For Windows 11, Linux and Mac OS:
+```
 cd frontend
 npm install
 npm run build
