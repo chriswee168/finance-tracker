@@ -10,7 +10,7 @@ import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendJSON } from "../utils/api/apiService";
 import getCurrentDatetime from "../utils/getCurrentDatetime";
 import { addToHistoryList } from "../transaction-history/transaction-history";
-import CurrentBalanceInit from "./current-balance-init/current-balance-init";
+import StartingBalance from "./starting-balance/starting-balance";
 import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
 
@@ -153,7 +153,7 @@ export default function AmountTransaction({entries, setEntries})
       <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
-      <CurrentBalanceInit 
+      <StartingBalance 
         netIncome={netIncomeBox}
         currentBalance={currentBalanceBox}
         setCurrentBalance={setCurrentBalanceBox}
