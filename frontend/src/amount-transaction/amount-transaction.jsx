@@ -61,7 +61,7 @@ export default function AmountTransaction({entries, setEntries})
 
       const datetime = getCurrentDatetime();
       const transactionObj = {
-        datetime: getCurrentDatetime(),
+        datetime: datetime,
         type: transactionOption,
         desc: transactionDesc,
         amount_cents: cashAmountCents
@@ -153,11 +153,7 @@ export default function AmountTransaction({entries, setEntries})
       <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
-      <StartingBalance 
-        netIncome={netIncomeBox}
-        currentBalance={currentBalanceBox}
-        setCurrentBalance={setCurrentBalanceBox}
-      />
+      <StartingBalance netIncome={netIncomeBox} setCurrentBalance={setCurrentBalanceBox}/>
             
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
