@@ -1,7 +1,5 @@
-import { useState } from "react";
-import styles from "./amount-box.module.css";
-import { SIGN_COLOURS } from "../../utils/constants";
 import { getColourSignAmount } from "../../utils/getColourSign";
+import styles from "./amount-box.module.css";
 
 /**
  * Create the amount box component to display a cash amount.
