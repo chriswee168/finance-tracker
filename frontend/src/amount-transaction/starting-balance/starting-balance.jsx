@@ -8,14 +8,12 @@ import styles from "./starting-balance.module.css";
  * 
  * @param {Object} param0 
  * @param {number} param0.netIncome Net income state in dollars.
- * @param {number} param0.currentBalance Current balance state in dollars.
  * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance state.
  * 
  * @returns Starting balance component.
 */
 export default function StartingBalance({
   netIncome,
-  currentBalance,
   setCurrentBalance
 })
 {
@@ -43,6 +41,7 @@ export default function StartingBalance({
     }
     catch (error)
     {
+      console.log(error);
       setCashValid(false);
     }
 
