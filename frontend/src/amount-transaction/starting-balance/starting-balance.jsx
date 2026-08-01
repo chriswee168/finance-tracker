@@ -1,8 +1,7 @@
 import { useState } from "react";
-import styles from "./starting-balance.module.css";
-import { SIGN_COLOURS } from "../../utils/constants";
-import { apiSendAmounts } from "../amount-transaction";
 import { REQUEST_URLS } from "../../utils/api/apiConfig";
+import { apiSendAmounts } from "../amount-transaction";
+import styles from "./starting-balance.module.css";
 
 /**
  * Component to prompt the user to set the starting balance.

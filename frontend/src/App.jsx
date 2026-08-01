@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import styles from './App.module.css'
-import AmountTransaction from './amount-transaction/amount-transaction'
-import TransactionHistory from './transaction-history/transaction-history'
+import { useState } from 'react';
+import styles from './App.module.css';
+import AmountTransaction from './amount-transaction/amount-transaction';
+import TransactionHistory from './transaction-history/transaction-history';
 
 /**
  * Create main app component.

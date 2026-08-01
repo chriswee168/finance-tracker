@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, SIGN_COLOURS, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
-import AmountBox from "./amount-box/amount-box";
-import styles from "./transaction-box.module.css";
-import TransactionOptions from "./transaction-options/transaction-options";
-import CashAmountInput from "./cash-amount-input/cash-amount-input";
-import DescriptionInput from "./description-input/description-input";
-import twoNumOp from "../utils/twoNumOp";
+import { addToHistoryList } from "../transaction-history/transaction-history";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendJSON } from "../utils/api/apiService";
-import getCurrentDatetime from "../utils/getCurrentDatetime";
-import { addToHistoryList } from "../transaction-history/transaction-history";
-import StartingBalance from "./starting-balance/starting-balance";
-import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
+import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
+import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
+import getCurrentDatetime from "../utils/getCurrentDatetime";
+import twoNumOp from "../utils/twoNumOp";
+import AmountBox from "./amount-box/amount-box";
+import CashAmountInput from "./cash-amount-input/cash-amount-input";
+import DescriptionInput from "./description-input/description-input";
+import StartingBalance from "./starting-balance/starting-balance";
+import styles from "./transaction-box.module.css";
+import TransactionOptions from "./transaction-options/transaction-options";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.

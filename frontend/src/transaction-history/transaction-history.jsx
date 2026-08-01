@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import TransactionEntry from "./transaction-entry/transaction-entry";
-import styles from "./transaction-history.module.css";
+import { useEffect } from "react";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
+import TransactionEntry from "./transaction-entry/transaction-entry";
+import styles from "./transaction-history.module.css";
 
 /**
  * Create transaction history component to display previous transactions
