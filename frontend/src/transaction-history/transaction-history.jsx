@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 import TransactionEntry from "./transaction-entry/transaction-entry";
@@ -19,11 +19,16 @@ export default function TransactionHistory({entries, setEntries})
   // Default message to display when no transactions have ever been made.
   const defaultMsg = <div className={styles.defaultMsg}>NO TRANSACTIONS</div>;
 
-  const url = createEntryGetURL(MAX_TRANSACTION_ENTRIES);
+  // Create URL to obtain the latest N transactions from FastAPI backend.
+  const url = useRef(null);
+  if (url.current == null)
+  {
+    url.current = createEntryGetURL(MAX_TRANSACTION_ENTRIES);
+  }
 
   // Get transaction entries from backend SQL database.
   useEffect(() => {
-    fetch(url)
+    fetch(url.current)
       .then(response => response.json())
       .then(
         (data) => {
