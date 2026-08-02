@@ -45,7 +45,7 @@ export default function TransactionHistory({entries, setEntries})
       ).catch(
         error => console.log(error)
       );
-  }, []);
+  }, [setEntries]);
 
   return (
     <div className={styles.transactionHistory}>
