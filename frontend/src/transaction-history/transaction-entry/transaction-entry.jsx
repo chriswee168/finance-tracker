@@ -1,5 +1,4 @@
 import { centsToDollars } from "../../utils/cashUnitConversion";
-import { CASH_DP, CASH_SCALE_FACTOR, SIGN_COLOURS } from "../../utils/constants";
 import { getColourSignTransaction } from "../../utils/getColourSign";
 import styles from "./transaction-entry.module.css";
 

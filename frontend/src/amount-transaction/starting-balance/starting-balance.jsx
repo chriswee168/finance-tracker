@@ -1,22 +1,19 @@
 import { useState } from "react";
-import styles from "./starting-balance.module.css";
-import { SIGN_COLOURS } from "../../utils/constants";
-import { apiSendAmounts } from "../amount-transaction";
 import { REQUEST_URLS } from "../../utils/api/apiConfig";
+import { apiSendAmounts } from "../../utils/api/apiService";
+import styles from "./starting-balance.module.css";
 
 /**
  * Component to prompt the user to set the starting balance.
  * 
  * @param {Object} param0 
  * @param {number} param0.netIncome Net income state in dollars.
- * @param {number} param0.currentBalance Current balance state in dollars.
  * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance state.
  * 
  * @returns Starting balance component.
 */
 export default function StartingBalance({
   netIncome,
-  currentBalance,
   setCurrentBalance
 })
 {
@@ -44,6 +41,7 @@ export default function StartingBalance({
     }
     catch (error)
     {
+      console.log(error);
       setCashValid(false);
     }
 
