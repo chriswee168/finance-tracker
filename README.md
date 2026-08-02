@@ -67,5 +67,12 @@ npm run preview
 3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in the **TRANSACTION HISTORY** widget.
 
 ## Technical Details
-### React Frontend
 ### FastAPI/SQLite3 Backend
+### React Frontend
+
+- Entering a new transaction from frontend to SQL database on backend.
+
+```mermaid
+graph LR
+    A(Enter transaction.) -- POST /add-transaction --> B[(Add new transaction entry to SQL table.)] -- Return entry_id --> C(Append transaction to transaction history.)
+```
