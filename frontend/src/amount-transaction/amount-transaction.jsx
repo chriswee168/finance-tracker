@@ -145,7 +145,7 @@ export default function AmountTransaction({entries, setEntries})
         }
       ).catch(
         error => console.log(error)
-      );;
+      );
   }, []);
 
   return (
