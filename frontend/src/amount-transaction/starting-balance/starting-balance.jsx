@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { REQUEST_URLS } from "../../utils/api/apiConfig";
-import { apiSendAmounts } from "../amount-transaction";
+import { apiSendAmounts } from "../../utils/api/apiService";
 import styles from "./starting-balance.module.css";
 
 /**

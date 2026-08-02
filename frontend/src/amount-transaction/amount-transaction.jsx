@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { addToHistoryList } from "../transaction-history/transaction-history";
+import { useEffect, useRef, useState } from "react";
+import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
-import { apiSendJSON } from "../utils/api/apiService";
+import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
 import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
 import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
@@ -41,6 +41,7 @@ export default function AmountTransaction({entries, setEntries})
   // Timestamp state for refreshing the net income periodically and saving
   // data.
   const [timestamp, setTimestamp] = useState(0);
+  const timestampTemp = useRef(0);
 
   // String displaying the next point in time net income will be reset for next period.
   const [nextResetTime, setNextResetTime] = useState('');
@@ -106,15 +107,14 @@ export default function AmountTransaction({entries, setEntries})
   }
 
   // Synchronize timestamp.
-  let timestampTemp = 0;
   useEffect(() => {
     fetch(REQUEST_URLS.TIMESTAMP)
       .then(response => response.json())
       .then(
         (data) => {
-          timestampTemp = data.timestamp;
-          setNextResetTime(getNextDate(timestampTemp));
-          setTimestamp(timestampTemp)
+          timestampTemp.current = data.timestamp;
+          setNextResetTime(getNextDate(timestampTemp.current));
+          setTimestamp(timestampTemp.current);
         }
       )
       .catch(
@@ -132,7 +132,7 @@ export default function AmountTransaction({entries, setEntries})
           
           // Refresh net income if amount of time passed since previous timestamp exceeds the
           // interval in seconds.
-          if (currentEpochSecsExceeded(timestampTemp))
+          if (currentEpochSecsExceeded(timestampTemp.current))
           {
             netIncomeCents = 0;
           }
@@ -145,7 +145,7 @@ export default function AmountTransaction({entries, setEntries})
         }
       ).catch(
         error => console.log(error)
-      );;
+      );
   }, []);
 
   return (
@@ -239,43 +239,6 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
   apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
 
   return newTimestamp;
-}
-
-/**
- * Function to send net income and current balance to a request URL.
- * 
- * @param {number} netIncomeDollars Net income in dollars.
- * @param {number} currentBalanceDollars Current balance in dollars.
- * @param {string} httpMethod HTTP method (POST/PUT).
- * @param {string} requestURL URL to send net income and current balance to.
- */
-export const apiSendAmounts = (
-  netIncomeDollars, 
-  currentBalanceDollars,
-  httpMethod,
-  requestURL
-) =>
-{
-  const netIncomeCents = dollarsToCents(netIncomeDollars);
-  const currentBalanceCents = dollarsToCents(currentBalanceDollars);
-
-  apiSendJSON(
-    requestURL, 
-    httpMethod, 
-    {
-      net_income_cents: netIncomeCents,
-      current_balance_cents: currentBalanceCents
-    }
-  )
-  .then((response) => {
-    if (!response.ok)
-    {
-      throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
-    }
-  })
-  .catch(
-    (error) => console.log(error)
-  );
 }
 
 /**
