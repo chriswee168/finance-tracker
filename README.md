@@ -26,13 +26,13 @@ This project is a first attempt a building a full stack localised app using Reac
 ### Backend Stack (FastAPI/SQLite3)
 
 - **FastAPI**: High performance web framework for building APIs in Python.
-- **Uvicorn**: Production level ASGI web server implementation for hosting FastAPI servers.
+- **Uvicorn**: Production level ASGI web server for hosting FastAPI.
 - **SQLite3**: Serverless SQL database engine for working with SQL tables locally.
 - **Pydantic**: Python library used for data validation during FastAPI HTTP requests from React frontend.
 
 ## Installation and Setup
 
-#### 1. Open terminal in project directory and install Python libraries and start FastAPI server:
+#### 1. Open terminal in project directory and install Python libraries and start FastAPI:
 
 For Windows OS 11:
 ```powershell
@@ -69,6 +69,9 @@ npm run preview
 
 ## Technical Details
 ### FastAPI Backend
+
+-  The following path operation functions and their responsibilities:
+    - 
 ### Backend Database (SQLite3)
 
 - This app uses two SQL tables to record the current balance, net income and transactions as they're submitted by user.
