@@ -7,8 +7,7 @@ This project is a first attempt a building a full stack localised app using Reac
 2. Installation and Setup
 3. Usage
 4. Technical Details
-    - FastAPI Backend
-    - Backend Database (SQLite3)
+    - FastAPI Backend Database (SQLite3)
     - React Frontend
 
 ## Requirements
@@ -68,11 +67,7 @@ npm run preview
 3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in the **TRANSACTION HISTORY** widget.
 
 ## Technical Details
-### FastAPI Backend
-
--  The following path operation functions and their responsibilities:
-    - 
-### Backend Database (SQLite3)
+### FastAPI Backend Database (SQLite3)
 
 - This app uses two SQL tables to record the current balance, net income and transactions as they're submitted by user.
     - `amount_history_table` records the current balance and net income periodically. (New entry added every week by default.)
