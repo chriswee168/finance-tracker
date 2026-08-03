@@ -7,8 +7,9 @@ This project is a first attempt a building a full stack localised app using Reac
 2. Installation and Setup
 3. Usage
 4. Technical Details
+    - FastAPI Backend
+    - Backend Database (SQLite3)
     - React Frontend
-    - FastAPI/SQLite3 Backend
 
 ## Requirements
 
@@ -67,7 +68,32 @@ npm run preview
 3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in the **TRANSACTION HISTORY** widget.
 
 ## Technical Details
-### FastAPI/SQLite3 Backend
+### FastAPI Backend
+### Backend Database (SQLite3)
+
+- This app uses two SQL tables to record the current balance, net income and transactions as they're submitted by user.
+    - `amount_history_table` records the current balance and net income periodically. (New entry added every week by default.)
+    - `transaction_table` records every transaction submitted by user and used for displaying transaction history on frontend.
+- Cash amount are saved as cents to prevent floating point rounding errors.
+- Details for `amount_history_table` and `transaction_table` are provided below. 
+
+#### amount_history_table
+| Field name | Type | Description |
+| --- | --- | --- |
+| entry_id | INTEGER | Unique ID for entries. (automatically generated during insertion) |
+| entry_datetime | TEXT | Date and time of when entry was added. |
+| net_income_cents | INTEGER | Net income recorded at date and time. |
+| current_balance_cents | INTEGER | Current balance recorded at date and time. |
+
+#### transaction_table
+| Field name | Type | Description |
+| --- | --- | --- |
+| entry_id | INTEGER | Unique ID for entries. (automatically generated during insertion) |
+| entry_datetime | TEXT | Date and time of when entry was added. |
+| transaction_type | VARCHAR(7) | Indicates if cash is earned or loss. (either "income" or "expense") |
+| transaction_desc | TEXT | Text description entered by user. |
+| amount_cents | INTEGER | Transaction cash amount in cents. |
+
 ### React Frontend
 
 - Entering a new transaction from frontend to SQL database on backend.
