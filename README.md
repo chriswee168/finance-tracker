@@ -3,12 +3,12 @@
 This project is a first attempt a building a full stack localised app using React, FastAPI and SQLite3 for manually tracking personal income and expense transactions, along with the current balance and weekly net income are also displayed.
 
 ### Table Of Contents
-1. Requirements
-2. Installation and Setup
-3. Usage
-4. Technical Details
-    - FastAPI Backend Database (SQLite3)
-    - React Frontend
+1. [Requirements](#requirements)
+2. [Installation and Setup](#installation-and-setup)
+3. [Usage](#usage)
+4. [Technical Details](#technical-details)
+    - [FastAPI Backend Database (SQLite3)](#fastapi-backend-database-sqlite3)
+    - [React Frontend](#react-frontend)
 
 ## Requirements
 
