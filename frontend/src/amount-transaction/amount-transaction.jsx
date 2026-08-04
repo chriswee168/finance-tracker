@@ -127,18 +127,22 @@ export default function AmountTransaction({entries, setEntries})
     fetch(REQUEST_URLS.CURRENT_AMOUNTS)
       .then(response => response.json())
       .then(
-        (data) => {
-          let netIncomeCents = data.net_income_cents;
-          
+        (data) => {          
+          let netIncomeDollars = centsToDollars(data.net_income_cents);
+          const currentBalanceDollars = centsToDollars(data.current_balance_cents);
+
           // Refresh net income if amount of time passed since previous timestamp exceeds the
           // interval in seconds.
           if (currentEpochSecsExceeded(timestampTemp.current))
           {
-            netIncomeCents = 0;
-          }
+            // Record the net income and current balance in amount history table before 
+            // resetting the net income to zero.
+            apiSendAmounts(netIncomeDollars, currentBalanceDollars, "POST", REQUEST_URLS.AMOUNTS_HISTORY);
 
-          const netIncomeDollars = centsToDollars(netIncomeCents);
-          const currentBalanceDollars = centsToDollars(data.current_balance_cents);
+            const newTimestamp = incrementTimestamp(timestampTemp.current, setTimestamp);
+            setNextResetTime(getNextDate(newTimestamp));
+            netIncomeDollars = 0.0;
+          }
 
           setNetIncomeBox(netIncomeDollars);
           setCurrentBalanceBox(currentBalanceDollars);
