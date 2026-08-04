@@ -1,14 +1,14 @@
-# Full Stack Personal Finance Tracker/Ledger
+# Full Stack Personal Finance Ledger App
 
-This project is a first attempt a building a full stack localised app using React, FastAPI and SQLite3 for manually tracking personal income and expense transactions, along with the current balance and weekly net income are also displayed.
+This project is a full stack local app using React, FastAPI and SQLite3 for manually tracking personal income and expenses, current balance and weekly net income. It has also served as a project to gain fundamental experience in working with full stack technologies and learning how frontend and backend services communicate and transfer data via HTTP requests and APIs.
 
 ### Table Of Contents
-1. Requirements
-2. Installation and Setup
-3. Usage
-4. Technical Details
-    - React Frontend
-    - FastAPI/SQLite3 Backend
+1. [Requirements](#requirements)
+2. [Installation and Setup](#installation-and-setup)
+3. [Usage](#usage)
+4. [Technical Details](#technical-details)
+    - [FastAPI Backend Database (SQLite3)](#fastapi-backend-database-sqlite3)
+    - [React Frontend](#react-frontend)
 
 ## Requirements
 
@@ -25,13 +25,13 @@ This project is a first attempt a building a full stack localised app using Reac
 ### Backend Stack (FastAPI/SQLite3)
 
 - **FastAPI**: High performance web framework for building APIs in Python.
-- **Uvicorn**: Production level ASGI web server implementation for hosting FastAPI servers.
+- **Uvicorn**: Production level ASGI web server for hosting FastAPI.
 - **SQLite3**: Serverless SQL database engine for working with SQL tables locally.
 - **Pydantic**: Python library used for data validation during FastAPI HTTP requests from React frontend.
 
 ## Installation and Setup
 
-#### 1. Open terminal in project directory and install Python libraries and start FastAPI server:
+#### 1. Open terminal in project directory and install Python libraries and start FastAPI:
 
 For Windows OS 11:
 ```powershell
@@ -67,5 +67,49 @@ npm run preview
 3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in the **TRANSACTION HISTORY** widget.
 
 ## Technical Details
+### FastAPI Backend Database (SQLite3)
+
+- This app uses two SQL tables to record the current balance, net income and transactions as they're submitted by user.
+    - `amount_history_table` records the current balance and net income periodically. (New entry added every week by default.)
+    - `transaction_table` records every transaction submitted by user and used for displaying transaction history on frontend.
+- Cash amount are saved as cents to prevent floating point rounding errors.
+- Details for `amount_history_table` and `transaction_table` are provided below. 
+
+#### amount_history_table
+| Field name | Type | Description |
+| --- | --- | --- |
+| entry_id | INTEGER | Unique ID for entries. (automatically generated during insertion) |
+| entry_datetime | TEXT | Date and time of when entry was added. |
+| net_income_cents | INTEGER | Net income recorded at date and time. |
+| current_balance_cents | INTEGER | Current balance recorded at date and time. |
+
+#### transaction_table
+| Field name | Type | Description |
+| --- | --- | --- |
+| entry_id | INTEGER | Unique ID for entries. (automatically generated during insertion) |
+| entry_datetime | TEXT | Date and time of when entry was added. |
+| transaction_type | VARCHAR(7) | Indicates if cash is earned or loss. (either "income" or "expense") |
+| transaction_desc | TEXT | Text description entered by user. |
+| amount_cents | INTEGER | Transaction cash amount in cents. |
+
 ### React Frontend
-### FastAPI/SQLite3 Backend
+
+The frontend relies on HTTP requests to perform essential tasks which include but not limited to setting the starting balance, entering new transactions and retrieving the transaction history. Below are flowcharts illustrating these three processes the frontend relies on for basic functionality.
+
+#### Setting the starting balance when using app for the first time.
+```mermaid
+graph LR
+    A(Enter starting balance amount.) -- PUT /current-cash-amounts --> B(Write starting balance to JSON file.)
+```
+
+#### Entering a new transaction from frontend to SQL database on backend.
+```mermaid
+graph LR
+    A(Enter transaction.) -- POST /transaction-entries --> B[(Add new transaction entry to transaction_table.)] -- Return entry_id --> C(Append transaction to transaction history.)
+```
+
+#### Retrieving transaction history from SQL database on frontend startup or refresh.
+```mermaid
+graph LR
+    A(Frontend startup/refresh.) -- GET /transaction-entries?n_entries=N --> B[(Select N latest rows from transaction_table.)] -- Return JSON list. --> C(Add all entries to transaction history.)
+```
