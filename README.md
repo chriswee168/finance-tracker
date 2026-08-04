@@ -94,9 +94,22 @@ npm run preview
 
 ### React Frontend
 
-- Entering a new transaction from frontend to SQL database on backend.
+The frontend relies on HTTP requests to perform essential tasks which include but not limited to setting the starting balance, entering new transactions and retrieving the transaction history. Below are flowcharts illustrating these three processes the frontend relies on for basic functionality.
 
+#### Setting the starting balance when using app for the first time.
 ```mermaid
 graph LR
-    A(Enter transaction.) -- POST /add-transaction --> B[(Add new transaction entry to SQL table.)] -- Return entry_id --> C(Append transaction to transaction history.)
+    A(Enter starting balance amount.) -- PUT /current-cash-amounts --> B(Write starting balance to JSON file.)
+```
+
+#### Entering a new transaction from frontend to SQL database on backend.
+```mermaid
+graph LR
+    A(Enter transaction.) -- POST /transaction-entries --> B[(Add new transaction entry to transaction_table.)] -- Return entry_id --> C(Append transaction to transaction history.)
+```
+
+#### Retrieving transaction history from SQL database on frontend startup or refresh.
+```mermaid
+graph LR
+    A(Frontend startup/refresh.) -- GET /transaction-entries?n_entries=N --> B[(Select N latest rows from transaction_table.)] -- Return JSON list. --> C(Add all entries to transaction history.)
 ```
