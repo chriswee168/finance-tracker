@@ -113,22 +113,14 @@ FastAPI is used to expose API endpoints for the frontend to interact with local 
 
 ### React Frontend
 
-The frontend relies on HTTP requests to perform essential tasks which include but not limited to setting the starting balance, entering new transactions and retrieving the transaction history. Below are flowcharts illustrating these three processes the frontend relies on for basic functionality.
+The frontend relies on HTTP requests to perform essential tasks which include but not limited to setting the starting balance, entering new transactions and retrieving the transaction history. Details on these processes are provided below in dotpoints.
 
-#### Setting the starting balance when using app for the first time.
-```mermaid
-graph LR
-    A(Enter starting balance amount.) -- PUT /current-cash-amounts --> B(Write starting balance to JSON file.)
-```
-
-#### Entering a new transaction from frontend to SQL database on backend.
-```mermaid
-graph LR
-    A(Enter transaction.) -- POST /transaction-entries --> B[(Add new transaction entry to transaction_table.)] -- Return entry_id --> C(Append transaction to transaction history.)
-```
-
-#### Retrieving transaction history from SQL database on frontend startup or refresh.
-```mermaid
-graph LR
-    A(Frontend startup/refresh.) -- GET /transaction-entries?n_entries=N --> B[(Select N latest rows from transaction_table.)] -- Return JSON list. --> C(Add all entries to transaction history.)
-```
+- Setting the starting balance when using app for the first time.
+    - Sends a **PUT** request to **/current-cash-amounts** endpoint containing the starting balance amount submitted by user to update the JSON configuration file on backend.
+- Entering a new transaction from frontend to SQL database on backend.
+    - Sends a **POST** request to **/transaction-entries** endpoint containing transaction details entered by user.
+    - New transaction entry containing submitted information is added to `transaction_table` on backend.
+    - Frontend receives the new entry ID from backend via HTTP response and transaction is added to **TRANSACTION HISTORY**.
+- Retrieving transaction history from SQL database on frontend startup or refresh.
+    - On app startup/refresh, send a **GET** request to **/transaction-entries** along with **n_entries=N** argument to select the N latest transaction entries from `transaction_table`.
+    - Frontend receives transactions as JS objects and displays them in **TRANSACTION HISTORY**.
