@@ -11,7 +11,7 @@ class CashAmounts(BaseModel):
     net_income_cents: int
     current_balance_cents: int
 
-# Add net income and current balance to SQL tables.
+# Add net income and current balance to amount_history_table.
 @route.post("/cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
 def add_cash_amounts(cash_amounts: CashAmounts):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)

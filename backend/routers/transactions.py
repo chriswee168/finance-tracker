@@ -14,7 +14,7 @@ class Transaction(BaseModel):
         gt=0, description="Transaction cash amount must be greater than zero."
     )
 
-# Add transaction entry to transaction table and return new entry with ID.
+# Add transaction entry to transaction_table and return new entry with ID.
 @route.post("/transaction-entries", status_code=status.HTTP_201_CREATED)
 def add_transaction(transaction: Transaction):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)

@@ -18,7 +18,7 @@ def save_timestamp(epoch_time: EpochTime):
     
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-# Get the current timestamp from JSON config.
+# Get the timestamp from JSON config.
 @route.get("/utc-epoch-timestamp", status_code=status.HTTP_200_OK)
 def get_timestamp():
     with open(TIMESTAMP_CONFIG_PATH, "r") as f:
