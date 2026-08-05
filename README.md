@@ -7,7 +7,8 @@ This project is a full stack local app using React, FastAPI and SQLite3 for manu
 2. [Installation and Setup](#installation-and-setup)
 3. [Usage](#usage)
 4. [Technical Details](#technical-details)
-    - [FastAPI Backend Database (SQLite3)](#fastapi-backend-database-sqlite3)
+    - [FastAPI Endpoints](#fastapi-endpoints)
+    - [SQLite3 Database Tables](#sqlite3-database-tables)
     - [React Frontend](#react-frontend)
 
 ## Requirements
@@ -71,7 +72,21 @@ The following image illustrates the app UI on startup. (Instructions on usage wi
 3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in **TRANSACTION HISTORY**.
 
 ## Technical Details
-### FastAPI Backend Database (SQLite3)
+### FastAPI Endpoints
+
+FastAPI is used to expose API endpoints for the frontend to interact with local SQL database and JSON configuration files. All API endpoints are listed below with their name, HTTP method and purpose:
+
+| API Endpoint | Method | Purpose |
+| --- | --- | --- |
+| /cash-amounts | POST | Record the current net income and current balance to amount_history_table. |
+| /current-cash-amounts | PUT | Save the current net income and current balance to JSON configuration file. |
+| /current-cash-amounts | GET | Get the current net income and current balance from JSON configuration file on app startup or refresh. |
+| /transaction-entries | POST | Add transaction entry to transaction_table and return new entry ID. |
+| /transaction-entries | GET | Get transaction entries from transaction_table to display in history on frontend. |
+| /utc-epoch-timestamp | PUT | Save the current timestamp in epoch seconds to JSON configuration file.
+| /utc-epoch-timestamp | GET | Get the timestamp recorded in JSON configuration file.
+
+### SQLite3 Database Tables
 
 - This app uses two SQL tables to record the current balance, net income and transactions as they're submitted by user.
     - `amount_history_table` records the current balance and net income periodically. (New entry added every week by default.)
