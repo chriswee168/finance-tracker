@@ -41,7 +41,6 @@ export default function AmountTransaction({entries, setEntries})
   // Timestamp state for refreshing the net income periodically and saving
   // data.
   const [timestamp, setTimestamp] = useState(0);
-  const timestampTemp = useRef(0);
 
   // String displaying the next point in time net income will be reset for next period.
   const [nextResetTime, setNextResetTime] = useState('');
@@ -112,9 +111,8 @@ export default function AmountTransaction({entries, setEntries})
       .then(response => response.json())
       .then(
         (data) => {
-          timestampTemp.current = data.timestamp;
-          setNextResetTime(getNextDate(timestampTemp.current));
-          setTimestamp(timestampTemp.current);
+          setNextResetTime(getNextDate(data.timestamp));
+          setTimestamp(data.timestamp);
         }
       )
       .catch(
