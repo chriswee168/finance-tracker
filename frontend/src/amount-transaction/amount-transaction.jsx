@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
@@ -80,10 +80,10 @@ export default function AmountTransaction({entries, setEntries})
           }
           else
           {
-            const returnedEntry = await response.json();
+            const data = await response.json();
 
             // Send transaction entry to transaction history list.
-            addToHistoryList(entries, setEntries, returnedEntry);
+            addToHistoryList(entries, setEntries, {"entry_id": data.entry_id, ...transactionObj});
           }
         })
         .catch(
