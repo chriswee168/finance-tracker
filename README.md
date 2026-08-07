@@ -20,15 +20,15 @@ This project is a full stack local app using React, FastAPI and SQLite3 for manu
 
 ### Frontend Stack (React)
 
-- **React (JavaScript)**: JavaScript library for building component based and interactive user interfaces.
-- **Vite**: Build tool and local development server for React frontend.
+- **React (JavaScript)**: JavaScript library for building web based user interfaces using JSX components (Javascript combined with HTML).
+- **Vite**: Build tool for local development of the React frontend.
 
 ### Backend Stack (FastAPI/SQLite3)
 
-- **FastAPI**: High performance web framework for building APIs in Python.
-- **Uvicorn**: Production level ASGI web server for hosting FastAPI.
-- **SQLite3**: Serverless SQL database engine for working with SQL tables locally.
-- **Pydantic**: Python library used for data validation during FastAPI HTTP requests from React frontend.
+- **FastAPI**: Python web framework for building API endpoints.
+- **Uvicorn**: ASGI web server for hosting FastAPI.
+- **SQLite3**: Database engine for working with SQL tables locally.
+- **Pydantic**: Python library used for data validation of HTTP requests received from React frontend.
 
 ## Installation and Setup
 
