@@ -44,13 +44,7 @@ def add_transaction(transaction: Transaction):
         f"Cash amount (cents): {transaction.amount_cents}"
     ))
 
-    return {
-        "entry_id": latest_entry_id,
-        "datetime": transaction.datetime,
-        "type": transaction.type,
-        "desc": transaction.desc,
-        "amount_cents": transaction.amount_cents
-    }
+    return {"entry_id": latest_entry_id}
 
 # Obtain the latest N transaction entries.
 @route.get("/transaction-entries", status_code=status.HTTP_200_OK)
