@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
 import sqlite3, json
@@ -16,24 +16,29 @@ class CashAmounts(BaseModel):
 def add_cash_amounts(cash_amounts: CashAmounts):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
-
-    current_datetime = time.strftime("%Y-%m-%d %I:%M:%S%p")
     
     add_cash_amounts_query = (
         "INSERT INTO amount_history_table "
-        "(entry_datetime, net_income_cents, current_balance_cents) "
-        "VALUES (?, ?, ?)"
-        )
+        "(net_income_cents, current_balance_cents) "
+        "VALUES (?, ?)"
+    )
 
     cursor.execute(
         add_cash_amounts_query, 
-        (current_datetime, cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
+        (cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
     )
     conn.commit()
-    conn.close()
 
+    get_timestamp_query = "SELECT entry_timestamp FROM amount_history_table ORDER BY entry_id DESC LIMIT 1"
+    cursor.execute(get_timestamp_query)
+    timestamp = cursor.fetchone()[0]
+    datetime_str = datetime.fromtimestamp(timestamp).strftime("%d/%b/%Y %I:%M:%S%p")
+    
+    conn.close()
+    
     print((
         "Record current cash amounts to amount history:\n"
+        f"Datetime: {datetime_str}\n"
         f"Net income cents: {cash_amounts.net_income_cents}\n"
         f"Current balance cents: {cash_amounts.current_balance_cents}"
     ))
