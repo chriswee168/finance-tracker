@@ -16,18 +16,16 @@ class CashAmounts(BaseModel):
 def add_cash_amounts(cash_amounts: CashAmounts):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
-
-    current_datetime = time.strftime("%Y-%m-%d %I:%M:%S%p")
     
     add_cash_amounts_query = (
         "INSERT INTO amount_history_table "
-        "(entry_datetime, net_income_cents, current_balance_cents) "
-        "VALUES (?, ?, ?)"
-        )
+        "(net_income_cents, current_balance_cents) "
+        "VALUES (?, ?)"
+    )
 
     cursor.execute(
         add_cash_amounts_query, 
-        (current_datetime, cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
+        (cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
     )
     conn.commit()
     conn.close()
