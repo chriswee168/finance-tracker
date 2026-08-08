@@ -67,7 +67,7 @@ def get_transaction(n_entries: int):
     return [
         {
             "entry_id": entry[0], 
-            "datetime": entry[1], 
+            "datetime": datetime.fromtimestamp(entry[1]).strftime("%d/%b/%Y %I:%M:%S%p"), 
             "type": entry[2], 
             "desc": entry[3], 
             "amount_cents": entry[4]
