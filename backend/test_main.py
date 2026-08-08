@@ -48,3 +48,11 @@ def test_get_transactions():
     # Return list of transaction objects/dictionaries.
     assert isinstance(response.json(), list)
     assert len(response.json()) == n_entries
+
+# Test adding cash amounts to amount_history_table.
+def test_add_cash_amounts():
+    response = testclient.post(
+        f"/cash-amounts", 
+        json={"net_income_cents": 100, "current_balance_cents": 1000000}
+    )
+    assert response.status_code == 204 # No content.
