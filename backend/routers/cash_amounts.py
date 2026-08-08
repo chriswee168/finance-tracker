@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 from fastapi import APIRouter, status, Response
 from pydantic import BaseModel
 import sqlite3, json
@@ -28,10 +28,17 @@ def add_cash_amounts(cash_amounts: CashAmounts):
         (cash_amounts.net_income_cents, cash_amounts.current_balance_cents)
     )
     conn.commit()
-    conn.close()
 
+    get_timestamp_query = "SELECT entry_timestamp FROM amount_history_table ORDER BY entry_id DESC LIMIT 1"
+    cursor.execute(get_timestamp_query)
+    timestamp = cursor.fetchone()[0]
+    datetime_str = datetime.fromtimestamp(timestamp).strftime("%d/%b/%Y %I:%M:%S%p")
+    
+    conn.close()
+    
     print((
         "Record current cash amounts to amount history:\n"
+        f"Datetime: {datetime_str}\n"
         f"Net income cents: {cash_amounts.net_income_cents}\n"
         f"Current balance cents: {cash_amounts.current_balance_cents}"
     ))
