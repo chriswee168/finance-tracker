@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from main import app
+from utils.create_tables import create_tables
 
 testclient = TestClient(app)
 
@@ -11,6 +12,11 @@ def test_get_api_status():
 
 # Test adding valid and invalid transactions.
 def test_add_transaction():
+
+    # Create the SQL database if it doesn't exist.
+    create_tables()
+
+    # Test valid entry.
     response = testclient.post(
         "/transaction-entries", 
         json={
@@ -33,3 +39,12 @@ def test_add_transaction():
         }
     )
     assert response.status_code == 422 # Unprocessable entity.
+
+# Test getting transactions.
+def test_get_transactions():
+    n_entries = 1
+    response = testclient.get(f"/transaction-entries?n_entries={n_entries}")
+
+    # Return list of transaction objects/dictionaries.
+    assert isinstance(response.json(), list)
+    assert len(response.json()) == n_entries
