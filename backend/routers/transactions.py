@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status, Response
 from pydantic import BaseModel, Field
+from typing import Literal
 import sqlite3
 from utils.constants import *
 
@@ -8,7 +9,7 @@ route = APIRouter()
 # Transactions require datetime, type, description and cash amount.
 class Transaction(BaseModel):
     datetime: str
-    type: str
+    type: Literal["income", "expense"]
     desc: str
     amount_cents: int = Field(
         gt=0, description="Transaction cash amount must be greater than zero."

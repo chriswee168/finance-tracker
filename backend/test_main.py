@@ -20,5 +20,16 @@ def test_add_transaction():
             "amount_cents": 100
         }
     )
-    
-    assert response.status_code == 201
+    assert response.status_code == 201 # Created.
+
+    # Test invalid entry.
+    response = testclient.post(
+        "/transaction-entries", 
+        json={
+            "datetime": "01 Mar 2026, 12:00 pm",
+            "type": "none",
+            "desc": "Test description.",
+            "amount_cents": -25
+        }
+    )
+    assert response.status_code == 422 # Unprocessable entity.
