@@ -1,14 +1,13 @@
 from fastapi import APIRouter, status, Response
 from pydantic import BaseModel, Field
 from typing import Literal
-import sqlite3
+import sqlite3, time
 from utils.constants import *
 
 route = APIRouter()
 
 # Transactions require datetime, type, description and cash amount.
 class Transaction(BaseModel):
-    datetime: str
     type: Literal["income", "expense"]
     desc: str
     amount_cents: int = Field(
@@ -23,29 +22,35 @@ def add_transaction(transaction: Transaction):
 
     add_transaction_query = (
         "INSERT INTO transaction_table "
-        "(entry_datetime, transaction_type, transaction_desc, amount_cents) "
-        "VALUES (?, ?, ?, ?)"
+        "(transaction_type, transaction_desc, amount_cents) "
+        "VALUES (?, ?, ?)"
     )
-
+    
     cursor.execute(
         add_transaction_query, 
-        (transaction.datetime, transaction.type, transaction.desc, transaction.amount_cents)
+        (transaction.type, transaction.desc, transaction.amount_cents)
     )
 
     latest_entry_id = cursor.lastrowid # Get ID of newly added transaction entry.
     conn.commit()
+
+    get_datetime_query = ("SELECT DATETIME(entry_timestamp, 'unixepoch', 'localtime') "
+                          "FROM transaction_table ORDER BY entry_id DESC LIMIT 1")
+    cursor.execute(get_datetime_query)
+    datetime = cursor.fetchone()[0]
+    
     conn.close()
 
     print((
         "Added transaction:\n" \
         f"ID: {latest_entry_id}\n" \
-        f"Datetime: {transaction.datetime}\n" \
+        f"Datetime: {datetime}\n" \
         f"Transaction type: {transaction.type}\n" \
         f"Description: {transaction.desc}\n" \
         f"Cash amount (cents): {transaction.amount_cents}"
     ))
 
-    return {"entry_id": latest_entry_id}
+    return {"entry_id": latest_entry_id, "entry_datetime": datetime}
 
 # Obtain the latest N transaction entries.
 @route.get("/transaction-entries", status_code=status.HTTP_200_OK)
