@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
 import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
 import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
-import getCurrentDatetime from "../utils/getCurrentDatetime";
 import twoNumOp from "../utils/twoNumOp";
 import AmountBox from "./amount-box/amount-box";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
@@ -59,9 +58,7 @@ export default function AmountTransaction({entries, setEntries})
       // Cash amount dollars to cents.
       const cashAmountCents = dollarsToCents(cashAmountNum);
 
-      const datetime = getCurrentDatetime();
       const transactionObj = {
-        datetime: datetime,
         type: transactionOption,
         desc: transactionDesc,
         amount_cents: cashAmountCents
@@ -80,10 +77,12 @@ export default function AmountTransaction({entries, setEntries})
           }
           else
           {
-            const returnedEntry = await response.json();
+            const data = await response.json();
 
             // Send transaction entry to transaction history list.
-            addToHistoryList(entries, setEntries, returnedEntry);
+            addToHistoryList(entries, setEntries, 
+              {"entry_id": data.entry_id, "datetime": data.entry_datetime, ...transactionObj}
+            );
           }
         })
         .catch(
