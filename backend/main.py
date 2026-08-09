@@ -12,10 +12,14 @@ async def lifespan(app: FastAPI):
     create_tables()
     print("Called create_tables() function...")
 
+    # Create config directory for JSON files.
+    if not os.path.exists("config"):
+        os.makedirs("config")
+
     # Initialise the timestamp if timestamp JSON file doesn't exist.
     init_timestamp()
 
-    # Initalise cash amounts if cash amount JSON file doesn't exist.
+    # Initialise cash amounts if cash amount JSON file doesn't exist.
     init_cash_amounts()
     
     yield
