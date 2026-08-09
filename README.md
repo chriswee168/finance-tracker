@@ -57,6 +57,7 @@ For Windows 11, Linux and Mac OS:
 ```
 cd frontend
 npm install
+npm audit fix
 npm run build
 npm run preview
 ```
