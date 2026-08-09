@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import { CASH_DP, CASH_SCALE_FACTOR, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, SIGN_COLOURS, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
+import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
+import { REQUEST_URLS } from "../utils/api/apiConfig";
+import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
+import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
+import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
+import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
+import twoNumOp from "../utils/twoNumOp";
 import AmountBox from "./amount-box/amount-box";
-import styles from "./transaction-box.module.css";
-import TransactionOptions from "./transaction-options/transaction-options";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
-import twoNumOp from "../utils/twoNumOp";
-import { REQUEST_URLS } from "../utils/api/apiConfig";
-import { apiSendJSON } from "../utils/api/apiService";
-import getCurrentDatetime from "../utils/getCurrentDatetime";
-import { addToHistoryList } from "../transaction-history/transaction-history";
-import CurrentBalanceInit from "./current-balance-init/current-balance-init";
-import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
-import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
+import StartingBalance from "./starting-balance/starting-balance";
+import styles from "./transaction-box.module.css";
+import TransactionOptions from "./transaction-options/transaction-options";
 
 /**
  * Wrapper for amount boxes and transaction box that allows state sharing.
@@ -59,9 +58,7 @@ export default function AmountTransaction({entries, setEntries})
       // Cash amount dollars to cents.
       const cashAmountCents = dollarsToCents(cashAmountNum);
 
-      const datetime = getCurrentDatetime();
       const transactionObj = {
-        datetime: getCurrentDatetime(),
         type: transactionOption,
         desc: transactionDesc,
         amount_cents: cashAmountCents
@@ -80,10 +77,12 @@ export default function AmountTransaction({entries, setEntries})
           }
           else
           {
-            const returnedEntry = await response.json();
+            const data = await response.json();
 
             // Send transaction entry to transaction history list.
-            addToHistoryList(entries, setEntries, returnedEntry);
+            addToHistoryList(entries, setEntries, 
+              {"entry_id": data.entry_id, "datetime": data.entry_datetime, ...transactionObj}
+            );
           }
         })
         .catch(
@@ -106,15 +105,13 @@ export default function AmountTransaction({entries, setEntries})
   }
 
   // Synchronize timestamp.
-  let timestampTemp = 0;
   useEffect(() => {
     fetch(REQUEST_URLS.TIMESTAMP)
       .then(response => response.json())
       .then(
         (data) => {
-          timestampTemp = data.timestamp;
-          setNextResetTime(getNextDate(timestampTemp));
-          setTimestamp(timestampTemp)
+          setNextResetTime(getNextDate(data.timestamp));
+          setTimestamp(data.timestamp);
         }
       )
       .catch(
@@ -128,24 +125,14 @@ export default function AmountTransaction({entries, setEntries})
       .then(response => response.json())
       .then(
         (data) => {
-          let netIncomeCents = data.net_income_cents;
-          
-          // Refresh net income if amount of time passed since previous timestamp exceeds the
-          // interval in seconds.
-          if (currentEpochSecsExceeded(timestampTemp))
-          {
-            netIncomeCents = 0;
-          }
-
-          const netIncomeDollars = centsToDollars(netIncomeCents);
+          let netIncomeDollars = centsToDollars(data.net_income_cents);
           const currentBalanceDollars = centsToDollars(data.current_balance_cents);
-
           setNetIncomeBox(netIncomeDollars);
           setCurrentBalanceBox(currentBalanceDollars);
         }
       ).catch(
         error => console.log(error)
-      );;
+      );
   }, []);
 
   return (
@@ -153,11 +140,7 @@ export default function AmountTransaction({entries, setEntries})
       <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
-      <CurrentBalanceInit 
-        netIncome={netIncomeBox}
-        currentBalance={currentBalanceBox}
-        setCurrentBalance={setCurrentBalanceBox}
-      />
+      <StartingBalance netIncome={netIncomeBox} setCurrentBalance={setCurrentBalanceBox}/>
             
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
@@ -243,43 +226,6 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
   apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
 
   return newTimestamp;
-}
-
-/**
- * Function to send net income and current balance to a request URL.
- * 
- * @param {number} netIncomeDollars Net income in dollars.
- * @param {number} currentBalanceDollars Current balance in dollars.
- * @param {string} httpMethod HTTP method (POST/PUT).
- * @param {string} requestURL URL to send net income and current balance to.
- */
-export const apiSendAmounts = (
-  netIncomeDollars, 
-  currentBalanceDollars,
-  httpMethod,
-  requestURL
-) =>
-{
-  const netIncomeCents = dollarsToCents(netIncomeDollars);
-  const currentBalanceCents = dollarsToCents(currentBalanceDollars);
-
-  apiSendJSON(
-    requestURL, 
-    httpMethod, 
-    {
-      net_income_cents: netIncomeCents,
-      current_balance_cents: currentBalanceCents
-    }
-  )
-  .then((response) => {
-    if (!response.ok)
-    {
-      throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
-    }
-  })
-  .catch(
-    (error) => console.log(error)
-  );
 }
 
 /**

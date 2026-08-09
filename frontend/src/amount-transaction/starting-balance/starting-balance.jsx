@@ -1,22 +1,19 @@
 import { useState } from "react";
-import styles from "./current-balance-init.module.css";
-import { SIGN_COLOURS } from "../../utils/constants";
-import { apiSendAmounts } from "../amount-transaction";
 import { REQUEST_URLS } from "../../utils/api/apiConfig";
+import { apiSendAmounts } from "../../utils/api/apiService";
+import styles from "./starting-balance.module.css";
 
 /**
- * Component to prompt the user to set the current balance.
+ * Component to prompt the user to set the starting balance.
  * 
  * @param {Object} param0 
- * @param {number} param0.netIncome Net income in dollars.
- * @param {number} param0.currentBalance Current balance in dollars.
- * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance.
+ * @param {number} param0.netIncome Net income state in dollars.
+ * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance state.
  * 
- * @returns Current balance initialisation component.
+ * @returns Starting balance component.
 */
-export default function CurrentBalanceInit({
+export default function StartingBalance({
   netIncome,
-  currentBalance,
   setCurrentBalance
 })
 {
@@ -36,14 +33,15 @@ export default function CurrentBalanceInit({
         throw new Error("Invalid cash amount.");
       }
 
-      // Set the initial current balance.
+      // Set the starting balance.
       setCurrentBalance(amountNum);
-      // Send initial current balance to FastAPI backend along with
+      // Send starting balance to FastAPI backend along with
       // existing net income for initialisation.
       apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
     }
     catch (error)
     {
+      console.log(error);
       setCashValid(false);
     }
 
@@ -52,10 +50,10 @@ export default function CurrentBalanceInit({
   }
   
   return (
-    <div className={styles.currentBalanceWrapper}>
-      <h4 className={styles.currentBalanceTitle}>INITIAL CURRENT BALANCE</h4>
+    <div className={styles.startingBalanceWrapper}>
+      <h4 className={styles.startingBalanceTitle}>STARTING BALANCE</h4>
       <div className={styles.cashAmountInput}>
-        <label htmlFor="cash-input" className={styles.cashAmountLabel}>Current balance amount in dollars: </label><br/>
+        <label htmlFor="cash-input" className={styles.cashAmountLabel}>Cash amount in dollars: </label><br/>
         <input id="cash-input" value={amount} type="text" 
           placeholder={cashValid ? "00.00" : "Invalid cash amount."} 
           onChange={(event) => {

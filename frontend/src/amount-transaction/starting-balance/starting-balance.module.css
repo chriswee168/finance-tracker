@@ -1,5 +1,5 @@
 /* Wrap the title, label and input for cash amount. */
-.currentBalanceWrapper
+.startingBalanceWrapper
 {
     position: absolute;
     border-radius: 10px;
@@ -8,15 +8,15 @@
     height: 130px;
 }
 
-/* Title for component prompting the initial current balance. */
-.currentBalanceTitle
+/* Title for component prompting the starting balance. */
+.startingBalanceTitle
 {
     text-align: left;
     padding-left: 10px;
     margin: 10px;
 }
 
-/* Prompts user the initial current balance to set. */
+/* Prompts user the starting balance to set. */
 .cashAmountLabel
 {
     padding-left: 2%;    
