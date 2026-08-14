@@ -28,12 +28,16 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Frontend URL for hosting FastAPI on Render.
+FRONTEND_URL = os.getenv("FRONTEND_RENDER_URL", "http://127.0.0.1:5173")
+
 # Origins to allow for Cross-Origin Resource Sharing in browser.
 origins = [
     "http://localhost:5173", # Vite development.
     "http://127.0.0.1:5173",
     "http://localhost:4173", # Vite production preview.
-    "http://127.0.0.1:4173"
+    "http://127.0.0.1:4173",
+    FRONTEND_URL
 ]
 
 # Add CORS middleware.
