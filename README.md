@@ -1,6 +1,6 @@
 # Full Stack Personal Finance Ledger App
 
-This project is a full stack local app using React, FastAPI and SQLite3 for manually tracking personal income and expenses, current balance and net income on a weekly basis.
+This project is a full stack desktop web app built using React, FastAPI and SQLite3 for manually tracking personal income and expenses, current balance and net income on a weekly basis.
 
 ### Table Of Contents
 1. [Requirements](#requirements)
