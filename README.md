@@ -2,6 +2,18 @@
 
 This project is a full stack desktop web app built using React, FastAPI and SQLite3 for manually tracking personal income and expenses, current balance and net income on a weekly basis.
 
+### Live Deployment On Render (Platform as a Service) 
+
+The frontend user interface and backend API service for this app are hosted live on Render for direct access without the need for building locally.
+
+Render links for user interface and API service is provided below:
+- **Static site for the user interface**: https://finance-tracker-ui-syk4.onrender.com/
+- **Web service for API**: https://finance-tracker-fastapi-1j8h.onrender.com/
+
+Instructions on how to use the app is provided under [Usage](#usage) starting from step 2.
+
+***Important Note: This app uses Render's free tier. Web service for API may take up to around 30 seconds or more to start up for interaction with user interface, which is indicated when the reset date and time for net income is received.***
+
 ### Table Of Contents
 1. [Requirements](#requirements)
 2. [Installation and Setup](#installation-and-setup)
