@@ -53,10 +53,6 @@ export const apiSendAmounts = (
     {
       throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
     }
-    else
-    {
-      setServerOnline(true);
-    }
   })
   .catch(
     (error) => {
