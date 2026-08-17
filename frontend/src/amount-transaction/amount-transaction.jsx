@@ -19,10 +19,12 @@ import TransactionOptions from "./transaction-options/transaction-options";
  * @param {Object} param0 
  * @param {JSX.Element[]} param0.entries List of TransactionEntry components.
  * @param {Dispatch<SetStateAction<JSX.Element[]>>} param0.setEntries Setter for entries list.
+ * @param {bool} param0.serverOnline Boolean to indicate if the backend API server is online or offline.
+ * @param {Dispatch<SetStateAction<bool>>} param0.setServerOnline Setter for serverOnline state.
  *
  * @returns Wrapper component for amount boxes and transaction box.
  */
-export default function AmountTransaction({entries, setEntries})
+export default function AmountTransaction({entries, setEntries, serverOnline, setServerOnline})
 {
   // Net income and current balance states for amount boxes.
   const [netIncomeBox, setNetIncomeBox] = useState(0.0);
@@ -136,11 +138,15 @@ export default function AmountTransaction({entries, setEntries})
   }, []);
 
   return (
-    <>
+    <div className={serverOnline ? styles.serverOnline : styles.serverOffline}>
       <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
-      <StartingBalance netIncome={netIncomeBox} setCurrentBalance={setCurrentBalanceBox}/>
+      <StartingBalance 
+        netIncome={netIncomeBox} 
+        setCurrentBalance={setCurrentBalanceBox} 
+        setServerOnline={setServerOnline}
+      />
             
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
@@ -189,7 +195,7 @@ export default function AmountTransaction({entries, setEntries})
           SUBMIT
         </button>
       </div>
-    </>
+    </div>
   )
 }
 
