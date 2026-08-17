@@ -75,6 +75,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
             {
               throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
             }
+            setServerOnline(false);
             throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
           }
           else
@@ -167,7 +168,10 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
                 setNextResetTime(getNextDate(newTimestamp));
 
                 // Record the net income and current balance in amount history on FastAPI backend.
-                apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY);
+                apiSendAmounts(
+                  tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY, 
+                  setServerOnline
+                );
                 tempNetIncomeBox = 0.0;
               }
               
@@ -186,7 +190,10 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
                   transactionOption, setCurrentBalanceBox
                 );
 
-                apiSendAmounts(newNetIncomeBox, newCurrentBalanceBox, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
+                apiSendAmounts(
+                  newNetIncomeBox, newCurrentBalanceBox, "PUT", REQUEST_URLS.CURRENT_AMOUNTS, 
+                  setServerOnline
+                );
               }
               
               submitFunc();

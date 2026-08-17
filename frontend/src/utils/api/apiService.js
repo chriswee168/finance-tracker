@@ -27,17 +27,19 @@ export async function apiSendJSON(urlPath, httpMethod, body)
  * @param {number} currentBalanceDollars Current balance in dollars.
  * @param {string} httpMethod HTTP method (POST/PUT).
  * @param {string} requestURL URL to send net income and current balance to.
+ * @param {Dispatch<SetStateAction<bool>>} setServerOnline Setter for serverOnline state.
  */
 export const apiSendAmounts = (
   netIncomeDollars, 
   currentBalanceDollars,
   httpMethod,
-  requestURL
+  requestURL,
+  setServerOnline
 ) =>
 {
   const netIncomeCents = dollarsToCents(netIncomeDollars);
   const currentBalanceCents = dollarsToCents(currentBalanceDollars);
-
+  
   apiSendJSON(
     requestURL, 
     httpMethod, 
@@ -51,8 +53,15 @@ export const apiSendAmounts = (
     {
       throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
     }
+    else
+    {
+      setServerOnline(true);
+    }
   })
   .catch(
-    (error) => console.log(error)
+    (error) => {
+      setServerOnline(false);
+      console.log(error)
+    }
   );
 }
