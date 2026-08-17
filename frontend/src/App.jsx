@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './App.module.css';
 import AmountTransaction from './amount-transaction/amount-transaction';
+import ServerStatus from './server-status/server-status';
 import TransactionHistory from './transaction-history/transaction-history';
 
 /**
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <div className={styles.appWrapper}>
+      <ServerStatus/>
       <AmountTransaction
         entries={transactionEntries} 
         setEntries={setTransactionEntries}
