@@ -75,7 +75,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
             {
               throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
             }
-            setServerOnline(false);
+            setServerOnline(false); // Lock the UI if server does not return HTTP OK.
             throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
           }
           else

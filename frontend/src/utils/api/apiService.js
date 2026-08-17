@@ -60,7 +60,7 @@ export const apiSendAmounts = (
   })
   .catch(
     (error) => {
-      setServerOnline(false);
+      setServerOnline(false); // Lock the UI if server does not return HTTP OK.
       console.log(error)
     }
   );
