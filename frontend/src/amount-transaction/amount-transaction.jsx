@@ -42,7 +42,7 @@ export default function AmountTransaction({entries, setEntries})
   const [timestamp, setTimestamp] = useState(0);
 
   // String displaying the next point in time net income will be reset for next period.
-  const [nextResetTime, setNextResetTime] = useState('');
+  const [nextResetTime, setNextResetTime] = useState('NULL DATE');
 
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
