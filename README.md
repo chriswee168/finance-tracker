@@ -10,9 +10,9 @@ Render links for user interface and API service is provided below:
 - **Static site for the user interface**: https://finance-tracker-ui-syk4.onrender.com/
 - **Web service for API**: https://finance-tracker-fastapi-1j8h.onrender.com/
 
-Instructions on how to use the app is provided under [Usage](#usage) starting from step 2.
+***Important Note: This app is hosted using Render's free tier. Web service for API may take up to around 30 seconds or more to start up for full app functionality, which will be indicated when server status turns from red to green.***
 
-***Important Note: This app uses Render's free tier. Web service for API may take up to around 30 seconds or more to start up for interaction with user interface, which is indicated when the reset date and time for net income is received.***
+Instructions on how to use the app is provided under [Usage](#usage) starting from step 2.
 
 ### Table Of Contents
 1. [Requirements](#requirements)

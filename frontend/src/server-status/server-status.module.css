@@ -1,0 +1,32 @@
+/* Styles for backend server status div. */
+.serverStatusDiv
+{
+    font-family: var(--p-font-family);
+    font-weight: bold;
+    width: 180px;
+    height: 30px;
+    text-align: center;
+    border-radius: 10px;
+    top: -35px;
+    left: 0px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: 0.5s;
+}
+
+/* If server is online. */
+.onlineStatus
+{
+    background-color: var(--green);
+    color: var(--app-back-colour);
+}
+
+/* If server is offline. */
+.offlineStatus
+{
+    background-color: var(--red);
+    color: var(--app-back-colour);
+}
