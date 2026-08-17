@@ -15,12 +15,18 @@ function App() {
   // details of previous transactions.
   const [transactionEntries, setTransactionEntries] = useState([]);
 
+  // Used to indicate whether the backend API server is online or offline as well as 
+  // to lock the app and block user input when the server is offline.
+  const [serverOnline, setServerOnline] = useState(false);
+
   return (
     <div className={styles.appWrapper}>
-      <ServerStatus/>
+      <ServerStatus serverOnline={serverOnline} setServerOnline={setServerOnline}/>
       <AmountTransaction
         entries={transactionEntries} 
         setEntries={setTransactionEntries}
+        serverOnline={serverOnline}
+        setServerOnline={setServerOnline}
       />
       <TransactionHistory 
         entries={transactionEntries} 
