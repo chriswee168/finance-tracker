@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BASE_URL } from "../utils/api/apiConfig";
 import styles from "./server-status.module.css";
 
 /**
  * Indicates if backend server is online or offline.
+ * @param {Object} param0
+ * @param {bool} param0.serverOnline Boolean to indicate if the backend API server is online or offline.
+ * @param {Dispatch<SetStateAction<bool>>} param0.setServerOnline Setter for serverOnline state.
  * 
  * @returns Server status component.
  */
-export default function ServerStatus()
+export default function ServerStatus({serverOnline, setServerOnline})
 {
-  const [serverOnline, setServerOnline] = useState(false);
-
   // Try GET request from base URL.
   useEffect(() => {
     fetch(BASE_URL)
