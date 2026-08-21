@@ -9,12 +9,14 @@ import styles from "./starting-balance.module.css";
  * @param {Object} param0 
  * @param {number} param0.netIncome Net income state in dollars.
  * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance state.
+ * @param {Dispatch<SetStateAction<bool>>} param0.setServerOnline Setter for serverOnline state.
  * 
  * @returns Starting balance component.
 */
 export default function StartingBalance({
   netIncome,
-  setCurrentBalance
+  setCurrentBalance,
+  setServerOnline
 })
 {
   const [amount, setAmount] = useState('');
@@ -37,7 +39,7 @@ export default function StartingBalance({
       setCurrentBalance(amountNum);
       // Send starting balance to FastAPI backend along with
       // existing net income for initialisation.
-      apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
+      apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.CURRENT_AMOUNTS, setServerOnline);
     }
     catch (error)
     {

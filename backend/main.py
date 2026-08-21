@@ -12,10 +12,14 @@ async def lifespan(app: FastAPI):
     create_tables()
     print("Called create_tables() function...")
 
+    # Create config directory for JSON files.
+    if not os.path.exists("config"):
+        os.makedirs("config")
+
     # Initialise the timestamp if timestamp JSON file doesn't exist.
     init_timestamp()
 
-    # Initalise cash amounts if cash amount JSON file doesn't exist.
+    # Initialise cash amounts if cash amount JSON file doesn't exist.
     init_cash_amounts()
     
     yield
@@ -24,12 +28,16 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Frontend URL for hosting FastAPI on Render.
+FRONTEND_URL = os.getenv("FRONTEND_RENDER_URL", "http://127.0.0.1:5173")
+
 # Origins to allow for Cross-Origin Resource Sharing in browser.
 origins = [
     "http://localhost:5173", # Vite development.
     "http://127.0.0.1:5173",
     "http://localhost:4173", # Vite production preview.
-    "http://127.0.0.1:4173"
+    "http://127.0.0.1:4173",
+    FRONTEND_URL
 ]
 
 # Add CORS middleware.

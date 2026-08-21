@@ -15,3 +15,17 @@
     height: 315px;
     top: 46%;
 }
+
+/* Properties to unlock UI if server is online. */
+.serverOnline
+{
+    pointer-events: all;
+    opacity: 1.0;
+}
+
+/* Properties to lock UI if server is offline.*/
+.serverOffline
+{
+    pointer-events: none;
+    opacity: 0.5;
+}
