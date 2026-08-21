@@ -76,10 +76,6 @@ npm run preview
 
 ## Usage
 
-The following image illustrates the app UI on startup. (Instructions on usage will be reliant on this image.)  
-
-![Initial page on startup.](assets/images/startup_empty.png "Initial page on startup.")
-
 1. Navigate to http://localhost:4173 using a web browser (e.g. Google Chrome, Edge, Firefox) to display the UI.
 2. Enter starting balance using the **STARTING BALANCE** widget when using the app for the first time. This amount will be displayed under *Current Balance* as shown in the image above. 
 3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in **TRANSACTION HISTORY**.
