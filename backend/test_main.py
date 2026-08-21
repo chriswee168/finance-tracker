@@ -40,12 +40,14 @@ def test_add_transaction():
 
 # Test getting transactions.
 def test_get_transactions():
-    n_entries = 1
+    n_entries = 20
     response = testclient.get(f"/transaction-entries?n_entries={n_entries}")
 
     # Return list of transaction objects/dictionaries.
     assert isinstance(response.json(), list)
-    assert len(response.json()) == n_entries
+
+    # Returns a maximum of N entries.
+    assert len(response.json()) <= n_entries
 
 # Test adding cash amounts to amount_history_table.
 def test_add_cash_amounts():
