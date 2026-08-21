@@ -20,7 +20,6 @@ def test_add_transaction():
     response = testclient.post(
         "/transaction-entries", 
         json={
-            "datetime": "01 Mar 2026, 12:00 pm",
             "type": "income",
             "desc": "Test description.",
             "amount_cents": 100
@@ -28,26 +27,38 @@ def test_add_transaction():
     )
     assert response.status_code == 201 # Created.
 
-    # Test invalid entry.
+    # Test invalid entry 1. (Amount less than zero.)
     response = testclient.post(
         "/transaction-entries", 
         json={
-            "datetime": "01 Mar 2026, 12:00 pm",
-            "type": "none",
+            "type": "expense",
             "desc": "Test description.",
             "amount_cents": -25
         }
     )
     assert response.status_code == 422 # Unprocessable entity.
 
+    # Test invalid entry 2. (Invalid transaction type.)
+    response = testclient.post(
+        "/transaction-entries", 
+        json={
+            "type": "none",
+            "desc": "Test description.",
+            "amount_cents": 10
+        }
+    )
+    assert response.status_code == 422 # Unprocessable entity.
+
 # Test getting transactions.
 def test_get_transactions():
-    n_entries = 1
+    n_entries = 20
     response = testclient.get(f"/transaction-entries?n_entries={n_entries}")
 
     # Return list of transaction objects/dictionaries.
     assert isinstance(response.json(), list)
-    assert len(response.json()) == n_entries
+
+    # Returns a maximum of N entries.
+    assert len(response.json()) <= n_entries
 
 # Test adding cash amounts to amount_history_table.
 def test_add_cash_amounts():
