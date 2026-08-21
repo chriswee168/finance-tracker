@@ -20,7 +20,6 @@ def test_add_transaction():
     response = testclient.post(
         "/transaction-entries", 
         json={
-            "datetime": "01 Mar 2026, 12:00 pm",
             "type": "income",
             "desc": "Test description.",
             "amount_cents": 100
@@ -32,7 +31,6 @@ def test_add_transaction():
     response = testclient.post(
         "/transaction-entries", 
         json={
-            "datetime": "01 Mar 2026, 12:00 pm",
             "type": "none",
             "desc": "Test description.",
             "amount_cents": -25
