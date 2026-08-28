@@ -25,7 +25,10 @@ def create_tables():
         "   entry_timestamp INT DEFAULT (strftime('%s', 'now'))," \
         "   transaction_type VARCHAR(7)," \
         "   transaction_desc TEXT," \
-        "   amount_cents INT" \
+        "   amount_cents INT," \
+        "   amount_history_id INT," \
+        
+        "   FOREIGN KEY (amount_history_id) REFERENCES amount_history_table(entry_id) ON DELETE CASCADE"
         ")"
     )
 
