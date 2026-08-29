@@ -13,20 +13,20 @@ def create_tables():
     # amount_history_table: record the net income and current balance overtime.
     # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
-        "CREATE TABLE IF NOT EXISTS amount_history_table(" \
-        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT," \
-        "   entry_timestamp INT DEFAULT (strftime('%s', 'now'))," \
-        "   net_income_cents INT," \
-        "   current_balance_cents INT" \
+        "CREATE TABLE IF NOT EXISTS amount_history_table("
+        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "   entry_timestamp INT DEFAULT (strftime('%s', 'now')),"
+        "   net_income_cents INT,"
+        "   current_balance_cents INT"
         ");"
 
-        "CREATE TABLE IF NOT EXISTS transaction_table(" \
-        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT," \
-        "   entry_timestamp INT DEFAULT (strftime('%s', 'now'))," \
-        "   transaction_type VARCHAR(7)," \
-        "   transaction_desc TEXT," \
-        "   amount_cents INT," \
-        "   amount_history_id INT," \
+        "CREATE TABLE IF NOT EXISTS transaction_table("
+        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "   entry_timestamp INT DEFAULT (strftime('%s', 'now')),"
+        "   transaction_type VARCHAR(7),"
+        "   transaction_desc TEXT,"
+        "   amount_cents INT,"
+        "   amount_history_id INT,"
         
         "   FOREIGN KEY (amount_history_id) REFERENCES amount_history_table(entry_id) ON DELETE CASCADE"
         ")"
