@@ -1,7 +1,7 @@
 import sqlite3, time
 from constants import *
 
-def get_latest_timestamp(cursor: sqlite3.Cursor):
+def get_latest_timestamp(cursor: sqlite3.Cursor) -> int:
     """
     Get timestamp epoch of latest amount_history_table entry.
     """
@@ -9,7 +9,7 @@ def get_latest_timestamp(cursor: sqlite3.Cursor):
     prev_epoch = cursor.fetchone()[0]
     return prev_epoch
     
-def exceeded_timestamp_interval(cursor: sqlite3.Cursor):
+def exceeded_timestamp_interval(cursor: sqlite3.Cursor) -> bool:
     '''
     Determine if timestamp interval has been exceeded.
     '''
