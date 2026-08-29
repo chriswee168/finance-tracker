@@ -34,4 +34,15 @@ def create_tables():
 
     cursor.executescript(create_tables_query)
     conn.commit()
+
+    # Initialise first amount history entry if table created.
+    cursor.execute("SELECT * FROM amount_history_table")
+    n_amount_history_entries = len(cursor.fetchall())
+    if n_amount_history_entries == 0:
+        cursor.execute((
+            "INSERT INTO amount_history_table (net_income_cents, current_balance_cents) "
+            "VALUES (0, 0)"
+        ))
+
+    conn.commit()        
     conn.close()
