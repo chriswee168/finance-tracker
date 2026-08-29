@@ -9,6 +9,22 @@ def append_amount_history_entry(cursor: sqlite3.Cursor, timestamp: int):
         "INSERT INTO amount_history_table (entry_timestamp, net_income_cents, current_balance_cents) "
         "VALUES (?, 0, 0)", (timestamp,)
     ))
+
+def set_amount_history_entry(
+    cursor: sqlite3.Cursor, 
+    new_net_income_cents: int,
+    new_current_balance_cents: int,
+    entry_id: int
+):
+    """
+    Set new values for an amount history table entry.
+    """
+    cursor.execute((
+        "UPDATE amount_history_table "
+        "SET net_income_cents = ?,"
+        "current_balance_cents = ? "
+        "WHERE entry_id = ?"
+    ), (new_net_income_cents, new_current_balance_cents, entry_id))
     
 def get_latest_amount_history(cursor: sqlite3.Cursor) -> tuple:
     """
