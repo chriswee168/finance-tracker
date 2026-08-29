@@ -1,5 +1,5 @@
 import sqlite3, time
-from constants import *
+from utils.constants import *
 
 def get_latest_timestamp(cursor: sqlite3.Cursor) -> int:
     """
