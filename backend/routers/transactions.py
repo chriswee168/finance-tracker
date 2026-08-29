@@ -4,6 +4,8 @@ from typing import Literal
 import sqlite3
 from datetime import datetime
 from utils.constants import *
+from utils.timestamp_funcs import *
+from utils.amount_history_funcs import *
 
 route = APIRouter()
 
@@ -21,15 +23,24 @@ def add_transaction(transaction: Transaction):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
+    # Check if current timestamp has exceeded interval since previous one.
+    if exceeded_timestamp_interval(cursor):
+        # Create new amount_history_table entry.
+        latest_timestamp = get_latest_timestamp(cursor)
+        new_timestamp = latest_timestamp + TIMESTAMP_INTERVAL_SECS
+        append_amount_history_entry(cursor, new_timestamp)
+
+    latest_id = get_latest_amount_history_id(cursor)
+
     add_transaction_query = (
         "INSERT INTO transaction_table "
-        "(transaction_type, transaction_desc, amount_cents) "
-        "VALUES (?, ?, ?)"
+        "(transaction_type, transaction_desc, amount_cents, amount_history_id) "
+        "VALUES (?, ?, ?, ?)"
     )
     
     cursor.execute(
         add_transaction_query, 
-        (transaction.type, transaction.desc, transaction.amount_cents)
+        (transaction.type, transaction.desc, transaction.amount_cents, latest_id)
     )
 
     latest_entry_id = cursor.lastrowid # Get ID of newly added transaction entry.
