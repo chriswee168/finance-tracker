@@ -30,7 +30,8 @@ def add_transaction(transaction: Transaction):
         new_timestamp = latest_timestamp + TIMESTAMP_INTERVAL_SECS
         append_amount_history_entry(cursor, new_timestamp)
 
-    latest_id = get_latest_amount_history_id(cursor)
+    amount_history_entry = get_latest_amount_history(cursor)
+    amount_history_id = amount_history_entry[0]
 
     add_transaction_query = (
         "INSERT INTO transaction_table "
@@ -40,7 +41,7 @@ def add_transaction(transaction: Transaction):
     
     cursor.execute(
         add_transaction_query, 
-        (transaction.type, transaction.desc, transaction.amount_cents, latest_id)
+        (transaction.type, transaction.desc, transaction.amount_cents, amount_history_id)
     )
 
     latest_entry_id = cursor.lastrowid # Get ID of newly added transaction entry.

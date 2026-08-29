@@ -10,10 +10,10 @@ def append_amount_history_entry(cursor: sqlite3.Cursor, timestamp: int):
         "VALUES (?, 0, 0)", (timestamp,)
     ))
     
-def get_latest_amount_history_id(cursor: sqlite3.Cursor) -> int:
+def get_latest_amount_history(cursor: sqlite3.Cursor) -> tuple:
     """
     Get latest amount_history_table entry ID.
     """
-    cursor.execute("SELECT entry_id FROM amount_history_table ORDER BY entry_id DESC LIMIT 1")
-    latest_id = cursor.fetchone()[0]
-    return latest_id
+    cursor.execute("SELECT * FROM amount_history_table ORDER BY entry_id DESC LIMIT 1")
+    latest_entry = cursor.fetchone()
+    return latest_entry
