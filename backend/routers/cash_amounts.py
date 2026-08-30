@@ -42,10 +42,14 @@ def set_latest_cash_amounts(cash_amounts: CashAmounts):
         "current_balance_cents": latest_entry[3]
     }
 
-# Get the current net income and current balance from JSON config.
-@route.get("/current-cash-amounts", status_code=status.HTTP_200_OK)
-def get_current_cash_amounts():
-    with open(CASH_AMOUNT_CONFIG_PATH, "r") as f:
-        amount_data = json.load(f)
+# Get the net income and current balance from latest amount_history_table entry.
+@route.get("/latest-cash-amounts", status_code=status.HTTP_200_OK)
+def get_latest_cash_amounts():
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
+    cursor = conn.cursor()
+    latest_entry = get_latest_amount_history(cursor)
     
-    return amount_data
+    return {
+        "net_income_cents": latest_entry[2], 
+        "current_balance_cents": latest_entry[3]
+    }
