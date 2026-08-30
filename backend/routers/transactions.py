@@ -23,13 +23,6 @@ def add_transaction(transaction: Transaction):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
-    # Check if current timestamp has exceeded interval since previous one.
-    if exceeded_timestamp_interval(cursor):
-        # Create new amount_history_table entry.
-        latest_timestamp = get_latest_timestamp(cursor)
-        new_timestamp = latest_timestamp + TIMESTAMP_INTERVAL_SECS
-        append_amount_history_entry(cursor, new_timestamp)
-
     amount_history_entry = get_latest_amount_history(cursor)
     amount_history_id = amount_history_entry[0]
 
