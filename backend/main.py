@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from routers import cash_amounts, transactions
+from routers import cash_amounts, transactions, timestamp
 from fastapi.middleware.cors import CORSMiddleware
 from utils.create_tables import create_tables
 from utils.init_json_configs import *
@@ -57,3 +57,4 @@ def get_api_status():
 # Link all routers.
 app.include_router(cash_amounts.route)
 app.include_router(transactions.route)
+app.include_router(timestamp.route)
