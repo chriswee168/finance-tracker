@@ -42,23 +42,6 @@ def set_latest_cash_amounts(cash_amounts: CashAmounts):
         "current_balance_cents": latest_entry[3]
     }
 
-# Save the current net income and current balance to JSON config.
-@route.put("/current-cash-amounts", status_code=status.HTTP_204_NO_CONTENT)
-def save_current_cash_amounts(cash_amounts: CashAmounts):
-    with open(CASH_AMOUNT_CONFIG_PATH, "w") as f:
-        json.dump({
-            "net_income_cents": cash_amounts.net_income_cents,
-            "current_balance_cents": cash_amounts.current_balance_cents
-        }, f, indent=4)
-    
-    print((
-        "Save current cash amounts:\n"
-        f"Net income cents: {cash_amounts.net_income_cents}\n"
-        f"Current balance cents: {cash_amounts.current_balance_cents}"
-    ))
-    
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-
 # Get the current net income and current balance from JSON config.
 @route.get("/current-cash-amounts", status_code=status.HTTP_200_OK)
 def get_current_cash_amounts():
