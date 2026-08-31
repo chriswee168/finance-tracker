@@ -3,8 +3,7 @@ import { addToHistoryList } from "../transaction-history/transaction-history-hel
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
-import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
-import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
+import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL } from "../utils/constants";
 import twoNumOp from "../utils/twoNumOp";
 import AmountBox from "./amount-box/amount-box";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
@@ -105,12 +104,10 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
 
   // Synchronize timestamp.
   useEffect(() => {
-    fetch(REQUEST_URLS.TIMESTAMP)
+    fetch(REQUEST_URLS.TIMESTAMP, {method: "POST"})
       .then(response => response.json())
       .then(
-        (data) => {
-          setNextResetTime(getNextDate(data.timestamp));
-        }
+        (data) => { setNextResetTime(secsToDate(data.timestamp)); }
       )
       .catch(
         error => console.log(error)
@@ -119,7 +116,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
 
   // Synchronize net income and current balance amounts from persistent JSON data.
   useEffect(() => {
-    fetch(REQUEST_URLS.CURRENT_AMOUNTS)
+    fetch(REQUEST_URLS.LATEST_AMOUNTS)
       .then(response => response.json())
       .then(
         (data) => {

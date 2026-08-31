@@ -39,7 +39,7 @@ export default function StartingBalance({
       setCurrentBalance(amountNum);
       // Send starting balance to FastAPI backend along with
       // existing net income for initialisation.
-      apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.CURRENT_AMOUNTS, setServerOnline);
+      apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.LATEST_AMOUNTS, setServerOnline);
     }
     catch (error)
     {
