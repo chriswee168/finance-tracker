@@ -39,10 +39,6 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
   // Used to control what placeholder text should be displayed for cash input box.
   const [cashValid, setCashValid] = useState(true);
 
-  // Timestamp state for refreshing the net income periodically and saving
-  // data.
-  const [timestamp, setTimestamp] = useState(0);
-
   // String displaying the next point in time net income will be reset for next period.
   const [nextResetTime, setNextResetTime] = useState('NULL DATE');
 
@@ -114,7 +110,6 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
       .then(
         (data) => {
           setNextResetTime(getNextDate(data.timestamp));
-          setTimestamp(data.timestamp);
         }
       )
       .catch(
@@ -161,19 +156,6 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
             () => {
               // Update the epoch timestamp on FastAPI backend and reset net income to zero.
               let tempNetIncomeBox = netIncomeBox;
-              if (currentEpochSecsExceeded(timestamp))
-              {
-                // Get the next day and time.
-                const newTimestamp = incrementTimestamp(timestamp, setTimestamp);
-                setNextResetTime(getNextDate(newTimestamp));
-
-                // Record the net income and current balance in amount history on FastAPI backend.
-                apiSendAmounts(
-                  tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY, 
-                  setServerOnline
-                );
-                tempNetIncomeBox = 0.0;
-              }
               
               const transactionAmount = Number(cashAmount);
 
@@ -222,23 +204,6 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
   const newAmount = twoNumOp(initialAmount, transactionAmount, transactionOption, CASH_DP);
   setStateFunc(newAmount);
   return newAmount;
-}
-
-/**
- * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
- * 
- * @param {number} timestamp Current epoch timestamp in seconds.
- * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
- * 
- * @returns New epoch timestamp.
- */
-const incrementTimestamp = (timestamp, setTimestamp) =>
-{
-  const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
-  setTimestamp(newTimestamp);
-  apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
-
-  return newTimestamp;
 }
 
 /**
