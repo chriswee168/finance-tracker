@@ -213,10 +213,9 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
  * 
  * @returns Day and time as string.
  */
-const getNextDate = (timestamp) =>
+const secsToDate = (timestamp) =>
 {
-  const nextEpoch = timestamp + TIMESTAMP_INTERVAL_SECS;
-  const date = new Date(Math.round(nextEpoch * 1000));
+  const date = new Date(Math.round(timestamp * 1000));
   const day = date.toLocaleDateString("en-AU", { weekday: "short" });
   const time = date.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   return `${day} ${time}`;
