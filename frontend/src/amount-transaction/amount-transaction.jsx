@@ -207,23 +207,6 @@ const updateAmount = (initialAmount, transactionAmount, transactionOption, setSt
 }
 
 /**
- * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
- * 
- * @param {number} timestamp Current epoch timestamp in seconds.
- * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
- * 
- * @returns New epoch timestamp.
- */
-const incrementTimestamp = (timestamp, setTimestamp) =>
-{
-  const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
-  setTimestamp(newTimestamp);
-  apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
-
-  return newTimestamp;
-}
-
-/**
  * Get the day and time in the future when net income will reset for the next period.
  * 
  * @param {number} timestamp Epoch time in seconds.
