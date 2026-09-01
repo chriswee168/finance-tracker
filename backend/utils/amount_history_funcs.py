@@ -5,10 +5,13 @@ def append_amount_history_entry(cursor: sqlite3.Cursor, timestamp: int, current_
     """
     Append new amount history entry with specified timestamp.
     """
-    cursor.execute((
-        "INSERT INTO amount_history_table (entry_timestamp, net_income_cents, current_balance_cents) "
-        "VALUES (?, 0, ?)", (timestamp, current_balance_cents)
-    ))
+    cursor.execute(
+        (
+            "INSERT INTO amount_history_table (entry_timestamp, net_income_cents, current_balance_cents) "
+            "VALUES (?, 0, ?)"
+        ), 
+        (timestamp, current_balance_cents)
+    )
 
 def set_amount_history_entry(
     cursor: sqlite3.Cursor, 

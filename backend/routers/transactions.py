@@ -23,6 +23,7 @@ def add_transaction(transaction: Transaction):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
+    latest_timestamp = timestamp_update(cursor, conn)
     amount_history_entry = get_latest_amount_history(cursor)
     amount_history_id = amount_history_entry[0]
 
@@ -79,6 +80,7 @@ def add_transaction(transaction: Transaction):
         "entry_datetime": datetime_str, 
         "net_income_cents": new_net_income_cents, 
         "current_balance_cents": new_current_balance_cents,
+        "timestamp": latest_timestamp
     }
 
 # Obtain the latest N transaction entries.

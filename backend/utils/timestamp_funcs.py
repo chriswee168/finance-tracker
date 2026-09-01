@@ -1,4 +1,5 @@
 import sqlite3, time
+from utils.amount_history_funcs import append_amount_history_entry, get_latest_amount_history
 from utils.constants import *
 
 def get_latest_timestamp(cursor: sqlite3.Cursor) -> int:
@@ -20,3 +21,19 @@ def exceeded_timestamp_interval(cursor: sqlite3.Cursor) -> bool:
         return True
     else:
         return False
+
+def timestamp_update(cursor: sqlite3.Cursor, conn: sqlite3.Connection) -> int:
+    '''
+    Create new amount history entry if interval from last timestamp exceeded.
+    '''
+    if exceeded_timestamp_interval(cursor):
+        # Create new amount_history_table entry.
+        latest_amount_entry = get_latest_amount_history(cursor)
+        latest_timestamp = latest_amount_entry[1]
+        new_timestamp = latest_timestamp + TIMESTAMP_INTERVAL_SECS
+        append_amount_history_entry(cursor, new_timestamp, latest_amount_entry[3])
+        conn.commit()
+    
+    latest_timestamp = get_latest_timestamp(cursor)
+
+    return latest_timestamp
