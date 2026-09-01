@@ -26,7 +26,7 @@ export default function ServerStatus({serverOnline, setServerOnline})
         }
       }
     );
-  }, []);
+  }, [setServerOnline]);
 
   return (
     <div className={`${styles.serverStatusDiv} ${serverOnline ? styles.onlineStatus : styles.offlineStatus}`}>
