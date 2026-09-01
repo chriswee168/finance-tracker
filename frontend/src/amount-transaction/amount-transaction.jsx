@@ -48,7 +48,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
       let cashAmountNum = Number(cashAmount);
       if (isNaN(cashAmountNum))
       {
-        throw new Error("Invalid cash amount.");
+        throw new TypeError("Invalid cash amount.");
       }
 
       // Cash amount dollars to cents.
@@ -67,9 +67,8 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
           {
             if (response.status == 422)
             {
-              throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+              throw new RangeError(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
             }
-            setServerOnline(false); // Lock the UI if server does not return HTTP OK.
             throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
           }
           else
@@ -88,17 +87,26 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
             setCurrentBalanceBox(current_balance_dollars);
           }
         })
-        .catch(
-          (error) => {
-            console.log(error);
+        .catch((error) => {
+          if (error instanceof TypeError)
+          {
+            setServerOnline(false);
+          }
+          else if (error instanceof RangeError)
+          {
             setCashValid(false);
           }
-        );
+          console.log(error);
+
+        });
     }
     catch (error)
     {
+      if (error instanceof TypeError)
+      {
+        setCashValid(false);
+      }
       console.log(error);
-      setCashValid(false);
     }
 
     // Reset transaction box states.

@@ -33,7 +33,7 @@ export default function StartingBalance({
       const amountNum = Number(amount);
       if (isNaN(amountNum))
       {
-        throw new Error("Invalid cash amount.");
+        throw new TypeError("Invalid cash amount.");
       }
 
       const netIncomeCents = dollarsToCents(netIncome);
@@ -67,8 +67,11 @@ export default function StartingBalance({
     }
     catch (error)
     {
+      if (error instanceof TypeError)
+      {
+        setCashValid(false);
+      }
       console.log(error);
-      setCashValid(false);
     }
 
     // Clear user input.
