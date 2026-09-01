@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
-import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
+import { apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
-import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL } from "../utils/constants";
-import twoNumOp from "../utils/twoNumOp";
+import { CURRENT_BALANCE_LABEL, NET_INCOME_LABEL } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
@@ -49,7 +48,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
       let cashAmountNum = Number(cashAmount);
       if (isNaN(cashAmountNum))
       {
-        throw new Error("Invalid cash amount.");
+        throw new TypeError("Invalid cash amount.");
       }
 
       // Cash amount dollars to cents.
@@ -68,9 +67,8 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
           {
             if (response.status == 422)
             {
-              throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+              throw new RangeError(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
             }
-            setServerOnline(false); // Lock the UI if server does not return HTTP OK.
             throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
           }
           else
@@ -81,19 +79,34 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
             addToHistoryList(entries, setEntries, 
               {"entry_id": data.entry_id, "datetime": data.entry_datetime, ...transactionObj}
             );
+
+            // Set the new net income and current balance amounts returned from backend server.
+            const net_income_dollars = centsToDollars(data.net_income_cents);
+            const current_balance_dollars = centsToDollars(data.current_balance_cents);
+            setNetIncomeBox(net_income_dollars);
+            setCurrentBalanceBox(current_balance_dollars);
           }
         })
-        .catch(
-          (error) => {
-            console.log(error);
+        .catch((error) => {
+          if (error instanceof TypeError)
+          {
+            setServerOnline(false);
+          }
+          else if (error instanceof RangeError)
+          {
             setCashValid(false);
           }
-        );
+          console.log(error);
+
+        });
     }
     catch (error)
     {
+      if (error instanceof TypeError)
+      {
+        setCashValid(false);
+      }
       console.log(error);
-      setCashValid(false);
     }
 
     // Reset transaction box states.
@@ -114,7 +127,8 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
       );
   }, []);
 
-  // Synchronize net income and current balance amounts from persistent JSON data.
+  // Synchronize net income and current balance amounts from latest entry in the amount_history_table SQL
+  // table from the backend server.
   useEffect(() => {
     fetch(REQUEST_URLS.LATEST_AMOUNTS)
       .then(response => response.json())
@@ -148,59 +162,10 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
         <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} valid={cashValid} setValid={setCashValid}/>
         <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
       
-        <button
-          onClick={
-            () => {
-              // Update the epoch timestamp on FastAPI backend and reset net income to zero.
-              let tempNetIncomeBox = netIncomeBox;
-              
-              const transactionAmount = Number(cashAmount);
-
-              // Transaction cash amount must be larger than zero.
-              if (transactionAmount > 0)
-              {
-                // Obtain the new net income and current balance and save to FastAPI backend.
-                const newNetIncomeBox = updateAmount(
-                  tempNetIncomeBox, transactionAmount,
-                  transactionOption, setNetIncomeBox
-                );
-                const newCurrentBalanceBox = updateAmount(
-                  currentBalanceBox, transactionAmount,
-                  transactionOption, setCurrentBalanceBox
-                );
-
-                apiSendAmounts(
-                  newNetIncomeBox, newCurrentBalanceBox, "PUT", REQUEST_URLS.CURRENT_AMOUNTS, 
-                  setServerOnline
-                );
-              }
-              
-              submitFunc();
-            }
-          }>
-          SUBMIT
-        </button>
+        <button onClick={() => submitFunc()}>SUBMIT</button>
       </div>
     </div>
   )
-}
-
-/**
- * Function to update the net income and current balance in real time as transactions
- * are entered.
- * 
- * @param {number} initialAmount Initial cash amount.
- * @param {number} transactionAmount Transaction cash amount.
- * @param {string} transactionOption Transaction option (income/expense).
- * @param {Dispatch<SetStateAction<number>>} setStateFunc Setter for cash amount state.
- * 
- * @returns New cash amount number.
- */
-const updateAmount = (initialAmount, transactionAmount, transactionOption, setStateFunc) =>
-{
-  const newAmount = twoNumOp(initialAmount, transactionAmount, transactionOption, CASH_DP);
-  setStateFunc(newAmount);
-  return newAmount;
 }
 
 /**
