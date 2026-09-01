@@ -169,24 +169,6 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
 }
 
 /**
- * Function to update the net income and current balance in real time as transactions
- * are entered.
- * 
- * @param {number} initialAmount Initial cash amount.
- * @param {number} transactionAmount Transaction cash amount.
- * @param {string} transactionOption Transaction option (income/expense).
- * @param {Dispatch<SetStateAction<number>>} setStateFunc Setter for cash amount state.
- * 
- * @returns New cash amount number.
- */
-const updateAmount = (initialAmount, transactionAmount, transactionOption, setStateFunc) =>
-{
-  const newAmount = twoNumOp(initialAmount, transactionAmount, transactionOption, CASH_DP);
-  setStateFunc(newAmount);
-  return newAmount;
-}
-
-/**
  * Get the day and time in the future when net income will reset for the next period.
  * 
  * @param {number} timestamp Epoch time in seconds.
