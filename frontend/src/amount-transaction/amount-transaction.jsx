@@ -45,6 +45,11 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
   {
     try
     {
+
+      // Refresh timestamp and create new SQL entry for net income and current balance
+      // if required.
+      updateTimestamp();
+
       let cashAmountNum = Number(cashAmount);
       if (isNaN(cashAmountNum))
       {
@@ -115,17 +120,22 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
     setTransactionDesc('');
   }
 
-  // Synchronize timestamp.
-  useEffect(() => {
+  // Check if the interval since last timestamp was exceeded and create 
+  // a new entry for storing net income and current balance.
+  const updateTimestamp = () =>
+  {
     fetch(REQUEST_URLS.TIMESTAMP, {method: "POST"})
       .then(response => response.json())
       .then(
-        (data) => { setNextResetTime(secsToDate(data.timestamp)); }
+        data => setNextResetTime(secsToDate(data.timestamp))
       )
       .catch(
         error => console.log(error)
       );
-  }, []);
+  }
+
+  // Synchronize timestamp.
+  useEffect(() => updateTimestamp(), []);
 
   // Synchronize net income and current balance amounts from latest entry in the amount_history_table SQL
   // table from the backend server.
