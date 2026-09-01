@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { REQUEST_URLS } from "../../utils/api/apiConfig";
-import { apiSendAmounts } from "../../utils/api/apiService";
+import { apiSendJSON } from "../../utils/api/apiService";
+import { centsToDollars, dollarsToCents } from "../../utils/cashUnitConversion";
 import styles from "./starting-balance.module.css";
 
 /**
@@ -35,11 +36,34 @@ export default function StartingBalance({
         throw new Error("Invalid cash amount.");
       }
 
-      // Set the starting balance.
-      setCurrentBalance(amountNum);
-      // Send starting balance to FastAPI backend along with
-      // existing net income for initialisation.
-      apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.LATEST_AMOUNTS, setServerOnline);
+      const netIncomeCents = dollarsToCents(netIncome);
+      const currentBalanceCents = dollarsToCents(amountNum);
+      
+      // Pass net income and current balance as cents to backend.
+      apiSendJSON(
+        REQUEST_URLS.LATEST_AMOUNTS, 
+        "PUT", 
+        {
+          net_income_cents: netIncomeCents,
+          current_balance_cents: currentBalanceCents
+        }
+      )
+      .then((response) => {
+        if (!response.ok)
+        {
+          throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
+        }
+        return response.json()
+      })
+      .then((data) => {
+        setCurrentBalance(centsToDollars(data.current_balance_cents)); // Set new current balance.
+      })
+      .catch(
+        (error) => {
+          setServerOnline(false); // Lock the UI if server does not return HTTP OK.
+          console.log(error)
+        }
+      );
     }
     catch (error)
     {
