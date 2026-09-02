@@ -1,27 +1,17 @@
-from fastapi import APIRouter, status, Response
-from pydantic import BaseModel
-import os, json, time
+import sqlite3
+from fastapi import APIRouter, status
+from utils.amount_history_funcs import *
 from utils.constants import *
+from utils.timestamp_funcs import *
 
 route = APIRouter()
 
-class EpochTime(BaseModel):
-    secs: int
-
-# Save the current timestamp to JSON config.
-@route.put("/utc-epoch-timestamp", status_code=status.HTTP_204_NO_CONTENT)
-def save_timestamp(epoch_time: EpochTime):
-    with open(TIMESTAMP_CONFIG_PATH, "w") as f:
-        json.dump({"timestamp": int(time.time())}, f, indent=4)
-    
-    print(f"Epoch time (secs): {epoch_time.secs}")
-    
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-# Get the timestamp from JSON config.
-@route.get("/utc-epoch-timestamp", status_code=status.HTTP_200_OK)
+# Get the latest timestamp from latest amount history entry.
+@route.post("/utc-epoch-timestamp", status_code=status.HTTP_200_OK)
 def get_timestamp():
-    with open(TIMESTAMP_CONFIG_PATH, "r") as f:
-        timestamp_data = json.load(f)
-    
-    return timestamp_data
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
+    cursor = conn.cursor()
+    latest_timestamp = timestamp_update(cursor, conn)
+    conn.close()
+
+    return {"timestamp": latest_timestamp}
