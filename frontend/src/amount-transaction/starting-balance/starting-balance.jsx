@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { REQUEST_URLS } from "../../utils/api/apiConfig";
-import { apiSendAmounts } from "../../utils/api/apiService";
+import { apiSendJSON } from "../../utils/api/apiService";
+import { centsToDollars, dollarsToCents } from "../../utils/cashUnitConversion";
 import styles from "./starting-balance.module.css";
 
 /**
@@ -9,12 +10,14 @@ import styles from "./starting-balance.module.css";
  * @param {Object} param0 
  * @param {number} param0.netIncome Net income state in dollars.
  * @param {Dispatch<SetStateAction<number>>} param0.setCurrentBalance Setter for current balance state.
+ * @param {Dispatch<SetStateAction<bool>>} param0.setServerOnline Setter for serverOnline state.
  * 
  * @returns Starting balance component.
 */
 export default function StartingBalance({
   netIncome,
-  setCurrentBalance
+  setCurrentBalance,
+  setServerOnline
 })
 {
   const [amount, setAmount] = useState('');
@@ -30,19 +33,45 @@ export default function StartingBalance({
       const amountNum = Number(amount);
       if (isNaN(amountNum))
       {
-        throw new Error("Invalid cash amount.");
+        throw new TypeError("Invalid cash amount.");
       }
 
-      // Set the starting balance.
-      setCurrentBalance(amountNum);
-      // Send starting balance to FastAPI backend along with
-      // existing net income for initialisation.
-      apiSendAmounts(netIncome, amountNum, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
+      const netIncomeCents = dollarsToCents(netIncome);
+      const currentBalanceCents = dollarsToCents(amountNum);
+      
+      // Pass net income and current balance as cents to backend.
+      apiSendJSON(
+        REQUEST_URLS.LATEST_AMOUNTS, 
+        "PUT", 
+        {
+          net_income_cents: netIncomeCents,
+          current_balance_cents: currentBalanceCents
+        }
+      )
+      .then((response) => {
+        if (!response.ok)
+        {
+          throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
+        }
+        return response.json()
+      })
+      .then((data) => {
+        setCurrentBalance(centsToDollars(data.current_balance_cents)); // Set new current balance.
+      })
+      .catch(
+        (error) => {
+          setServerOnline(false); // Lock the UI if server does not return HTTP OK.
+          console.log(error)
+        }
+      );
     }
     catch (error)
     {
+      if (error instanceof TypeError)
+      {
+        setCashValid(false);
+      }
       console.log(error);
-      setCashValid(false);
     }
 
     // Clear user input.

@@ -1,9 +1,11 @@
-from fastapi import APIRouter, status, Response
+from fastapi import APIRouter, status
 from pydantic import BaseModel, Field
 from typing import Literal
 import sqlite3
 from datetime import datetime
 from utils.constants import *
+from utils.timestamp_funcs import *
+from utils.amount_history_funcs import *
 
 route = APIRouter()
 
@@ -21,25 +23,47 @@ def add_transaction(transaction: Transaction):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
 
+    latest_timestamp = timestamp_update(cursor, conn)
+    amount_history_entry = get_latest_amount_history(cursor)
+    amount_history_id = amount_history_entry[0]
+
     add_transaction_query = (
         "INSERT INTO transaction_table "
-        "(transaction_type, transaction_desc, amount_cents) "
-        "VALUES (?, ?, ?)"
+        "(transaction_type, transaction_desc, amount_cents, amount_history_id) "
+        "VALUES (?, ?, ?, ?)"
     )
     
     cursor.execute(
         add_transaction_query, 
-        (transaction.type, transaction.desc, transaction.amount_cents)
+        (transaction.type, transaction.desc, transaction.amount_cents, amount_history_id)
     )
 
     latest_entry_id = cursor.lastrowid # Get ID of newly added transaction entry.
     conn.commit()
 
+    # Get latest transaction entry ID and timestamp.
     get_timestamp_query = "SELECT entry_timestamp FROM transaction_table ORDER BY entry_id DESC LIMIT 1"
     cursor.execute(get_timestamp_query)
     timestamp = cursor.fetchone()[0]
     datetime_str = datetime.fromtimestamp(timestamp).strftime("%d/%b/%Y %I:%M:%S%p")
-    
+
+    # Update net income and current balance in latest amount history entry.
+    if transaction.type == "income":
+        transaction_cents = transaction.amount_cents
+    else:
+        transaction_cents = -transaction.amount_cents
+
+    new_net_income_cents = amount_history_entry[2] + transaction_cents
+    new_current_balance_cents = amount_history_entry[3] + transaction_cents
+
+    set_amount_history_entry(
+        cursor, 
+        new_net_income_cents, 
+        new_current_balance_cents,
+        amount_history_id
+    )
+
+    conn.commit()
     conn.close()
 
     print((
@@ -51,7 +75,13 @@ def add_transaction(transaction: Transaction):
         f"Cash amount (cents): {transaction.amount_cents}"
     ))
 
-    return {"entry_id": latest_entry_id, "entry_datetime": datetime_str}
+    return {
+        "entry_id": latest_entry_id, 
+        "entry_datetime": datetime_str, 
+        "net_income_cents": new_net_income_cents, 
+        "current_balance_cents": new_current_balance_cents,
+        "timestamp": latest_timestamp
+    }
 
 # Obtain the latest N transaction entries.
 @route.get("/transaction-entries", status_code=status.HTTP_200_OK)

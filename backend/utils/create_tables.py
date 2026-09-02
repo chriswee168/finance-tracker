@@ -13,22 +13,36 @@ def create_tables():
     # amount_history_table: record the net income and current balance overtime.
     # transaction_table: record all transactions (income/expenses) entered by user.
     create_tables_query = (
-        "CREATE TABLE IF NOT EXISTS amount_history_table(" \
-        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT," \
-        "   entry_timestamp INT DEFAULT (strftime('%s', 'now'))," \
-        "   net_income_cents INT," \
-        "   current_balance_cents INT" \
+        "CREATE TABLE IF NOT EXISTS amount_history_table("
+        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "   entry_timestamp INT DEFAULT (strftime('%s', 'now')),"
+        "   net_income_cents INT,"
+        "   current_balance_cents INT"
         ");"
 
-        "CREATE TABLE IF NOT EXISTS transaction_table(" \
-        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT," \
-        "   entry_timestamp INT DEFAULT (strftime('%s', 'now'))," \
-        "   transaction_type VARCHAR(7)," \
-        "   transaction_desc TEXT," \
-        "   amount_cents INT" \
+        "CREATE TABLE IF NOT EXISTS transaction_table("
+        "   entry_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "   entry_timestamp INT DEFAULT (strftime('%s', 'now')),"
+        "   transaction_type VARCHAR(7),"
+        "   transaction_desc TEXT,"
+        "   amount_cents INT,"
+        "   amount_history_id INT,"
+        
+        "   FOREIGN KEY (amount_history_id) REFERENCES amount_history_table(entry_id) ON DELETE CASCADE"
         ")"
     )
 
     cursor.executescript(create_tables_query)
     conn.commit()
+
+    # Initialise first amount history entry if table created.
+    cursor.execute("SELECT * FROM amount_history_table")
+    n_amount_history_entries = len(cursor.fetchall())
+    if n_amount_history_entries == 0:
+        cursor.execute((
+            "INSERT INTO amount_history_table (net_income_cents, current_balance_cents) "
+            "VALUES (0, 0)"
+        ))
+
+    conn.commit()        
     conn.close()

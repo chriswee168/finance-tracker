@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
-import { apiSendAmounts, apiSendJSON } from "../utils/api/apiService";
+import { apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
-import { CASH_DP, CURRENT_BALANCE_LABEL, NET_INCOME_LABEL, TIMESTAMP_INTERVAL_SECS } from "../utils/constants";
-import currentEpochSecsExceeded from "../utils/currentEpochSecsExceeded";
-import twoNumOp from "../utils/twoNumOp";
+import { CURRENT_BALANCE_LABEL, NET_INCOME_LABEL } from "../utils/constants";
 import AmountBox from "./amount-box/amount-box";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
@@ -19,10 +17,12 @@ import TransactionOptions from "./transaction-options/transaction-options";
  * @param {Object} param0 
  * @param {JSX.Element[]} param0.entries List of TransactionEntry components.
  * @param {Dispatch<SetStateAction<JSX.Element[]>>} param0.setEntries Setter for entries list.
+ * @param {bool} param0.serverOnline Boolean to indicate if the backend API server is online or offline.
+ * @param {Dispatch<SetStateAction<bool>>} param0.setServerOnline Setter for serverOnline state.
  *
  * @returns Wrapper component for amount boxes and transaction box.
  */
-export default function AmountTransaction({entries, setEntries})
+export default function AmountTransaction({entries, setEntries, serverOnline, setServerOnline})
 {
   // Net income and current balance states for amount boxes.
   const [netIncomeBox, setNetIncomeBox] = useState(0.0);
@@ -37,12 +37,8 @@ export default function AmountTransaction({entries, setEntries})
   // Used to control what placeholder text should be displayed for cash input box.
   const [cashValid, setCashValid] = useState(true);
 
-  // Timestamp state for refreshing the net income periodically and saving
-  // data.
-  const [timestamp, setTimestamp] = useState(0);
-
   // String displaying the next point in time net income will be reset for next period.
-  const [nextResetTime, setNextResetTime] = useState('');
+  const [nextResetTime, setNextResetTime] = useState('NULL DATE');
 
   // Function for submit button in transaction box to call when clicked.
   const submitFunc = () =>
@@ -52,7 +48,7 @@ export default function AmountTransaction({entries, setEntries})
       let cashAmountNum = Number(cashAmount);
       if (isNaN(cashAmountNum))
       {
-        throw new Error("Invalid cash amount.");
+        throw new TypeError("Invalid cash amount.");
       }
 
       // Cash amount dollars to cents.
@@ -71,7 +67,7 @@ export default function AmountTransaction({entries, setEntries})
           {
             if (response.status == 422)
             {
-              throw new Error(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
+              throw new RangeError(`Amount less than or equal to zero not allowed. (${cashAmountCents} <= 0)`);
             }
             throw new Error(`HTTP code ${response.status}: ${response.statusText}`);
           }
@@ -83,19 +79,37 @@ export default function AmountTransaction({entries, setEntries})
             addToHistoryList(entries, setEntries, 
               {"entry_id": data.entry_id, "datetime": data.entry_datetime, ...transactionObj}
             );
+
+            // Set the new net income and current balance amounts returned from backend server.
+            const net_income_dollars = centsToDollars(data.net_income_cents);
+            const current_balance_dollars = centsToDollars(data.current_balance_cents);
+            setNetIncomeBox(net_income_dollars);
+            setCurrentBalanceBox(current_balance_dollars);
+
+            // Set next reset time from epoch seconds.
+            setNextResetTime(secsToDate(data.timestamp));
           }
         })
-        .catch(
-          (error) => {
-            console.log(error);
+        .catch((error) => {
+          if (error instanceof TypeError)
+          {
+            setServerOnline(false);
+          }
+          else if (error instanceof RangeError)
+          {
             setCashValid(false);
           }
-        );
+          console.log(error);
+
+        });
     }
     catch (error)
     {
+      if (error instanceof TypeError)
+      {
+        setCashValid(false);
+      }
       console.log(error);
-      setCashValid(false);
     }
 
     // Reset transaction box states.
@@ -105,23 +119,22 @@ export default function AmountTransaction({entries, setEntries})
   }
 
   // Synchronize timestamp.
-  useEffect(() => {
-    fetch(REQUEST_URLS.TIMESTAMP)
+  useEffect(() =>
+  {
+    fetch(REQUEST_URLS.TIMESTAMP, {method: "POST"})
       .then(response => response.json())
       .then(
-        (data) => {
-          setNextResetTime(getNextDate(data.timestamp));
-          setTimestamp(data.timestamp);
-        }
+        data => setNextResetTime(secsToDate(data.timestamp))
       )
       .catch(
         error => console.log(error)
       );
   }, []);
 
-  // Synchronize net income and current balance amounts from persistent JSON data.
+  // Synchronize net income and current balance amounts from latest entry in the amount_history_table SQL
+  // table from the backend server.
   useEffect(() => {
-    fetch(REQUEST_URLS.CURRENT_AMOUNTS)
+    fetch(REQUEST_URLS.LATEST_AMOUNTS)
       .then(response => response.json())
       .then(
         (data) => {
@@ -136,11 +149,15 @@ export default function AmountTransaction({entries, setEntries})
   }, []);
 
   return (
-    <>
+    <div className={serverOnline ? styles.serverOnline : styles.serverOffline}>
       <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
-      <StartingBalance netIncome={netIncomeBox} setCurrentBalance={setCurrentBalanceBox}/>
+      <StartingBalance 
+        netIncome={netIncomeBox} 
+        setCurrentBalance={setCurrentBalanceBox} 
+        setServerOnline={setServerOnline}
+      />
             
       <div className={styles.transactionBox}>
         <h3 className={styles.transactionBoxTitle}>ENTER TRANSACTION</h3>
@@ -149,83 +166,10 @@ export default function AmountTransaction({entries, setEntries})
         <CashAmountInput cashAmount={cashAmount} setAmount={setAmount} valid={cashValid} setValid={setCashValid}/>
         <DescriptionInput transactionDesc={transactionDesc} setTransactionDesc={setTransactionDesc} />
       
-        <button
-          onClick={
-            () => {
-              // Update the epoch timestamp on FastAPI backend and reset net income to zero.
-              let tempNetIncomeBox = netIncomeBox;
-              if (currentEpochSecsExceeded(timestamp))
-              {
-                // Get the next day and time.
-                const newTimestamp = incrementTimestamp(timestamp, setTimestamp);
-                setNextResetTime(getNextDate(newTimestamp));
-
-                // Record the net income and current balance in amount history on FastAPI backend.
-                apiSendAmounts(tempNetIncomeBox, currentBalanceBox, "POST", REQUEST_URLS.AMOUNTS_HISTORY);
-                tempNetIncomeBox = 0.0;
-              }
-              
-              const transactionAmount = Number(cashAmount);
-
-              // Transaction cash amount must be larger than zero.
-              if (transactionAmount > 0)
-              {
-                // Obtain the new net income and current balance and save to FastAPI backend.
-                const newNetIncomeBox = updateAmount(
-                  tempNetIncomeBox, transactionAmount,
-                  transactionOption, setNetIncomeBox
-                );
-                const newCurrentBalanceBox = updateAmount(
-                  currentBalanceBox, transactionAmount,
-                  transactionOption, setCurrentBalanceBox
-                );
-
-                apiSendAmounts(newNetIncomeBox, newCurrentBalanceBox, "PUT", REQUEST_URLS.CURRENT_AMOUNTS);
-              }
-              
-              submitFunc();
-            }
-          }>
-          SUBMIT
-        </button>
+        <button onClick={() => submitFunc()}>SUBMIT</button>
       </div>
-    </>
+    </div>
   )
-}
-
-/**
- * Function to update the net income and current balance in real time as transactions
- * are entered.
- * 
- * @param {number} initialAmount Initial cash amount.
- * @param {number} transactionAmount Transaction cash amount.
- * @param {string} transactionOption Transaction option (income/expense).
- * @param {Dispatch<SetStateAction<number>>} setStateFunc Setter for cash amount state.
- * 
- * @returns New cash amount number.
- */
-const updateAmount = (initialAmount, transactionAmount, transactionOption, setStateFunc) =>
-{
-  const newAmount = twoNumOp(initialAmount, transactionAmount, transactionOption, CASH_DP);
-  setStateFunc(newAmount);
-  return newAmount;
-}
-
-/**
- * Increment the timestamp epoch seconds by an interval and save to FastAPI backend.
- * 
- * @param {number} timestamp Current epoch timestamp in seconds.
- * @param {Dispatch<SetStateAction<number>>} setTimestamp Setter for timestamp.
- * 
- * @returns New epoch timestamp.
- */
-const incrementTimestamp = (timestamp, setTimestamp) =>
-{
-  const newTimestamp = timestamp + TIMESTAMP_INTERVAL_SECS;
-  setTimestamp(newTimestamp);
-  apiSendJSON(REQUEST_URLS.TIMESTAMP, "PUT", {secs: newTimestamp});
-
-  return newTimestamp;
 }
 
 /**
@@ -235,10 +179,9 @@ const incrementTimestamp = (timestamp, setTimestamp) =>
  * 
  * @returns Day and time as string.
  */
-const getNextDate = (timestamp) =>
+const secsToDate = (timestamp) =>
 {
-  const nextEpoch = timestamp + TIMESTAMP_INTERVAL_SECS;
-  const date = new Date(Math.round(nextEpoch * 1000));
+  const date = new Date(Math.round(timestamp * 1000));
   const day = date.toLocaleDateString("en-AU", { weekday: "short" });
   const time = date.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   return `${day} ${time}`;
