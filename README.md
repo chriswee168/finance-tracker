@@ -85,19 +85,6 @@ npm run preview
 ![Usage example.](assets/images/usage_example.png "UI with example transactions.")
 
 ## Technical Details
-### FastAPI Endpoints
-
-FastAPI is used to expose API endpoints for the frontend to interact with local SQL database and JSON configuration files. All API endpoints are listed below with their name, HTTP method and purpose:
-
-| API Endpoint | Method | Purpose |
-| --- | --- | --- |
-| /cash-amounts | POST | Record the current net income and current balance to amount_history_table. |
-| /current-cash-amounts | PUT | Save the current net income and current balance to JSON configuration file. |
-| /current-cash-amounts | GET | Get the current net income and current balance from JSON configuration file on app startup or refresh. |
-| /transaction-entries | POST | Add transaction entry to transaction_table and return new entry ID. |
-| /transaction-entries | GET | Get transaction entries from transaction_table to display in history on frontend. |
-| /utc-epoch-timestamp | PUT | Save the current timestamp in epoch seconds to JSON configuration file.
-| /utc-epoch-timestamp | GET | Get the timestamp recorded in JSON configuration file.
 
 ### SQLite3 Database Tables
 
@@ -123,17 +110,31 @@ FastAPI is used to expose API endpoints for the frontend to interact with local 
 | transaction_type | VARCHAR(7) | Indicates if cash is earned or loss. (either "income" or "expense") |
 | transaction_desc | TEXT | Text description entered by user. |
 | amount_cents | INTEGER | Transaction cash amount in cents. |
+| amount_history_id | INTEGER (FOREIGN KEY) | References entry in amount_history_table the transaction is linked to. |
+
+### FastAPI Endpoints
+
+FastAPI is used to expose API endpoints for the frontend to interact with the local SQL database. All API endpoints are listed below with their name, HTTP method and purpose:
+
+| API Endpoint | Method | Purpose |
+| --- | --- | --- |
+| /latest-cash-amounts | PUT | Update net income and current balance in latest amount_history_table entry. |
+| /latest-cash-amounts | GET | Get the net income and current balance from latest amount_history_table entry on app startup or refresh. |
+| /transaction-entries | POST | Add transaction entry to transaction_table and return new entry ID, datetime, updated net income and current balance, and timestamp. |
+| /transaction-entries | GET | Get transaction entries from transaction_table to display in history on frontend. |
+| /utc-epoch-timestamp | POST | Get timestamp in epoch seconds from latest entry in amount_history_table.
 
 ### React Frontend
 
 The frontend relies on HTTP requests to perform essential tasks which include but not limited to setting the starting balance, entering new transactions and retrieving the transaction history. Details on these processes are provided below in dotpoints.
 
 - Setting the starting balance when using app for the first time.
-    - Sends a **PUT** request to **/current-cash-amounts** endpoint containing the starting balance amount submitted by user to update the JSON configuration file on backend.
+    - Sends a **PUT** request to **/latest-cash-amounts** endpoint containing the starting balance amount submitted by user to update the latest entry in amount_history_table.
 - Entering a new transaction from frontend to SQL database on backend.
     - Sends a **POST** request to **/transaction-entries** endpoint containing transaction details entered by user.
     - New transaction entry containing submitted information is added to `transaction_table` on backend.
     - Frontend receives the new entry ID from backend via HTTP response and transaction is added to **TRANSACTION HISTORY**.
+    - Frontend also receives datetime information, updated net income and current balance, and timestamp.
 - Retrieving transaction history from SQL database on frontend startup or refresh.
     - On app startup/refresh, send a **GET** request to **/transaction-entries** along with **n_entries=N** argument to select the N latest transaction entries from `transaction_table`.
     - Frontend receives transactions as JS objects and displays them in **TRANSACTION HISTORY**.
