@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Response
+from fastapi import APIRouter, status
 from pydantic import BaseModel, Field
 from typing import Literal
 import sqlite3

@@ -1,7 +1,6 @@
-from datetime import datetime
-from fastapi import APIRouter, status, Response
+from fastapi import APIRouter, status
 from pydantic import BaseModel
-import sqlite3, json
+import sqlite3
 from utils.constants import *
 from utils.amount_history_funcs import set_amount_history_entry, get_latest_amount_history
 
