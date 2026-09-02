@@ -3,28 +3,14 @@ from contextlib import asynccontextmanager
 from routers import cash_amounts, transactions, timestamp
 from fastapi.middleware.cors import CORSMiddleware
 from utils.create_tables import create_tables
-from utils.init_json_configs import *
+import os
 
 # Call on FastAPI server startup.
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Starting FastAPI server...")
+    # Create SQL tables if they don't exist.
     create_tables()
-    print("Called create_tables() function...")
-
-    # Create config directory for JSON files.
-    if not os.path.exists("config"):
-        os.makedirs("config")
-
-    # Initialise the timestamp if timestamp JSON file doesn't exist.
-    init_timestamp()
-
-    # Initialise cash amounts if cash amount JSON file doesn't exist.
-    init_cash_amounts()
-    
     yield
-
-    print("Shutting down FastAPI server...")
 
 app = FastAPI(lifespan=lifespan)
 
