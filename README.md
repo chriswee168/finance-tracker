@@ -59,9 +59,9 @@ fastapi run main.py
 For Linux and Mac OS:
 ```bash
 cd backend
-python -m venv venv
+python3 -m venv venv
 ./venv/Scripts/activate
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 fastapi run main.py
 ```
 
