@@ -22,9 +22,9 @@ def exceeded_timestamp_interval(cursor: sqlite3.Cursor) -> bool:
     else:
         return False
 
-def timestamp_update(cursor: sqlite3.Cursor, conn: sqlite3.Connection) -> int:
+def get_next_timestamp(cursor: sqlite3.Cursor, conn: sqlite3.Connection) -> int:
     '''
-    Create new amount history entry if interval from last timestamp exceeded.
+    Get the next timestamp and create new amount history entry if interval from last timestamp exceeded.
     '''
     if exceeded_timestamp_interval(cursor):
         # Create new amount_history_table entry.
@@ -34,6 +34,6 @@ def timestamp_update(cursor: sqlite3.Cursor, conn: sqlite3.Connection) -> int:
         append_amount_history_entry(cursor, new_timestamp, latest_amount_entry[3])
         conn.commit()
     
-    latest_timestamp = get_latest_timestamp(cursor)
+    next_timestamp = get_latest_timestamp(cursor) + TIMESTAMP_INTERVAL_SECS
 
-    return latest_timestamp
+    return next_timestamp

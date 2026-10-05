@@ -87,7 +87,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
             setCurrentBalanceBox(current_balance_dollars);
 
             // Set next reset time from epoch seconds.
-            setNextResetTime(secsToDate(data.timestamp));
+            setNextResetTime(secsToDate(data.next_timestamp));
           }
         })
         .catch((error) => {
@@ -124,7 +124,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
     fetch(REQUEST_URLS.TIMESTAMP, {method: "POST"})
       .then(response => response.json())
       .then(
-        data => setNextResetTime(secsToDate(data.timestamp))
+        data => setNextResetTime(secsToDate(data.next_timestamp))
       )
       .catch(
         error => console.log(error)
