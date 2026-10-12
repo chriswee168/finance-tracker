@@ -18,7 +18,7 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
 {
   return (
     <Paper className={styles.chart}>
-      <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center'}}>
+      <Typography className={styles.title}>
         {chartTitle}
       </Typography>
       <BarChart
