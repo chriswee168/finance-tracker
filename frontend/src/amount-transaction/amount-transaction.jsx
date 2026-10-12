@@ -179,10 +179,9 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
  * 
  * @returns Day and time as string.
  */
-const secsToDate = (timestamp) =>
+export const secsToDate = (timestamp) =>
 {
   const date = new Date(Math.round(timestamp * 1000));
-  const day = date.toLocaleDateString("en-AU", { weekday: "short" });
-  const time = date.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  return `${day} ${time}`;
+  const dateString = date.toLocaleDateString("en-AU", { day: "2-digit", month: "short", year: "numeric"});
+  return dateString;
 }

@@ -2,7 +2,6 @@
 .startingBalanceWrapper
 {
     position: absolute;
-    border-radius: 10px;
     background-color: var(--widget-back-colour);
     width: 350px;
     height: 130px;

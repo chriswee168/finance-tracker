@@ -8,12 +8,11 @@
 /* Transaction box element for displaying options, cash amount and description. */
 .transactionBox
 {
-    border-radius: 10px;
     background-color: var(--widget-back-colour);
     position: absolute;
     width: 350px;
     height: 315px;
-    top: 46%;
+    top: 25.7%;
 }
 
 /* Properties to unlock UI if server is online. */

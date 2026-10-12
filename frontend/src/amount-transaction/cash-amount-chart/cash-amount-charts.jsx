@@ -1,0 +1,48 @@
+import { Paper, Typography } from "@mui/material";
+import { BarChart } from "@mui/x-charts";
+import { CHART_HEIGHT, SIGN_COLOURS } from "../../utils/constants";
+import { secsToDate } from "../amount-transaction";
+import styles from "./cash-amount-charts.module.css";
+
+/**
+ * Chart component to display cash amounts over a period of time.
+ * 
+ * @param {Object} param0 
+ * @param {string} param0.chartTitle Chart title.
+ * @param {string[]} param0.epochSecList List of epoch seconds.
+ * @param {number[]} param0.cashAmountList List of cash amounts.
+ * 
+ * @returns Chart component.
+ */
+export default function CashAmountChart({chartTitle, epochSecList, cashAmountList})
+{
+  return (
+    <Paper className={styles.chart}>
+      <Typography className={styles.title}>
+        {chartTitle}
+      </Typography>
+      <BarChart
+        height={CHART_HEIGHT}
+        xAxis={[
+          {
+            id: 'categoryAxis',
+            data: epochSecList,
+            valueFormatter: (epoch) => secsToDate(epoch),
+            height: 35,
+            tickLabelStyle: {
+              angle: 10,
+              textAnchor: 'middle',
+            },
+          }
+        ]}
+        yAxis={[{ label: "Amount", valueFormatter: (amount) => `$${amount}`}]}
+        series={[
+          {
+            data: cashAmountList,
+            colorGetter: ({value}) => value > 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
+          }
+        ]}
+      />
+    </Paper>
+  )
+}
