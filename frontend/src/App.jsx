@@ -34,10 +34,10 @@ function App() {
         entries={transactionEntries} 
         setEntries={setTransactionEntries}
       />
-      <div style={{bottom: "13%", position: "relative"}}>
+      <div style={{bottom: "12%", position: "relative"}}>
         <CashAmountChart chartTitle="NET INCOME" epochSecList={[1791777602, 1791777609, 1791777613]} cashAmountList={[10, 0, 0]}/>
       </div>
-      <div style={{bottom: "12%", position: "relative"}}>
+      <div style={{bottom: "11%", position: "relative"}}>
         <CashAmountChart chartTitle="BALANCE" epochSecList={[1791777602, 1791777609, 1791777613]} cashAmountList={[10, -10, 2]}/>
       </div>
     </div>
