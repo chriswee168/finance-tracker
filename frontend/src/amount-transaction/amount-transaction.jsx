@@ -179,7 +179,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
  * 
  * @returns Day and time as string.
  */
-const secsToDate = (timestamp) =>
+export const secsToDate = (timestamp) =>
 {
   const date = new Date(Math.round(timestamp * 1000));
   const day = date.toLocaleDateString("en-AU", { weekday: "short" });

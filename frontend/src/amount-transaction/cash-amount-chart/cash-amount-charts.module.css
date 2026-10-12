@@ -1,0 +1,6 @@
+/* Customization for MUI X Paper. */
+.chart:global(.MuiPaper-root)
+{
+    background-color: var(--widget-back-colour);
+    box-shadow: none;
+}
