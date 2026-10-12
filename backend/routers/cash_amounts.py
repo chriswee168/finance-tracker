@@ -52,3 +52,27 @@ def get_latest_cash_amounts():
         "net_income_cents": latest_entry[2], 
         "current_balance_cents": latest_entry[3]
     }
+
+# Get latest N entries from amount_history_table.
+@route.get("/cash-amounts-entries", status_code=status.HTTP_200_OK)
+def get_cash_amount_entries(n_entries: int):
+    conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        (
+            "(SELECT entry_timestamp, net_income_cents, current_balance_cents "
+            "FROM amount_history_table ORDER BY entry_id DESC LIMIT ?) ORDER BY entry_id ASC"
+        ),
+        (n_entries,)
+    )
+    entry_list = cursor.fetchall()
+    conn.close()
+
+    return [
+        {
+            "timestamp": timestamp,
+            "net_income_cents": net_income_cents,
+            "current_balance_cents": current_balance_cents
+        }
+        for timestamp, net_income_cents, current_balance_cents in entry_list
+    ]
