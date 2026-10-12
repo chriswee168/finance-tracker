@@ -25,8 +25,14 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
         height={CHART_HEIGHT}
         xAxis={[
           {
+            id: 'categoryAxis',
             data: epochSecList,
             valueFormatter: (epoch) => secsToDate(epoch),
+            height: 35,
+            tickLabelStyle: {
+              angle: 10,
+              textAnchor: 'middle',
+            },
           }
         ]}
         yAxis={[{ label: "Amount", valueFormatter: (amount) => `$${amount}`}]}
