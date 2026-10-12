@@ -8,7 +8,6 @@
 /* Transaction box element for displaying options, cash amount and description. */
 .transactionBox
 {
-    border-radius: 10px;
     background-color: var(--widget-back-colour);
     position: absolute;
     width: 350px;

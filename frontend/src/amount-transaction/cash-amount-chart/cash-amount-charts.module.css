@@ -3,6 +3,7 @@
 {
     background-color: var(--widget-back-colour);
     box-shadow: none;
+    border-radius: 0;
 }
 
 /* Customization for MUI X Typography. */
