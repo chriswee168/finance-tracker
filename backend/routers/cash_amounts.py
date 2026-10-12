@@ -54,7 +54,7 @@ def get_latest_cash_amounts():
     }
 
 # Get latest N entries from amount_history_table.
-@route.get("/cash-amounts-entries", status_code=status.HTTP_200_OK)
+@route.get("/cash-amount-entries", status_code=status.HTTP_200_OK)
 def get_cash_amount_entries(n_entries: int):
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
