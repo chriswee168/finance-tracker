@@ -1,3 +1,7 @@
+import { useEffect, useRef } from "react";
+import { createEntryGetURL } from "../../transaction-history/transaction-history-helper-funcs";
+import { REQUEST_URLS } from "../../utils/api/apiConfig";
+import { MAX_CASH_AMOUNT_ENTRIES } from "../../utils/constants";
 import CashAmountChart from "../cash-amount-chart/cash-amount-charts";
 
 /**
@@ -11,14 +15,35 @@ import CashAmountChart from "../cash-amount-chart/cash-amount-charts";
  */
 export default function ChartWrapper({cashAmountEntries, setCashAmountEntries})
 {
-  
+  const url = useRef(null);
+  if (url.current == null)
+  {
+    url.current = createEntryGetURL(MAX_CASH_AMOUNT_ENTRIES, REQUEST_URLS.CASH_AMOUNTS);
+  }
+
+  // Retrieve the latest N cash amounts (net income and current balance) and timestamps.
+  useEffect(() => {
+    fetch(url.current)
+      .then(response => response.json())
+      .then(data => setCashAmountEntries(data))
+      .catch(
+        error => console.log(error)
+      );
+  }, [setCashAmountEntries]);
+
   return (
     <>
       <div style={{bottom: "12%", position: "relative"}}>
-        <CashAmountChart chartTitle="NET INCOME" epochSecList={[1791777602, 1791777609, 1791777613]} cashAmountList={[10, 0, 0]}/>
+        <CashAmountChart chartTitle="NET INCOME" 
+          epochSecList={cashAmountEntries.map(entry => entry.timestamp)} 
+          cashAmountList={cashAmountEntries.map(entry => entry.net_income_cents)}
+        />
       </div>
       <div style={{bottom: "11%", position: "relative"}}>
-        <CashAmountChart chartTitle="BALANCE" epochSecList={[1791777602, 1791777609, 1791777613]} cashAmountList={[10, -10, 2]}/>
+        <CashAmountChart chartTitle="BALANCE" 
+          epochSecList={cashAmountEntries.map(entry => entry.timestamp)} 
+          cashAmountList={cashAmountEntries.map(entry => entry.current_balance_cents)}
+        />
       </div>
     </>
   )
