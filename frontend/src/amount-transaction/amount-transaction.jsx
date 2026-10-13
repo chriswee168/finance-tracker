@@ -4,6 +4,7 @@ import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
 import { CURRENT_BALANCE_LABEL, NET_INCOME_LABEL } from "../utils/constants";
+import { secsToDate } from "../utils/secsToDate";
 import AmountBox from "./amount-box/amount-box";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
@@ -170,18 +171,4 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
       </div>
     </div>
   )
-}
-
-/**
- * Get the day and time in the future when net income will reset for the next period.
- * 
- * @param {number} timestamp Epoch time in seconds.
- * 
- * @returns Day and time as string.
- */
-export const secsToDate = (timestamp) =>
-{
-  const date = new Date(Math.round(timestamp * 1000));
-  const dateString = date.toLocaleDateString("en-AU", { day: "2-digit", month: "short", year: "numeric"});
-  return dateString;
 }

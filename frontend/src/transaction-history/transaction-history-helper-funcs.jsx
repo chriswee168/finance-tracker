@@ -1,4 +1,3 @@
-import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 

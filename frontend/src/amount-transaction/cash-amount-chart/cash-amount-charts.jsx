@@ -1,9 +1,9 @@
 import { Paper, Typography } from "@mui/material";
 import { BarChart } from "@mui/x-charts";
-import { CHART_HEIGHT, SIGN_COLOURS } from "../../utils/constants";
-import { secsToDate } from "../amount-transaction";
-import styles from "./cash-amount-charts.module.css";
 import { centsToDollars } from "../../utils/cashUnitConversion";
+import { CHART_HEIGHT, SIGN_COLOURS } from "../../utils/constants";
+import { secsToDate } from "../../utils/secsToDate";
+import styles from "./cash-amount-charts.module.css";
 
 /**
  * Chart component to display cash amounts over a period of time.
