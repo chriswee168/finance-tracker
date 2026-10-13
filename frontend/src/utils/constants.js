@@ -11,6 +11,8 @@ export const CASH_SCALE_FACTOR = 100;
 
 // Max number of entries transaction history window can display.
 export const MAX_TRANSACTION_ENTRIES = 100;
+// Max number of cash amount entries to display in charts.
+export const MAX_CASH_AMOUNT_ENTRIES = 200;
 
 // Amount box labels for net income and current balance.
 export const NET_INCOME_LABEL = "Weekly Net Income";

@@ -3,6 +3,7 @@ import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 import { createEntryGetURL } from "./transaction-history-helper-funcs";
 import styles from "./transaction-history.module.css";
+import { REQUEST_URLS } from "../utils/api/apiConfig";
 
 /**
  * Create transaction history component to display previous transactions
@@ -23,7 +24,7 @@ export default function TransactionHistory({entries, setEntries})
   const url = useRef(null);
   if (url.current == null)
   {
-    url.current = createEntryGetURL(MAX_TRANSACTION_ENTRIES);
+    url.current = createEntryGetURL(MAX_TRANSACTION_ENTRIES, REQUEST_URLS.TRANSACTIONS);
   }
 
   // Get transaction entries from backend SQL database.

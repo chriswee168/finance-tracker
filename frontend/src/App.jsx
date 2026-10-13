@@ -1,9 +1,8 @@
-import { Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import styles from './App.module.css';
 import AmountTransaction from './amount-transaction/amount-transaction';
-import CashAmountChart from './amount-transaction/cash-amount-chart/cash-amount-charts';
 import './amount-transaction/cash-amount-chart/cash-amount-charts.module.css';
+import ChartWrapper from './amount-transaction/chart-wrapper/chart-wrapper';
 import ServerStatus from './server-status/server-status';
 import TransactionHistory from './transaction-history/transaction-history';
 /**
@@ -21,6 +20,9 @@ function App() {
   // to lock the app and block user input when the server is offline.
   const [serverOnline, setServerOnline] = useState(false);
 
+  // Array to store cash amounts along with timestamps for chart display.
+  const [cashAmountEntries, setCashAmountEntries] = useState([]);
+
   return (
     <div className={styles.appWrapper}>
       <ServerStatus serverOnline={serverOnline} setServerOnline={setServerOnline}/>
@@ -34,12 +36,10 @@ function App() {
         entries={transactionEntries} 
         setEntries={setTransactionEntries}
       />
-      <div style={{bottom: "12%", position: "relative"}}>
-        <CashAmountChart chartTitle="NET INCOME" epochSecList={[1791777602, 1791777609, 1791777613]} cashAmountList={[10, 0, 0]}/>
-      </div>
-      <div style={{bottom: "11%", position: "relative"}}>
-        <CashAmountChart chartTitle="BALANCE" epochSecList={[1791777602, 1791777609, 1791777613]} cashAmountList={[10, -10, 2]}/>
-      </div>
+      <ChartWrapper 
+        cashAmountEntries={cashAmountEntries} 
+        setCashAmountEntries={setCashAmountEntries}
+      />
     </div>
   )
 }
