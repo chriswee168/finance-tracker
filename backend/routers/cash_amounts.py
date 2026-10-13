@@ -60,8 +60,9 @@ def get_cash_amount_entries(n_entries: int):
     cursor = conn.cursor()
     cursor.execute(
         (
-            "(SELECT entry_timestamp, net_income_cents, current_balance_cents "
-            "FROM amount_history_table ORDER BY entry_id DESC LIMIT ?) ORDER BY entry_id ASC"
+            "SELECT entry_timestamp, net_income_cents, current_balance_cents FROM "
+            "(SELECT entry_id, entry_timestamp, net_income_cents, current_balance_cents "
+            "FROM amount_history_table ORDER BY entry_id DESC LIMIT ?) AS subquery ORDER BY entry_id ASC"
         ),
         (n_entries,)
     )
