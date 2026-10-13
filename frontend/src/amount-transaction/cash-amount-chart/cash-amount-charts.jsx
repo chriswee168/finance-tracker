@@ -1,7 +1,8 @@
 import { Paper, Typography } from "@mui/material";
 import { BarChart } from "@mui/x-charts";
+import { centsToDollars } from "../../utils/cashUnitConversion";
 import { CHART_HEIGHT, SIGN_COLOURS } from "../../utils/constants";
-import { secsToDate } from "../amount-transaction";
+import { secsToDate } from "../../utils/secsToDate";
 import styles from "./cash-amount-charts.module.css";
 
 /**
@@ -27,19 +28,24 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
           {
             id: 'categoryAxis',
             data: epochSecList,
-            valueFormatter: (epoch) => secsToDate(epoch),
-            height: 35,
+            valueFormatter: epoch => secsToDate(epoch),
+            height: 40,
             tickLabelStyle: {
-              angle: 10,
-              textAnchor: 'middle',
+              angle: 13,
+              textAnchor: 'start',
             },
           }
         ]}
-        yAxis={[{ label: "Amount", valueFormatter: (amount) => `$${amount}`}]}
+        yAxis={[
+          {
+            valueFormatter: amount => `$${centsToDollars(amount)}`,
+          }
+        ]}
         series={[
           {
             data: cashAmountList,
-            colorGetter: ({value}) => value > 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
+            valueFormatter: amount => `$${centsToDollars(amount)}`,
+            colorGetter: ({value}) => value >= 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
           }
         ]}
       />
