@@ -11,7 +11,7 @@ route = APIRouter()
 def get_timestamp():
     conn = sqlite3.connect(DATABASE_DIR_PATH + DATABASE_NAME_PATH)
     cursor = conn.cursor()
-    next_timestamp = get_next_timestamp(cursor, conn)
+    next_timestamp, _ = get_next_timestamp(cursor, conn)
     conn.close()
 
     return {"next_timestamp": next_timestamp}
