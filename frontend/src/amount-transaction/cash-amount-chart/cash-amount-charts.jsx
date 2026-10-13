@@ -3,6 +3,7 @@ import { BarChart } from "@mui/x-charts";
 import { CHART_HEIGHT, SIGN_COLOURS } from "../../utils/constants";
 import { secsToDate } from "../amount-transaction";
 import styles from "./cash-amount-charts.module.css";
+import { centsToDollars } from "../../utils/cashUnitConversion";
 
 /**
  * Chart component to display cash amounts over a period of time.
@@ -27,7 +28,7 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
           {
             id: 'categoryAxis',
             data: epochSecList,
-            valueFormatter: (epoch) => secsToDate(epoch),
+            valueFormatter: epoch => secsToDate(epoch),
             height: 40,
             tickLabelStyle: {
               angle: 13,
@@ -35,11 +36,16 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
             },
           }
         ]}
-        yAxis={[{ label: "Amount", valueFormatter: (amount) => `$${amount}`}]}
+        yAxis={[
+          {
+            valueFormatter: amount => `$${centsToDollars(amount)}`,
+          }
+        ]}
         series={[
           {
             data: cashAmountList,
-            colorGetter: ({value}) => value > 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
+            valueFormatter: amount => `$${centsToDollars(amount)}`,
+            colorGetter: ({value}) => value >= 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
           }
         ]}
       />
