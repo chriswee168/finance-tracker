@@ -28,10 +28,10 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
             id: 'categoryAxis',
             data: epochSecList,
             valueFormatter: (epoch) => secsToDate(epoch),
-            height: 35,
+            height: 40,
             tickLabelStyle: {
-              angle: 10,
-              textAnchor: 'middle',
+              angle: 13,
+              textAnchor: 'start',
             },
           }
         ]}
