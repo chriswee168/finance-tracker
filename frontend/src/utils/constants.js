@@ -15,7 +15,7 @@ export const MAX_TRANSACTION_ENTRIES = 100;
 export const MAX_CASH_AMOUNT_ENTRIES = 100;
 
 // Amount box labels for net income and current balance.
-export const NET_INCOME_LABEL = "Weekly Net Income";
+export const NET_INCOME_LABEL = "Net Income";
 export const CURRENT_BALANCE_LABEL = "Current Balance";
 
 // Cash amount chart and height.
