@@ -19,12 +19,19 @@ export const addToCharts = (
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const cashAmountEntriesLen = cashAmountEntries.length;
+            let length = cashAmountEntries.length;
             const selectedEntry = data[0];
-            const startIdx = cashAmountEntriesLen >= MAX_CASH_AMOUNT_ENTRIES ? 1 : 0;
+            const startIdx = length >= MAX_CASH_AMOUNT_ENTRIES ? 1 : 0;
+
+            // Avoid entries with duplicate timestamps.
+            const latestElement = cashAmountEntries.at(-1);
+            if (latestElement.timestamp == selectedEntry.timestamp)
+            {
+                length = length - 1
+            }
 
             setCashAmountEntries([
-                ...cashAmountEntries.slice(startIdx, cashAmountEntriesLen), 
+                ...cashAmountEntries.slice(startIdx, length), 
                 selectedEntry
             ]);
         })
