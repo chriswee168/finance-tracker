@@ -167,7 +167,7 @@ export default function AmountTransaction({
 
   return (
     <div className={serverOnline ? styles.serverOnline : styles.serverOffline}>
-      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <StartingBalance 
