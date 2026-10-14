@@ -31,6 +31,8 @@ function App() {
         setEntries={setTransactionEntries}
         serverOnline={serverOnline}
         setServerOnline={setServerOnline}
+        cashAmountEntries={cashAmountEntries}
+        setCashAmountEntries={setCashAmountEntries}
       />
       <TransactionHistory 
         entries={transactionEntries} 

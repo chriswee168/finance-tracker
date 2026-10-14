@@ -35,14 +35,14 @@ export default function ChartWrapper({cashAmountEntries, setCashAmountEntries})
     <>
       <div style={{bottom: "12%", position: "relative"}}>
         <CashAmountChart chartTitle="NET INCOME" 
-          epochSecList={cashAmountEntries.map(entry => entry.timestamp)} 
-          cashAmountList={cashAmountEntries.map(entry => entry.net_income_cents)}
+          cashAmountEntries={cashAmountEntries}
+          seriesLabel="net_income_cents"
         />
       </div>
       <div style={{bottom: "11%", position: "relative"}}>
         <CashAmountChart chartTitle="BALANCE" 
-          epochSecList={cashAmountEntries.map(entry => entry.timestamp)} 
-          cashAmountList={cashAmountEntries.map(entry => entry.current_balance_cents)}
+          cashAmountEntries={cashAmountEntries}
+          seriesLabel="current_balance_cents"
         />
       </div>
     </>
