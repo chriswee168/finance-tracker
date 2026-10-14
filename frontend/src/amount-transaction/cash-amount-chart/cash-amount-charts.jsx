@@ -10,12 +10,12 @@ import styles from "./cash-amount-charts.module.css";
  * 
  * @param {Object} param0 
  * @param {string} param0.chartTitle Chart title.
- * @param {string[]} param0.epochSecList List of epoch seconds.
- * @param {number[]} param0.cashAmountList List of cash amounts.
+ * @param {Object[]} param0.cashAmountEntries List of cash amount entries.
+ * @param {string} param0.seriesLabel List of cash amounts.
  * 
  * @returns Chart component.
  */
-export default function CashAmountChart({chartTitle, epochSecList, cashAmountList})
+export default function CashAmountChart({chartTitle, cashAmountEntries, seriesLabel})
 {
   return (
     <Paper className={styles.chart}>
@@ -24,9 +24,11 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
       </Typography>
       <BarChart
         height={CHART_HEIGHT}
+        dataset={cashAmountEntries}
         xAxis={[
           {
-            data: epochSecList,
+            scaleType: "band",
+            dataKey: "timestamp",
             valueFormatter: epoch => secsToDate(epoch),
             height: 40,
             tickLabelStyle: {
@@ -37,12 +39,13 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
         ]}
         yAxis={[
           {
+            scaleType: "linear",
             valueFormatter: amount => `$${centsToDollars(amount)}`,
           }
         ]}
         series={[
           {
-            data: cashAmountList,
+            dataKey: seriesLabel,
             valueFormatter: amount => `$${centsToDollars(amount)}`,
             colorGetter: ({value}) => value >= 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
           }
