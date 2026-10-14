@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import { BarChart } from "@mui/x-charts";
+import { LineChart } from "@mui/x-charts";
 import { centsToDollars } from "../../utils/cashUnitConversion";
 import { CHART_HEIGHT, SIGN_COLOURS } from "../../utils/constants";
 import { secsToDate } from "../../utils/secsToDate";
@@ -22,7 +22,7 @@ export default function CashAmountChart({chartTitle, cashAmountEntries, seriesLa
       <Typography className={styles.title}>
         {chartTitle}
       </Typography>
-      <BarChart
+      <LineChart
         height={CHART_HEIGHT}
         dataset={cashAmountEntries}
         xAxis={[
@@ -45,6 +45,8 @@ export default function CashAmountChart({chartTitle, cashAmountEntries, seriesLa
         ]}
         series={[
           {
+            color: "grey",
+            showMark: true,
             dataKey: seriesLabel,
             valueFormatter: amount => `$${centsToDollars(amount)}`,
             colorGetter: ({value}) => value >= 0 ? SIGN_COLOURS.green : SIGN_COLOURS.red
