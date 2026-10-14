@@ -26,7 +26,6 @@ export default function CashAmountChart({chartTitle, epochSecList, cashAmountLis
         height={CHART_HEIGHT}
         xAxis={[
           {
-            id: 'categoryAxis',
             data: epochSecList,
             valueFormatter: epoch => secsToDate(epoch),
             height: 40,
