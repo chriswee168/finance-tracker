@@ -30,6 +30,7 @@ Instructions on how to use the app is provided under [Usage](#usage) starting fr
 
 - **React (JavaScript)**: JavaScript library for building web based user interfaces using JSX components (Javascript combined with HTML).
 - **Vite**: Build tool for local development of the React frontend.
+- **MUI X Charts**: Charting and data visualisation library for React.
 
 ### Backend Stack (FastAPI/SQLite3)
 
