@@ -79,10 +79,8 @@ npm run preview
 
 1. Navigate to http://localhost:4173 using a web browser (e.g. Google Chrome, Edge, Firefox) to display the UI.
 2. Enter starting balance using the **STARTING BALANCE** widget when using the app for the first time. This amount will be displayed under *Current Balance* as shown in the image above. 
-3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in **TRANSACTION HISTORY**.
-
-(App after submitting a few example transactions.)
-![Usage example.](assets/images/usage_example.png "UI with example transactions.")
+3. Use the **ENTER TRANSACTION** widget to manually record any income and expenses. Net income and current balance is updated every time new transactions are added. Previous transactions and their details are displayed in **TRANSACTION HISTORY**. Below is an image of the UI after submitting a few example transactions. ![UI with example transactions.](assets/images/usage_example.png "UI with example transactions.")
+4. View cash amount trends using the two charts located below the **ENTER TRANSACTION** widget which display previous net income and balance amounts. Image of charts with example values is provided below. ![Net income and balance charts.](assets/images/amount_chart_example.png "Charts with example cash amount values.")
 
 ## Technical Details
 
