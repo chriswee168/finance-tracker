@@ -1,6 +1,6 @@
 # Full Stack Personal Finance Ledger App
 
-A full stack desktop web app built using React, FastAPI and SQLite3 for manually tracking personal income and expenses, current balance and net income on a weekly basis.
+A full stack desktop web app built using React, FastAPI and SQLite3 for manually tracking personal income and expenses, current balance and net income on a daily basis.
 
 ### Live Demo Deployment On Render (Platform as a Service) 
 
@@ -87,7 +87,7 @@ npm run preview
 ### SQLite3 Database Tables
 
 - This app uses two SQL tables to record the current balance, net income and transactions as they're submitted by user.
-    - `amount_history_table` records the current balance and net income periodically. (New entry added every week by default.)
+    - `amount_history_table` records the current balance and net income periodically.
     - `transaction_table` records every transaction submitted by user and used for displaying transaction history on frontend.
 - Cash amount are saved as cents to prevent floating point rounding errors.
 - Details for `amount_history_table` and `transaction_table` are provided below. 
