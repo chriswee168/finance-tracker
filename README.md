@@ -4,14 +4,9 @@ A full stack desktop web app built using React, FastAPI and SQLite3 for manually
 
 ### Live Demo Deployment On Render (Platform as a Service) 
 
-A live demo for this app is hosted on Render for direct access online. Render links for user interface and API service is provided below:
+A live public demo for this app is hosted on Render for direct access online. Render links for user interface and API service is provided below:
 - **Static site for user interface**: https://finance-tracker-ui-syk4.onrender.com/
 - **Web service for API**: https://finance-tracker-fastapi-1j8h.onrender.com/
-
-***Important Notes:***
-- Live demo is hosted using Render's free tier. Web service for API may take up to around 30 seconds or more to spin up for full app functionality, indicated by server status.
-- Refresh webpage if left inactive for at least 15 minutes to spin up web service.
-- Live demo is not intended for personal use and unsuitable for long term data persistence.
 
 Instructions on how to use the app is provided under [Usage](#usage) starting from step 2.
 
