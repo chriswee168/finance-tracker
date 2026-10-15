@@ -1,4 +1,3 @@
-import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { MAX_TRANSACTION_ENTRIES } from "../utils/constants";
 import TransactionEntry from "./transaction-entry/transaction-entry";
 
@@ -33,12 +32,12 @@ export const addToHistoryList = (entries, setEntries, data) =>
  * entries from backend SQL database.
  * 
  * @param {number} nEntries Number of entries to get from backend SQL database.
- * 
+ * @param {string} requestURL Request URL string.
  * @returns New URL for GET request.
  */
-export const createEntryGetURL = (nEntries) =>
+export const createEntryGetURL = (nEntries, requestURL) =>
 {
-  const url = new URL(REQUEST_URLS.TRANSACTIONS);
+  const url = new URL(requestURL);
   url.searchParams.append("n_entries", nEntries);
   return url;
 }

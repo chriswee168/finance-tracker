@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import styles from './App.module.css';
 import AmountTransaction from './amount-transaction/amount-transaction';
+import './amount-transaction/cash-amount-chart/cash-amount-charts.module.css';
+import ChartWrapper from './amount-transaction/chart-wrapper/chart-wrapper';
 import ServerStatus from './server-status/server-status';
 import TransactionHistory from './transaction-history/transaction-history';
-
 /**
  * Create main app component.
  * 
@@ -19,6 +20,9 @@ function App() {
   // to lock the app and block user input when the server is offline.
   const [serverOnline, setServerOnline] = useState(false);
 
+  // Array to store cash amounts along with timestamps for chart display.
+  const [cashAmountEntries, setCashAmountEntries] = useState([]);
+
   return (
     <div className={styles.appWrapper}>
       <ServerStatus serverOnline={serverOnline} setServerOnline={setServerOnline}/>
@@ -27,10 +31,16 @@ function App() {
         setEntries={setTransactionEntries}
         serverOnline={serverOnline}
         setServerOnline={setServerOnline}
+        cashAmountEntries={cashAmountEntries}
+        setCashAmountEntries={setCashAmountEntries}
       />
       <TransactionHistory 
         entries={transactionEntries} 
         setEntries={setTransactionEntries}
+      />
+      <ChartWrapper 
+        cashAmountEntries={cashAmountEntries} 
+        setCashAmountEntries={setCashAmountEntries}
       />
     </div>
   )

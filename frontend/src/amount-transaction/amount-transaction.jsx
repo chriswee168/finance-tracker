@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { addToHistoryList } from "../transaction-history/transaction-history-helper-funcs";
+import { addToCharts } from "../utils/addToCharts";
 import { REQUEST_URLS } from "../utils/api/apiConfig";
 import { apiSendJSON } from "../utils/api/apiService";
 import { centsToDollars, dollarsToCents } from "../utils/cashUnitConversion";
 import { CURRENT_BALANCE_LABEL, NET_INCOME_LABEL } from "../utils/constants";
+import { secsToDate } from "../utils/secsToDate";
 import AmountBox from "./amount-box/amount-box";
 import CashAmountInput from "./cash-amount-input/cash-amount-input";
 import DescriptionInput from "./description-input/description-input";
@@ -19,10 +21,15 @@ import TransactionOptions from "./transaction-options/transaction-options";
  * @param {Dispatch<SetStateAction<JSX.Element[]>>} param0.setEntries Setter for entries list.
  * @param {bool} param0.serverOnline Boolean to indicate if the backend API server is online or offline.
  * @param {Dispatch<SetStateAction<bool>>} param0.setServerOnline Setter for serverOnline state.
+ * @param {Object[]} param0.cashAmountEntries List of {timestamp, net_income_cents, current_balance_cents}.
+ * @param {Dispatch<SetStateAction<Object[]>>} param0.setCashAmountEntries Cash amount entries setter.
  *
  * @returns Wrapper component for amount boxes and transaction box.
  */
-export default function AmountTransaction({entries, setEntries, serverOnline, setServerOnline})
+export default function AmountTransaction({
+  entries, setEntries, serverOnline, setServerOnline,
+  cashAmountEntries, setCashAmountEntries
+})
 {
   // Net income and current balance states for amount boxes.
   const [netIncomeBox, setNetIncomeBox] = useState(0.0);
@@ -88,6 +95,16 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
 
             // Set next reset time from epoch seconds.
             setNextResetTime(secsToDate(data.next_timestamp));
+
+            // Update the cash amount charts to display previous entry if timestamp
+            // exceeded.
+            if (data.cash_amount_entry_created)
+            {
+              // Select the second latest cash amount entry because a fresh cash amount entry
+              // is automatically added on backend when timestamp is exceeded. Add second latest
+              // cash amount entry to charts.
+              addToCharts(cashAmountEntries, setCashAmountEntries, 1);
+            }
           }
         })
         .catch((error) => {
@@ -150,7 +167,7 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
 
   return (
     <div className={serverOnline ? styles.serverOnline : styles.serverOffline}>
-      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets next ${nextResetTime})`} amountDollars={netIncomeBox} />
+      <AmountBox textLabel={`${NET_INCOME_LABEL} (Resets ${nextResetTime})`} amountDollars={netIncomeBox} />
       <AmountBox textLabel={CURRENT_BALANCE_LABEL} amountDollars={currentBalanceBox} />
 
       <StartingBalance 
@@ -170,19 +187,4 @@ export default function AmountTransaction({entries, setEntries, serverOnline, se
       </div>
     </div>
   )
-}
-
-/**
- * Get the day and time in the future when net income will reset for the next period.
- * 
- * @param {number} timestamp Epoch time in seconds.
- * 
- * @returns Day and time as string.
- */
-const secsToDate = (timestamp) =>
-{
-  const date = new Date(Math.round(timestamp * 1000));
-  const day = date.toLocaleDateString("en-AU", { weekday: "short" });
-  const time = date.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  return `${day} ${time}`;
 }
